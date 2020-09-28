@@ -20,20 +20,17 @@ public class DAOImpl implements DAO {
                     "AND first_name = ? " +
                     "AND last_name = ?";
     private final String COURSES_WITHOUT_TEACHER_QUEUE =
-            "SELECT courses.id courses.course_name, courses.begin_of_course, " +
-                    "courses.end_of_course, courses.max_student_quantity, courses.finished" +
-                    "users.first_name, users.last_name, users.email, users.birthday" +
-            "FROM courses" +
-                    "LEFT JOIN users" +
-                    "ON courses.course_teacher = users.id" +
-            "WHERE course_teacher = NULL AND finished = FALSE";
+            "SELECT id, course_name, begin_of_course, " +
+                    "end_of_course, max_students_quantity, finished " +
+            "FROM courses " +
+            "WHERE finished = FALSE AND course_teacher IS NULL";
     private final String STUDENTS_ON_COURSE_QUANTITY_QUEUE =
             "SELECT COUNT(student_id)" +
             "FROM student_course_references" +
             "WHERE course_id = ?";
     private final String COURSE_PROGRAM_QUEUE =
-            "SELECT step, step_name, step_description, start_date, end_date" +
-                    "FROM courses" +
+            "SELECT step, step_name, step_description, start_date, end_date " +
+                    "FROM course_programs " +
                     "WHERE course_id = ?";
     private DAOImpl() {}
 
@@ -111,23 +108,10 @@ public class DAOImpl implements DAO {
                 Integer id = resultSet.getInt("id");
                 String courseName = resultSet.getString("course_name");
                 Date beginOfCourse = resultSet.getDate("begin_of_course");
-                Date endOfCourse = resultSet.getDate("endOfCourse");
-                Integer maxStudentQuantity = resultSet.getInt("max_student_quantity");
-                String teacherFirstName = resultSet.getString("first_name");
-                String teacherLastName = resultSet.getString("last_name");
-                String teacherEmail = resultSet.getString("email");
-                Date teacherBirthday = resultSet.getDate("birthday");
-                User teacher;
-                if (teacherFirstName == null || teacherLastName == null ||
-                teacherEmail == null || teacherBirthday == null) {
-                    teacher = null;
-                } else {
-                    teacher = new User(null, teacherFirstName, teacherLastName,
-                            teacherEmail, teacherBirthday, "teacher");
-                }
-
-                courses.add(new Course(null, courseName, beginOfCourse, endOfCourse,
-                        teacher, maxStudentQuantity, false));
+                Date endOfCourse = resultSet.getDate("end_of_course");
+                Integer maxStudentQuantity = resultSet.getInt("max_students_quantity");
+                courses.add(new Course(id, courseName, beginOfCourse, endOfCourse,
+                        null, maxStudentQuantity, false));
             }
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -170,13 +154,17 @@ public class DAOImpl implements DAO {
     }
 
     @Override
-    public ArrayList<ProgramStep> getCourseProgram(Course course) {
+    public ArrayList<ProgramStep> getCourseProgram(Course course) throws DAOException {
+        if (course == null) {
+            throw new DAOException("no course given");
+        }
         ArrayList<ProgramStep> coursePrograms = new ArrayList<>();
         try {
             ProxyConnection connection = ConnectionPoolImpl.getInstance().
                     getConnection();
             PreparedStatement statement = connection.
                     prepareStatement(COURSE_PROGRAM_QUEUE);
+            statement.setInt(1, course.getId());
             ResultSet resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 int step = resultSet.getInt("step");

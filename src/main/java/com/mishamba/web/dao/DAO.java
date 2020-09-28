@@ -17,7 +17,7 @@ public interface DAO {
             throws DAOException;
     ArrayList<MarkReview> getMarkReview(Course course, User student)
             throws DAOException;
-    ArrayList<ProgramStep> getCourseProgram(Course course);
+    ArrayList<ProgramStep> getCourseProgram(Course course) throws DAOException;
     boolean createUser(User user) throws DAOException;
     boolean createCourse(Course course) throws DAOException;
     boolean createHometask(Hometask hometask) throws DAOException;

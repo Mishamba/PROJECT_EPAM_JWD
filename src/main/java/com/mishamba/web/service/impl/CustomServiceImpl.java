@@ -28,45 +28,63 @@ public class CustomServiceImpl implements CustomService {
             throw new ServiceException("can't get courses without teacher");
         }
         for (Course course : courses) {
-            course.setCourseProgram(DAOImpl.getInstance().
-                    getCourseProgram(course));
+            try {
+                course.setCourseProgram(DAOImpl.getInstance().
+                        getCourseProgram(course));
+            } catch (DAOException e) {
+                throw new ServiceException("can't find course program", e);
+            }
         }
 
         StringBuilder answer = new StringBuilder();
         for (Course course : courses) {
-            answer.append("<h2>").append(course.getCourseName()).
-                    append("</h2>");
+            answer.append("<h3>").append(course.getCourseName()).
+                    append("</h3>");
             answer.append("<br><br>");
-            answer.append("<p>begin date</p><br>");
+            answer.append("<h3>begin date</h3><br>");
             answer.append("<p>").append(course.getBeginOfCourse()).
                     append("</p>");
             answer.append("<br><br>");
-            answer.append("<p>end date</p><br>");
+            answer.append("<h3>end date</h3><br>");
             answer.append("<p>").append(course.getEndOfCourse()).
                     append("</p>");
             answer.append("<br><br>");
-            answer.append("<p>course teacher<p><br>");
-            answer.append("<p>").append(course.getTeacher().getFirstName()).
-                    append(" ").append(course.getTeacher().getLastName()).
-                    append("</p>");
+            answer.append("<h3>course teacher</h3><br>");
+            if (course.getTeacher() != null) {
+                answer.append("<p>").append(course.getTeacher().getFirstName()).
+                        append(" ").append(course.getTeacher().getLastName()).
+                        append("</p>");
+            } else {
+                answer.append("<p>need teacher!</p>");
+            }
             answer.append("<br><br>");
-            answer.append("<p>max quantity of students</p>");
+            answer.append("<h3>max quantity of students</h3>");
             answer.append("<p>").append(course.getMaxStudentQuantity()).
                     append("</p>");
-            answer.append("<p>CourseProgram</p><br>");
-            for (ProgramStep programStep : course.getCourseProgram()) {
-                answer.append("<p>step number  ").append(
-                        programStep.getStep()).append("</p><br>");
-                answer.append("<p> step name  ").append(
-                        programStep.getStepName()).append("</p><br>");
-                answer.append("<p>step Description  ").append(
-                        programStep.getDescription()).append("</p><br>");
-                answer.append("<p>step start date  ").append(
-                        programStep.getStartDate()).append("</p><br>");
-                answer.append("<p>step end date  ").append(
-                        programStep.getEndDate()).append("</p><br>");
+            answer.append("<h3>CourseProgram</h3><br>");
+            if (course.getCourseProgram() != null) {
+                for (ProgramStep programStep : course.getCourseProgram()) {
+                    answer.append("<h4>step number  ").append(
+                            programStep.getStep()).append("</h4><br>");
+                    answer.append("<h4> step name  ").append(
+                            programStep.getStepName()).append("</h4><br>");
+                    if (programStep.getDescription() != null) {
+                        answer.append("<h4>step Description  ").append(
+                                programStep.getDescription()).append("</h4><br>");
+                    } else {
+                        answer.append("<p>no description</p><br>");
+                    }
+                    answer.append("<h4>step start date  ").append(
+                            programStep.getStartDate()).append("</h4><br>");
+                    answer.append("<h4>step end date  ").append(
+                            programStep.getEndDate()).append("</h4><br>");
+                }
+            } else {
+                answer.append("<p>no program right now</p>");
             }
+            answer.append("<br><br>");
         }
+        answer.append("<br>");
 
         return answer.toString();
     }

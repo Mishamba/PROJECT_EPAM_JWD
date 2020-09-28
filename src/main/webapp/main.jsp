@@ -8,28 +8,28 @@
     <br>
     <br>
 
-    <h3>Sing In As Student</h3>
+    <h2>Sing In As Student</h2>
     <form action="/student_sign_in">
         <input type="submit" value="Student sign in">
     </form>
     <br>
     <br>
 
-    <h3>Sign In As Teacher</h3>
+    <h2>Sign In As Teacher</h2>
     <form action="/teacher_sign_in">
         <input type="submit" value="Teacher sign in">
     </form>
     <br>
     <br>
 
-    <h3>Sign In As Admin</h3>
+    <h2>Sign In As Admin</h2>
     <form action="/admin_sign_in">
         <input type="submit" value="Admin sign in">
     </form>
     <br>
     <br>
 
-    <h3>Menu</h3>
+    <h2>Menu</h2>
     <br>
     <form action="/courses_catalog">
         <input type="submit" value="Courses Catalog">
