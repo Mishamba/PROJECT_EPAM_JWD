@@ -1,4 +1,7 @@
 package com.mishamba.web.controller;
 
-public class CustomController {
+import com.mishamba.web.controller.exception.ControllerException;
+
+public interface CustomController {
+    String execute() throws ControllerException;
 }

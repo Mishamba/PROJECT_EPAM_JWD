@@ -5,13 +5,13 @@
          version="3.0">
 
     <servlet>
-        <servlet-name></servlet-name>
-        <servlet-class></servlet-class>
+        <servlet-name>CustomServlet</servlet-name>
+        <servlet-class>com.mishamba.web.view.CustomServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name></servlet-name>
-        <url-pattern></url-pattern>
+        <servlet-name>CustomServlet</servlet-name>
+        <url-pattern>/</url-pattern>
     </servlet-mapping>
 
 </web-app>

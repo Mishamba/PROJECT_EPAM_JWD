@@ -3,7 +3,12 @@ package com.mishamba.web.dao.impl;
 import com.mishamba.web.dao.ConnectionPool;
 import com.mishamba.web.dao.ProxyConnection;
 import com.mishamba.web.dao.exception.DAOException;
+import org.apache.log4j.Logger;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
@@ -13,25 +18,32 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class ConnectionPoolImpl implements ConnectionPool {
+    private final Logger logger = Logger.getRootLogger();
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
 
-    private static final String URL = "jdbc:mysql://localhost:3306/final_project_jwd ? serverTimezone=UTC";
-    private static final String USER = "mishamba";
-    private static final String PASSWORD = "Alqp1209";
     private static final int DEFAULT_POOL_SIZE = 32;
 
     private ConnectionPoolImpl() {
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
         Properties connectionProperties = new Properties();
-        connectionProperties.put("user", USER);
-        connectionProperties.put("password", PASSWORD);
+        try(InputStream in = Files.newInputStream(
+                Paths.get("resources/database.properties"))) { // TODO: 9/28/20 database.properties
+            connectionProperties.load(in);
+        } catch (IOException exception) {
+            logger.error("can't get info from database.properties");
+        }
+
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
-                freeConnections.add(new ProxyConnection(DriverManager.getConnection(URL, connectionProperties)));
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+                freeConnections.add(new ProxyConnection(
+                        DriverManager.getConnection(
+                                connectionProperties.getProperty("url"),
+                                connectionProperties)));
+            } catch (SQLException throwable) {
+                logger.error("can't create connection");
+                throwable.printStackTrace();
             }
         }
     }
@@ -50,6 +62,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
             connectionToGive = freeConnections.take();
             givenAwayConnections.offer(connectionToGive);
         } catch (InterruptedException e) {
+            logger.error("can't give connection");
             Thread.currentThread().interrupt();
             throw new DAOException(e);
         }
@@ -67,6 +80,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
             try {
                 freeConnections.take().close();
             } catch (SQLException | InterruptedException throwables) {
+                logger.error("can't close connection");
                 throwables.printStackTrace();
                 Thread.currentThread().interrupt();
             }
@@ -80,6 +94,7 @@ public class ConnectionPoolImpl implements ConnectionPool {
             try {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException throwable) {
+                logger.error("can't deregister driver");
                 throwable.printStackTrace();
             }
         });
