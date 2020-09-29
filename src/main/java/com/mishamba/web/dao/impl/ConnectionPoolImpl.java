@@ -5,9 +5,16 @@ import com.mishamba.web.dao.ProxyConnection;
 import com.mishamba.web.dao.exception.DAOException;
 import org.apache.log4j.Logger;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
+import java.util.Properties;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -22,29 +29,27 @@ public class ConnectionPoolImpl implements ConnectionPool {
     private ConnectionPoolImpl() {
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
-        // TODO: 9/28/20 get driver
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException exception) {
             exception.printStackTrace();
         }
-        /*Properties connectionProperties = new Properties();
-        try(InputStream in = Files.newInputStream(
-                Paths.get("resources/database.properties"))) { // TODO: 9/28/20 database.properties
+        Properties connectionProperties = new Properties();
+        try(FileInputStream in = new FileInputStream(
+                System.getProperty("sql/database.properties"))) {
             connectionProperties.load(in);
         } catch (IOException exception) {
             logger.error("can't get info from database.properties");
-        }*/
+        }
 
         for (int i = 0; i < DEFAULT_POOL_SIZE; i++) {
             try {
-                /*freeConnections.add(new ProxyConnection(
-                        DriverManager.getConnection(
-                                connectionProperties.getProperty("url"),
-                                connectionProperties)));*/
+                String url = connectionProperties.getProperty("url");
+                String user = connectionProperties.getProperty("username");
+                String password = connectionProperties.getProperty("password");
                 freeConnections.add(new ProxyConnection(
-                        DriverManager.getConnection("jdbc:mysql://localhost:3306/final_project_jwd",
-                                "mishamba", "mishamba")));
+                        DriverManager.getConnection(url, user, password)));
+                logger.info("created connection to database");
             } catch (SQLException throwable) {
                 logger.error("can't create connection");
                 throwable.printStackTrace();
