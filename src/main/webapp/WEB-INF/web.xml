@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>CustomServlet</servlet-name>
-        <servlet-class>com.mishamba.web.view.CustomServlet</servlet-class>
+        <servlet-class>com.mishamba.project.view.CustomServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>
