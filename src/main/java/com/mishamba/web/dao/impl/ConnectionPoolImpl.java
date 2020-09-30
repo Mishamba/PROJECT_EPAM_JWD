@@ -27,6 +27,11 @@ public class ConnectionPoolImpl implements ConnectionPool {
     private ConnectionPoolImpl() {
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
         Properties connectionProperties = new Properties();
         try {
             InputStream in = Files.newInputStream(Paths.get("/home/mishamba/java/PROJECT_EPAM_JWD/src/main/resources/sql/database.properties"));

@@ -27,18 +27,6 @@ public class Course {
         this.finished = finished;
     }
 
-    public Course(Integer id, String courseName, Date beginOfCourse,
-                  Date endOfCourse, User teacher, Integer maxStudentQuantity,
-                  Boolean finished) {
-        this.id = id;
-        this.courseName = courseName;
-        this.beginOfCourse = beginOfCourse;
-        this.endOfCourse = endOfCourse;
-        this.teacher = teacher;
-        this.maxStudentQuantity = maxStudentQuantity;
-        this.finished = finished;
-    }
-
     public List<ProgramStep> getCourseProgram() {
         return courseProgram;
     }

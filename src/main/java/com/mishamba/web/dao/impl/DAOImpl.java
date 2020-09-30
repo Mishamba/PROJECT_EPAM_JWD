@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -32,6 +33,15 @@ public class DAOImpl implements DAO {
             "SELECT step, step_name, step_description, start_date, end_date " +
                     "FROM course_programs " +
                     "WHERE course_id = ?";
+    private final String ACTIVE_COURSES = "SELECT courses.id, courses.course_name, " +
+            "courses.begin_of_course, courses.end_of_course, " +
+            "courses.max_students_quantity, courses.finished, " +
+            "users.first_name, users.last_name, users.birthday " +
+            "FROM courses " +
+            "LEFT JOIN " +
+            "users" +
+            "on courses.course_teacher = users.id";
+
     private DAOImpl() {}
 
     private static class DAOImplHolder {
@@ -111,7 +121,7 @@ public class DAOImpl implements DAO {
                 Date endOfCourse = resultSet.getDate("end_of_course");
                 Integer maxStudentQuantity = resultSet.getInt("max_students_quantity");
                 courses.add(new Course(id, courseName, beginOfCourse, endOfCourse,
-                        null, maxStudentQuantity, false));
+                        null, maxStudentQuantity, null, false));
             }
         } catch (SQLException throwable) {
             throwable.printStackTrace();
@@ -140,7 +150,48 @@ public class DAOImpl implements DAO {
 
     @Override
     public ArrayList<Course> getActiveCourses() throws DAOException {
-        return null;
+        ArrayList<Course> courses = new ArrayList<>();
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery(ACTIVE_COURSES);
+            while (resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String courseName = resultSet.getString("course_name");
+                Date beginOfCourse = resultSet.getDate("begin_of_course");
+                Date endOfCourse = resultSet.getDate("end_of_course");
+                Integer maxStudentQuantity = resultSet.getInt("max_student_quantity");
+                String teacherFirstName = resultSet.getString("first_name");
+                String teacherLastName = resultSet.getString("last_name");
+                Date birthday = resultSet.getDate("birthday");
+                User teacher = null;
+                if (teacherFirstName != null || teacherLastName != null) {
+                    teacher = new User(null, teacherFirstName, teacherLastName,
+                            null, birthday, "teacher");
+                }
+                courses.add(new Course(id, courseName, beginOfCourse,
+                        endOfCourse, teacher, maxStudentQuantity, null, false));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        finally {
+            try {
+                resultSet.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
+        }
+
+        return courses;
     }
 
     @Override
