@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.factory;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.controller.command.impl.GetCoursesCatalogCommand;
 import com.mishamba.project.controller.command.impl.GetMainCoursesCommand;
 
 import java.util.HashMap;
@@ -16,6 +17,7 @@ public class CommandProvider {
 
     private CommandProvider() {
         repository.put("mainCourses", new GetMainCoursesCommand());
+        repository.put("coursesCatalog", new GetCoursesCatalogCommand());
     }
 
     public static CommandProvider getInstance() {
