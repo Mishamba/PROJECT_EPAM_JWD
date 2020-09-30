@@ -5,12 +5,10 @@ import com.mishamba.web.dao.ProxyConnection;
 import com.mishamba.web.dao.exception.DAOException;
 import org.apache.log4j.Logger;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayDeque;
@@ -29,14 +27,9 @@ public class ConnectionPoolImpl implements ConnectionPool {
     private ConnectionPoolImpl() {
         freeConnections = new LinkedBlockingDeque<>(DEFAULT_POOL_SIZE);
         givenAwayConnections = new ArrayDeque<>();
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-        } catch (ClassNotFoundException exception) {
-            exception.printStackTrace();
-        }
         Properties connectionProperties = new Properties();
-        try(FileInputStream in = new FileInputStream(
-                System.getProperty("sql/database.properties"))) {
+        try {
+            InputStream in = Files.newInputStream(Paths.get("/home/mishamba/java/PROJECT_EPAM_JWD/src/main/resources/sql/database.properties"));
             connectionProperties.load(in);
         } catch (IOException exception) {
             logger.error("can't get info from database.properties");
