@@ -1,9 +1,8 @@
 package com.mishamba.project.controller.command;
 
-import com.mishamba.project.controller.exception.ControllerException;
-
-import java.util.Properties;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public interface Command {
-    String execute(Properties parameter) throws ControllerException;
+    void execute(HttpServletRequest request, HttpServletResponse response);
 }

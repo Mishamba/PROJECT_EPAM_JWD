@@ -16,15 +16,15 @@ public class CommandProvider {
     }
 
     private CommandProvider() {
-        repository.put("mainCourses", new GetMainCoursesCommand());
-        repository.put("coursesCatalog", new GetCoursesCatalogCommand());
+        repository.put("main_page", new GetMainCoursesCommand());
+        repository.put("courses_catalog", new GetCoursesCatalogCommand());
     }
 
     public static CommandProvider getInstance() {
         return CommandProviderHolder.HOLDER;
     }
 
-    public Command getCommand(Properties parameter) {
-        return repository.get(parameter.get("commandType"));
+    public Command getCommand(String commandType) {
+        return repository.get(commandType);
     }
 }

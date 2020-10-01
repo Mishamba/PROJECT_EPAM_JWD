@@ -2,29 +2,24 @@ package com.mishamba.project.controller;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.controller.command.factory.CommandProvider;
-import com.mishamba.project.controller.exception.ControllerException;
+import org.apache.log4j.Logger;
 
-import java.util.Properties;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
-public class Invoker {
-    private Invoker() {}
+public class Invoker extends HttpServlet {
+    private final Logger logger = Logger.getRootLogger();
 
-    private static class InvokerHolder {
-        private static final Invoker HOLDER = new Invoker();
-    }
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        logger.info("got connection");
 
-    public static Invoker getInstance() {
-        return InvokerHolder.HOLDER;
-    }
-
-    public String executeCommand(Properties parameter) {
-        Command executor = CommandProvider.getInstance().getCommand(parameter);
-        try {
-            return executor.execute(parameter);
-        } catch (ControllerException e) {
-
-        }
-
-        return null;
+        String commandType = req.getParameter("command");
+        Command command = CommandProvider.getInstance().
+                getCommand(commandType);
+        command.execute(req, resp);
     }
 }

@@ -5,13 +5,17 @@
          version="3.0">
 
     <servlet>
-        <servlet-name>CustomServlet</servlet-name>
-        <servlet-class>com.mishamba.project.view.CustomServlet</servlet-class>
+        <servlet-name>Invoker</servlet-name>
+        <servlet-class>com.mishamba.project.controller.Invoker</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>CustomServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <servlet-name>Invoker</servlet-name>
+        <url-pattern>/university</url-pattern>
+        <url-pattern>/courses_catalog</url-pattern>
+        <url-pattern>/authorization</url-pattern>
+        <url-pattern>/sing_in</url-pattern>
+        <url-pattern>/sign_up</url-pattern>
     </servlet-mapping>
 
 </web-app>

@@ -41,7 +41,7 @@ public class DAOImpl implements DAO {
             "FROM courses " +
             "WHERE finished = FALSE AND course_teacher IS NULL";
     private final String STUDENTS_ON_COURSE_QUANTITY_QUEUE =
-            "SELECT COUNT(student_id)" +
+            "SELECT COUNT(student_id) AS quantity" +
             "FROM student_course_references" +
             "WHERE course_id = ?";
     private final String COURSE_PROGRAM_QUEUE =
@@ -304,6 +304,22 @@ public class DAOImpl implements DAO {
         }
 
         return coursePrograms;
+    }
+
+    @Override
+    public Integer getStudentsOnCourseQuantity(Course course) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(STUDENTS_ON_COURSE_QUANTITY_QUEUE);
+            statement.setInt(1, course.getId());
+            resultSet = statement.executeQuery();
+            return resultSet.getInt("quantity");
+        } catch (SQLException throwables) {
+            throw new DAOException("can't get students quantity " +
+                    "on course with name" + course.getCourseName(), throwables);
+        }
     }
 
     @Override

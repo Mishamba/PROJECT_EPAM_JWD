@@ -8,30 +8,18 @@
     <br>
     <br>
 
-    <h2>Sing In As Student</h2>
-    <form action="/student_sign_in">
-        <input type="submit" value="Student sign in">
+    <h2>Sing In</h2>
+    <form action="/PROJECT_EPAM_JWD_war/sign_in?command=authorization">
+        <input type="submit" value="Sign in">
     </form>
-    <br>
-    <br>
-
-    <h2>Sign In As Teacher</h2>
-    <form action="/teacher_sign_in">
-        <input type="submit" value="Teacher sign in">
+    <h2>Sing Up</h2>
+    <form action="/PROJECT_EPAM_JWD_war/sign_up?command=registration">
+        <input type="submit" value="Sign up">
     </form>
-    <br>
-    <br>
-
-    <h2>Sign In As Admin</h2>
-    <form action="/admin_sign_in">
-        <input type="submit" value="Admin sign in">
-    </form>
-    <br>
-    <br>
 
     <h2>Menu</h2>
     <br>
-    <form action="/courses_catalog">
+    <form action="/PROJECT_EPAM_JWD_war/courses_catalog?command=courses_catalog">
         <input type="submit" value="Courses Catalog">
     </form>
     <br>
@@ -39,6 +27,8 @@
 
     <h2>Course Add</h2>
     <br>
+
     ${courses_add}
+
 </body>
 </html>
