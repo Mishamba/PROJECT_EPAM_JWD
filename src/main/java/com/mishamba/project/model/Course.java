@@ -5,14 +5,14 @@ import java.util.Date;
 import java.util.List;
 
 public class Course {
-    Integer id;
-    String courseName;
-    Date beginOfCourse;
-    Date endOfCourse;
-    User teacher;
-    Integer maxStudentQuantity;
-    List<ProgramStep> courseProgram;
-    Boolean finished;
+    private Integer id;
+    private String courseName;
+    private Date beginOfCourse;
+    private Date endOfCourse;
+    private User teacher;
+    private Integer maxStudentQuantity;
+    private List<ProgramStep> courseProgram;
+    private Boolean finished;
 
     public Course(Integer id, String courseName, Date beginOfCourse,
                   Date endOfCourse, User teacher, Integer maxStudentQuantity,

@@ -3,12 +3,12 @@ package com.mishamba.project.model;
 import java.util.Date;
 
 public class ProgramStep {
-    Integer courseId;
-    int step;
-    String stepName;
-    String description;
-    Date startDate;
-    Date endDate;
+    private Integer courseId;
+    private int step;
+    private String stepName;
+    private String description;
+    private Date startDate;
+    private Date endDate;
 
     public ProgramStep(Integer courseId, int step, String stepName, String description,
                        Date startDate, Date endDate) {

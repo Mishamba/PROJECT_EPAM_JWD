@@ -15,6 +15,21 @@ import java.util.Date;
 
 public class DAOImpl implements DAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String TEACHER_BY_FIRST_LAST_NAME_QUEUE = "SELECT id, first_name, last_name, email, birthday " +
+            "FROM users " +
+            "WHERE role = 'teacher' AND first_name = ? AND last_name = ?";
+    private final String MARK_REVIEW_QUEUE = "SELECT " +
+            "users.id as teacher_id" +
+            "users.first_name AS teacher_first_name," +
+            "users.last_name as teacher_last_name, finished, " +
+            "users.id as teacher_id, user.email as teacher_email, " +
+            "user.birthday as teacher_birthday, " +
+            "mark, finished_date, review, got_certificate " +
+            "FROM student_mark_review " +
+            "LEFT JOIN " +
+            "users " +
+            "ON student_mark_review.teacher_id = users.id " +
+            "WHERE student_mark_review.student_id = ? AND student_mark_review.course_id = ?";
     private final String STUDENT_QUEUE =
             "SELECT id, first_name, last_name, email, birthday " +
             "FROM users WHERE role = 'student' " +
@@ -72,21 +87,21 @@ public class DAOImpl implements DAO {
                 users.add(new User(id, firstName, lastName, email, birthday,
                         "student"));
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
         finally {
             try {
                 resultSet.close();
-            } catch (SQLException throwables) {
+            } catch (SQLException throwable) {
                 logger.warn("result set is null");
-                throwables.printStackTrace();
+                throwable.printStackTrace();
             }
             try {
                 statement.close();
-            } catch (SQLException throwables) {
+            } catch (SQLException throwable) {
                 logger.warn("statement is null");
-                throwables.printStackTrace();
+                throwable.printStackTrace();
             }
             ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
@@ -96,7 +111,28 @@ public class DAOImpl implements DAO {
 
     @Override
     public ArrayList<User> getTeacherByFirstNameLastName(String firstName, String lastName) throws DAOException {
-        return null;
+        ArrayList<User> teachers = new ArrayList<>();
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(TEACHER_BY_FIRST_LAST_NAME_QUEUE);
+            statement.setString(1, firstName);
+            statement.setString(2, lastName);
+            resultSet = statement.executeQuery();
+
+            while(resultSet.next()) {
+                Integer id = resultSet.getInt("id");
+                String email = resultSet.getString("email");
+                Date birthday = resultSet.getDate("birthday");
+                teachers.add(new User(id, firstName, lastName, email, birthday,
+                        "teacher"));
+            }
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return teachers;
     }
 
     @Override
@@ -174,19 +210,19 @@ public class DAOImpl implements DAO {
                 courses.add(new Course(id, courseName, beginOfCourse,
                         endOfCourse, teacher, maxStudentQuantity, null, false));
             }
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException throwable) {
+            throwable.printStackTrace();
         }
         finally {
             try {
                 resultSet.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException throwable) {
+                logger.warn("can't close resultSet because it's NULL");
             }
             try {
                 statement.close();
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
+            } catch (SQLException throwable) {
+                logger.warn("can't close statement because it's NULL");
             }
             ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
@@ -201,7 +237,44 @@ public class DAOImpl implements DAO {
 
     @Override
     public ArrayList<MarkReview> getMarkReview(Course course, User student) throws DAOException {
-        return null;
+        if (course == null || student == null) {
+            throw new DAOException("course of student is null");
+        }
+
+        ProxyConnection connection = null;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        ArrayList<MarkReview> markReviews = new ArrayList<>();
+        try {
+            connection = ConnectionPoolImpl.getInstance().
+                    getConnection();
+            statement = connection.prepareStatement(MARK_REVIEW_QUEUE);
+            statement.setInt(1, student.getId());
+            statement.setInt(2, student.getId());
+            resultSet = statement.executeQuery();
+
+            while(resultSet.next()) {
+                Integer teacher_id = resultSet.getInt("teacher_id");
+                String teacherFirstName = resultSet.getString("teacher_first_name");
+                String teacherLastName = resultSet.getString("teacher_last_name");
+                Date teacherBirthday = resultSet.getDate("teacher_birthday");
+                String teacherEmail = resultSet.getString("teacher_email");
+                User teacher = new User(teacher_id, teacherFirstName,
+                        teacherLastName, teacherEmail, teacherBirthday,
+                        "teacher");
+                Boolean finished = resultSet.getBoolean("finished");
+                Integer mark = resultSet.getInt("mark");
+                Date finishDate = resultSet.getDate("finish_date");
+                String review = resultSet.getString("review");
+                Boolean gotCertificate = resultSet.getBoolean("got_certificate");
+                markReviews.add(new MarkReview(student, teacher, course,
+                        finished, mark, finishDate, review, gotCertificate));
+            }
+        } catch (SQLException throwable) {
+            throw new DAOException("can't get mark review", throwable);
+        }
+
+        return markReviews;
     }
 
     @Override
