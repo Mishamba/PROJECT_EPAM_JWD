@@ -32,7 +32,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
         }
         Properties connectionProperties = new Properties();
         try {
-            //InputStream in = Files.newInputStream(Paths.get("/home/mishamba/java/PROJECT_EPAM_JWD/src/main/resources/sql/database.properties"));
             InputStream in = getClass().getClassLoader().getResourceAsStream("database.properties");
             connectionProperties.load(in);
         } catch (IOException exception) {
@@ -49,7 +48,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
                 logger.info("created connection to database");
             } catch (SQLException throwable) {
                 logger.error("can't create connection");
-                throwable.printStackTrace();
             }
         }
     }
@@ -87,7 +85,6 @@ public class ConnectionPoolImpl implements ConnectionPool {
                 freeConnections.take().close();
             } catch (SQLException | InterruptedException throwables) {
                 logger.error("can't close connection");
-                throwables.printStackTrace();
                 Thread.currentThread().interrupt();
             }
         }
@@ -101,16 +98,12 @@ public class ConnectionPoolImpl implements ConnectionPool {
                 DriverManager.deregisterDriver(driver);
             } catch (SQLException throwable) {
                 logger.error("can't deregister driver");
-                throwable.printStackTrace();
             }
         });
     }
 
+    @Override
     public boolean checkForLose() {
         return (freeConnections.size() + givenAwayConnections.size() == 32);
-    }
-
-    public boolean checkForReturn() {
-        return (freeConnections.size() == 32);
     }
 }

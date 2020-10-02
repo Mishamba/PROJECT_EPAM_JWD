@@ -4,6 +4,7 @@ import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.builder.impl.admin.AdminMainPageButtons;
 import com.mishamba.project.util.former.builder.impl.admin.AdminUserInfo;
+import com.mishamba.project.util.former.builder.impl.anonym.AnonymMainPagesButtons;
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymUserInfo;
 import com.mishamba.project.util.former.builder.impl.student.StudentMainPagesButtons;
 import com.mishamba.project.util.former.builder.impl.student.StudentUserInfo;
@@ -17,13 +18,14 @@ import java.util.Properties;
 public class FormerProvider {
     private final Map<String, Former> repository = new HashMap<>();
     private FormerProvider() {
-        repository.put("student main button", new StudentMainPagesButtons());
-        repository.put("teacher main button", new TeacherMainPagesButtons());
-        repository.put("admin main button", new AdminMainPageButtons());
-        repository.put("admin main user info", new AdminUserInfo());
+        repository.put("student main button",    new StudentMainPagesButtons());
         repository.put("student main user info", new StudentUserInfo());
+        repository.put("teacher main button",    new TeacherMainPagesButtons());
         repository.put("teacher main user info", new TeacherUserInfo());
-        repository.put("anonym main user info", new AnonymUserInfo());
+        repository.put("admin main button",      new AdminMainPageButtons());
+        repository.put("admin main user info",   new AdminUserInfo());
+        repository.put("anonym main user info",  new AnonymUserInfo());
+        repository.put("anonym main menu",       new AnonymMainPagesButtons());
     }
 
     private static class FormerProviderHolder {
@@ -41,9 +43,9 @@ public class FormerProvider {
         StringBuilder parameters = new StringBuilder();
         String role = properties.getProperty("role");
         String page = properties.getProperty("page");
-        String part = properties.getProperty("parameter");
+        String target = properties.getProperty("target");
         parameters.append(role).append(" ").append(page).append(" ").
-                append(part);
+                append(target);
 
         return repository.get(parameters.toString());
     }

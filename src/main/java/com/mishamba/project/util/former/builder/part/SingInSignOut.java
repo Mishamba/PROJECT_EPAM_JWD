@@ -1,9 +1,6 @@
 package com.mishamba.project.util.former.builder.part;
 
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
-
-import java.util.Properties;
 
 public class SingInSignOut {
     public String get() throws UtilException {

@@ -50,6 +50,10 @@ public class CustomServiceImpl implements CustomService {
     }
 
     private StringBuilder formHtmlCourse(Course course) {
+        if (course == null) {
+            return null;
+        }
+
         StringBuilder courseString = new StringBuilder();
         courseString.append("<h3>").append(course.getCourseName()).
                 append("</h3>");
