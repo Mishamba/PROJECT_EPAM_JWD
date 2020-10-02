@@ -5,12 +5,12 @@
          version="3.0">
 
     <servlet>
-        <servlet-name>Invoker</servlet-name>
-        <servlet-class>com.mishamba.project.controller.Invoker</servlet-class>
+        <servlet-name>CustomController</servlet-name>
+        <servlet-class>com.mishamba.project.controller.CustomController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>Invoker</servlet-name>
+        <servlet-name>CustomController</servlet-name>
         <url-pattern>/university</url-pattern>
         <url-pattern>/courses_catalog</url-pattern>
         <url-pattern>/authorization</url-pattern>

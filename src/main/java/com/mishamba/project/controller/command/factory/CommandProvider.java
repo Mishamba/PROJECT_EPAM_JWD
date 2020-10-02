@@ -2,11 +2,10 @@ package com.mishamba.project.controller.command.factory;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.controller.command.impl.GetCoursesCatalogCommand;
-import com.mishamba.project.controller.command.impl.GetMainCoursesCommand;
+import com.mishamba.project.controller.command.impl.GetMainPageCommand;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 public class CommandProvider {
     private final Map<String, Command> repository = new HashMap<>();
@@ -16,7 +15,7 @@ public class CommandProvider {
     }
 
     private CommandProvider() {
-        repository.put("main_page", new GetMainCoursesCommand());
+        repository.put("main_page", new GetMainPageCommand());
         repository.put("courses_catalog", new GetCoursesCatalogCommand());
     }
 

@@ -54,7 +54,7 @@ public class DAOImpl implements DAO {
             "users.first_name, users.last_name, users.birthday " +
             "FROM courses " +
             "LEFT JOIN " +
-            "users" +
+            "users " +
             "on courses.course_teacher = users.id";
 
     private DAOImpl() {}
@@ -198,7 +198,7 @@ public class DAOImpl implements DAO {
                 String courseName = resultSet.getString("course_name");
                 Date beginOfCourse = resultSet.getDate("begin_of_course");
                 Date endOfCourse = resultSet.getDate("end_of_course");
-                Integer maxStudentQuantity = resultSet.getInt("max_student_quantity");
+                Integer maxStudentQuantity = resultSet.getInt("max_students_quantity");
                 String teacherFirstName = resultSet.getString("first_name");
                 String teacherLastName = resultSet.getString("last_name");
                 Date birthday = resultSet.getDate("birthday");
@@ -211,16 +211,20 @@ public class DAOImpl implements DAO {
                         endOfCourse, teacher, maxStudentQuantity, null, false));
             }
         } catch (SQLException throwable) {
-            throwable.printStackTrace();
+            throw new DAOException("can't get active courses", throwable);
         }
         finally {
             try {
-                resultSet.close();
+                if (statement != null) {
+                    resultSet.close();
+                }
             } catch (SQLException throwable) {
                 logger.warn("can't close resultSet because it's NULL");
             }
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException throwable) {
                 logger.warn("can't close statement because it's NULL");
             }

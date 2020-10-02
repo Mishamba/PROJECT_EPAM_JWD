@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class Invoker extends HttpServlet {
+public class CustomController extends HttpServlet {
     private final Logger logger = Logger.getRootLogger();
 
     @Override

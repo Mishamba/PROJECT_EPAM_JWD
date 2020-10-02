@@ -8,21 +8,13 @@
     <br>
     <br>
 
-    <h2>Sing In</h2>
-    <form action="/PROJECT_EPAM_JWD_war/sign_in?command=authorization">
-        <input type="submit" value="Sign in">
-    </form>
-    <h2>Sing Up</h2>
-    <form action="/PROJECT_EPAM_JWD_war/sign_up?command=registration">
-        <input type="submit" value="Sign up">
-    </form>
+
+    ${user_info}
+    <br>
 
     <h2>Menu</h2>
     <br>
-    <form action="/PROJECT_EPAM_JWD_war/courses_catalog?command=courses_catalog">
-        <input type="submit" value="Courses Catalog">
-    </form>
-    <br>
+    ${menu}
     <br>
 
     <h2>Course Add</h2>

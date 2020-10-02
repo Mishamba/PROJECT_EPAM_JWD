@@ -8,13 +8,19 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class GetMainCoursesCommand implements Command {
+public class GetMainPageCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
+        String userStuff = null;
+        HttpSession session = req.getSession();
+        String role = (String) session.getAttribute("role");
+
+
         String coursesAdd = null;
         try {
             coursesAdd = CustomServiceImpl.getInstance().formMainCourses();
@@ -22,10 +28,11 @@ public class GetMainCoursesCommand implements Command {
             coursesAdd = "can't upload courses";
         }
         req.setAttribute("courses_add", coursesAdd);
+
         try {
             req.getRequestDispatcher("main.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
-            logger.error("can't send main page for user");
+            logger.error("can't send response for user");
         }
     }
 }

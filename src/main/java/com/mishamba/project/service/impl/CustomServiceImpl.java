@@ -6,8 +6,12 @@ import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
 import com.mishamba.project.service.CustomService;
 import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.util.former.builder.Former;
+import com.mishamba.project.util.former.FormerProvider;
 
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class CustomServiceImpl implements CustomService {
 
@@ -111,5 +115,19 @@ public class CustomServiceImpl implements CustomService {
         }
 
         return answer.toString();
+    }
+
+    @Override
+    public String formPageParameter(Properties properties) throws ServiceException {
+        Former former = null;
+        try {
+            former = FormerProvider.getInstance().getFormer(properties);
+            if (former != null) {
+                throw new ServiceException("can't get such former");
+            }
+                return former.form(properties);
+        } catch (UtilException e) {
+            throw new ServiceException("can't get page parameters", e);
+        }
     }
 }
