@@ -12,9 +12,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Properties;
 
 public class DAOImpl implements DAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String GET_USER_PARAMETER_BY_EMAIL = "SELECT ? " +
+            "FROM users " +
+            "WHERE email=?";
+    private final String CHECK_SING_IN_DATA = "SELECT email, password_hash " +
+            "FROM users " +
+            "WHERE email = ? AND password_hash = ?";
     private final String TEACHER_BY_FIRST_LAST_NAME_QUEUE = "SELECT id, first_name, last_name, email, birthday " +
             "FROM users " +
             "WHERE role = 'teacher' AND first_name = ? AND last_name = ?";
@@ -347,7 +354,59 @@ public class DAOImpl implements DAO {
     }
 
     @Override
-    public boolean authorize(AuthorizationData data) throws DAOException {
-        return false;
+    public boolean checkSingInData(String givenEmail, int givenPasswordHash) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = connection.prepareStatement(CHECK_SING_IN_DATA);
+        } catch (SQLException e) {
+            throw new DAOException("can't create statement", e);
+        }
+
+        try {
+            statement.setString(1, givenEmail);
+            statement.setInt(2, givenPasswordHash);
+        } catch (SQLException e) {
+            throw new DAOException("can't set queue parameters", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+            String email = resultSet.getString("email");
+            int passwordHash = resultSet.getInt("password");
+            return (email.equals(givenEmail) && passwordHash == givenPasswordHash);
+        } catch (SQLException e) {
+            throw new DAOException("can't execute queue", e);
+        }
+    }
+
+    @Override
+    public String getUserParameterNameBy(Properties data) throws DAOException {
+        String parameter = data.getProperty("parameter");
+        String email = data.getProperty("email");
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = connection.prepareStatement(GET_USER_PARAMETER_BY_EMAIL);
+            statement.setString(1, parameter);
+            statement.setString(2, email);
+        } catch (SQLException e) {
+            throw new DAOException("can't create statement", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            throw new DAOException("can't execute queue", e);
+        }
+
+        try {
+            return resultSet.getString(parameter);
+        } catch (SQLException e) {
+            throw new DAOException("can't get result from result set", e);
+        }
     }
 }

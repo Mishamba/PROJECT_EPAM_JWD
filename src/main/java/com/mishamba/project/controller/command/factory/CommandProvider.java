@@ -1,10 +1,7 @@
 package com.mishamba.project.controller.command.factory;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.controller.command.impl.GetCoursesCatalogCommand;
-import com.mishamba.project.controller.command.impl.GetMainPageCommand;
-import com.mishamba.project.controller.command.impl.GetSignInPageCommand;
-import com.mishamba.project.controller.command.impl.GetSingUpPageCommand;
+import com.mishamba.project.controller.command.impl.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,6 +18,7 @@ public class CommandProvider {
         repository.put("courses_catalog", new GetCoursesCatalogCommand());
         repository.put("sing_up", new GetSingUpPageCommand());
         repository.put("sing_in", new GetSignInPageCommand());
+        repository.put("check_sing_in", new CheckSingInDataCommand());
     }
 
     public static CommandProvider getInstance() {

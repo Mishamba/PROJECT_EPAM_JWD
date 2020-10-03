@@ -10,4 +10,6 @@ public interface CustomService {
     String formMainCourses() throws ServiceException;
     String formCoursesCatalog() throws ServiceException;
     String formPageParameter(Properties properties) throws ServiceException;
+    boolean checkSingInData(String email, String password) throws ServiceException;
+    String getUserParameter(Properties info) throws ServiceException;
 }

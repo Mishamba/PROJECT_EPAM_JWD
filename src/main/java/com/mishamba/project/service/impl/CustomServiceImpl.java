@@ -1,6 +1,8 @@
 package com.mishamba.project.service.impl;
 
+import com.mishamba.project.dao.ProxyConnection;
 import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.dao.impl.ConnectionPoolImpl;
 import com.mishamba.project.dao.impl.DAOImpl;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
@@ -14,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class CustomServiceImpl implements CustomService {
-
     private static class CustomServiceImplHolder {
         private static final CustomServiceImpl HOLDER = new CustomServiceImpl();
     }
@@ -126,12 +127,34 @@ public class CustomServiceImpl implements CustomService {
         Former former = null;
         try {
             former = FormerProvider.getInstance().getFormer(properties);
-            if (former != null) {
+            if (former == null) {
                 throw new ServiceException("can't get such former");
             }
-                return former.form(properties);
+
+            return former.form(properties);
         } catch (UtilException e) {
             throw new ServiceException("can't get page parameters", e);
+        }
+    }
+
+    @Override
+    public boolean checkSingInData(String email, String password) throws ServiceException {
+        int passwordHash = password.hashCode();
+        passwordHash = Integer.valueOf(passwordHash).hashCode();
+
+        try {
+            return DAOImpl.getInstance().checkSingInData(email, passwordHash);
+        } catch (DAOException e) {
+            throw new ServiceException("can't check sing in data", e);
+        }
+    }
+
+    @Override
+    public String getUserParameter(Properties info) throws ServiceException {
+        try {
+            return DAOImpl.getInstance().getUserParameterNameBy(info);
+        } catch (DAOException e) {
+            throw new ServiceException("can't get first name", e);
         }
     }
 }
