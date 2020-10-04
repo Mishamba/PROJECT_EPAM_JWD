@@ -3,6 +3,7 @@ package com.mishamba.project.util.former;
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.builder.impl.admin.AdminMainPageButtons;
+import com.mishamba.project.util.former.builder.impl.admin.AdminSingUpField;
 import com.mishamba.project.util.former.builder.impl.admin.AdminUserInfo;
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymMainPagesButtons;
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymUserInfo;
@@ -26,6 +27,7 @@ public class FormerProvider {
         repository.put("admin main user info",   new AdminUserInfo());
         repository.put("anonym main user info",  new AnonymUserInfo());
         repository.put("anonym main menu",       new AnonymMainPagesButtons());
+        repository.put("admin sing up field",    new AdminSingUpField());
     }
 
     private static class FormerProviderHolder {

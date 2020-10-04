@@ -1,18 +1,20 @@
 package com.mishamba.project.service.impl;
 
-import com.mishamba.project.dao.ProxyConnection;
 import com.mishamba.project.dao.exception.DAOException;
-import com.mishamba.project.dao.impl.ConnectionPoolImpl;
 import com.mishamba.project.dao.impl.DAOImpl;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.CustomService;
 import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.FormerProvider;
+import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.validator.DateValidator;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 public class CustomServiceImpl implements CustomService {
@@ -155,6 +157,32 @@ public class CustomServiceImpl implements CustomService {
             return DAOImpl.getInstance().getUserParameterNameBy(info);
         } catch (DAOException e) {
             throw new ServiceException("can't get first name", e);
+        }
+    }
+
+    @Override
+    public boolean singInUser(Properties userInfo) throws ServiceException {
+        String firstName = userInfo.getProperty("firstName");
+        String lastName = userInfo.getProperty("lastName");
+        String email = userInfo.getProperty("email");
+        String birthdayDate = userInfo.getProperty("birthday");
+        String password = userInfo.getProperty("password");
+        int passwordHash = password.hashCode();
+        passwordHash = Integer.valueOf(passwordHash).hashCode();
+        Date birthday = null;
+        try {
+            birthday = new DateParser().parseDate(birthdayDate);
+        } catch (UtilException e) {
+            throw new ServiceException("date entered incorrect", e);
+        }
+        String role = userInfo.getProperty("role");
+
+        User newUser = new User(null, firstName, lastName, email, birthday,
+                role);
+        try {
+            return DAOImpl.getInstance().createUser(newUser, passwordHash);
+        } catch (DAOException e) {
+            throw new ServiceException("can't sing up new user", e);
         }
     }
 }

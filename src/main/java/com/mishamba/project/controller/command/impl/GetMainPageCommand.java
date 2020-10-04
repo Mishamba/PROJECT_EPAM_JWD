@@ -19,8 +19,10 @@ public class GetMainPageCommand implements Command {
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         String userInfo = null;
         HttpSession session = req.getSession();
+        logger.info("getting user role");
         String role = (String) session.getAttribute("role");
         if (role == null) {
+            logger.info("user has no role, so role set as \"aninym\"");
             role = "anonym";
         }
         Properties properties = new Properties();
@@ -28,6 +30,7 @@ public class GetMainPageCommand implements Command {
         properties.setProperty("page", "main");
         properties.setProperty("target", "user info");
         try {
+            logger.info("getting user info");
             userInfo = CustomServiceImpl.getInstance().formPageParameter(properties);
         } catch (ServiceException e) {
             logger.error("can't get user info");
@@ -37,6 +40,7 @@ public class GetMainPageCommand implements Command {
         String menu = null;
         properties.setProperty("target", "menu");
         try {
+            logger.info("getting menu buttons");
             menu = CustomServiceImpl.getInstance().formPageParameter(properties);
         } catch (ServiceException e) {
             logger.error("can't get menu buttons");
@@ -45,16 +49,19 @@ public class GetMainPageCommand implements Command {
 
         String coursesAdd;
         try {
+            logger.info("getting courses add");
             coursesAdd = CustomServiceImpl.getInstance().formMainCourses();
         } catch (ServiceException e) {
             coursesAdd = "can't get courses add ((((";
         }
 
+        logger.info("setting jsp page attributes");
         req.setAttribute("user_info", userInfo);
         req.setAttribute("menu", menu);
         req.setAttribute("courses_add", coursesAdd);
 
         try {
+            logger.info("uploading main page");
             req.getRequestDispatcher("main.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("can't send response for user");

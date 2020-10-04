@@ -14,6 +14,7 @@ public class GetHometaskCreatePageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         try {
+            logger.info("uploading create hometask page");
             request.getRequestDispatcher("create_hometask.html").forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload create hometask page");

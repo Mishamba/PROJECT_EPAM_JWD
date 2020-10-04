@@ -16,6 +16,11 @@ import java.util.Properties;
 
 public class DAOImpl implements DAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String CREATE_USER = "INSERT INTO users " +
+            "(first_name, last_name, email, password_hash, birthday, role) " +
+            "VALUES (?, ?, ?, ?, ?, ?)";
+    private final String CHECK_EMAIL_UNIQUE = "SELECT EXISTS " +
+            "(SELECT  email FROM users WHERE email=?) as exists_value";
     private final String GET_USER_PARAMETER_BY_EMAIL = "SELECT ? " +
             "FROM users " +
             "WHERE email=?";
@@ -334,8 +339,41 @@ public class DAOImpl implements DAO {
     }
 
     @Override
-    public boolean createUser(User user) throws DAOException {
-        return false;
+    public boolean createUser(User user, int password) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = connection.prepareStatement(CHECK_EMAIL_UNIQUE);
+            statement.setString(1, user.getEmail());
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            if (resultSet.getInt("exists_value") == 1) {
+                logger.warn("can't create new user. " +
+                        "such email already exists in database.");
+                return false;
+            }
+            logger.info("email is unique. going to create user");
+        } catch (SQLException e) {
+            throw new DAOException("can't check email unique", e);
+        }
+
+        try {
+            statement = connection.prepareStatement(CREATE_USER);
+            statement.setString(1, user.getFirstName());
+            statement.setString(2, user.getLastName());
+            statement.setString(3, user.getEmail());
+            statement.setInt(4, password);
+            statement.setDate(5, new java.sql.Date(user.getBirthday().getYear(),
+                    user.getBirthday().getMonth(), user.getBirthday().getDay()));
+            statement.setString(6, user.getRole());
+        } catch (SQLException e) {
+            throw new DAOException("can't make a write in " +
+                    "database with new user", e);
+        }
+
+        return true;
     }
 
     @Override

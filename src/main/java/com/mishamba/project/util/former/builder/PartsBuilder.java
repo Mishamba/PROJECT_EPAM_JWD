@@ -5,16 +5,6 @@ import com.mishamba.project.util.exception.UtilException;
 import java.util.Properties;
 
 public class PartsBuilder {
-    private PartsBuilder() {}
-
-    private static class PartsBuilderHolder {
-        private static final PartsBuilder HOLDER = new PartsBuilder();
-    }
-
-    public static PartsBuilder getInstance() {
-        return PartsBuilderHolder.HOLDER;
-    }
-
     public String formCoursesCatalogButton() {
         StringBuilder builder = new StringBuilder();
 
@@ -38,11 +28,11 @@ public class PartsBuilder {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<h2>Sign In</h2>");
-        builder.append("<form action=\"PROJECT_EPAM_JWD_war/sing_in\">");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/sing_in?command=sing_in\">");
         builder.append("<input type=\"submit\" value=\"Sign in\">");
         builder.append("</form><br>");
         builder.append("<h2>Sign Up<h2>");
-        builder.append("<form action=\"PROJECT_EPAM_JWD_war/sign_up\">");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/sign_up?command=sing_up\">");
         builder.append("<input type=\"submit\" value=\"Sing Up\">");
         builder.append("</form><br>");
 

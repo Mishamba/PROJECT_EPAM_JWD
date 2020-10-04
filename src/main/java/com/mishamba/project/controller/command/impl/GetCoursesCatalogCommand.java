@@ -17,13 +17,17 @@ public class GetCoursesCatalogCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         String courses = null;
         try {
+            logger.info("getting courses");
             courses = CustomServiceImpl.getInstance().formCoursesCatalog();
         } catch (ServiceException e) {
             courses = "can't upload courses";
         }
 
+        logger.info("setting page attributes");
         request.setAttribute("courses", courses);
+
         try {
+            logger.info("uploading courses catalog page");
             request.getRequestDispatcher("courses_catalog.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't send courses catalog for user");

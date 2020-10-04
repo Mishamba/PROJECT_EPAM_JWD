@@ -21,6 +21,9 @@ public class CheckSingInDataCommand implements Command {
         logger.info("checking sing in data");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String firstName = null;
+        String lastName = null;
+        String role = null;
         String pageToLoad = "error.html";
 
         try {
@@ -30,15 +33,15 @@ public class CheckSingInDataCommand implements Command {
                 logger.info("getting first name");
                 info.setProperty("parameter", "first_name");
                 info.setProperty("email", email);
-                String firstName = CustomServiceImpl.getInstance().
+                firstName = CustomServiceImpl.getInstance().
                         getUserParameter(info);
                 logger.info("getting last name");
                 info.setProperty("parameter", "last_name");
-                String lastName = CustomServiceImpl.getInstance().
+                lastName = CustomServiceImpl.getInstance().
                         getUserParameter(info);
                 logger.info("getting role");
                 info.setProperty("parameter", "role");
-                String role = CustomServiceImpl.getInstance().
+                role = CustomServiceImpl.getInstance().
                         getUserParameter(info);
                 HttpSession session = request.getSession();
                 session.setAttribute("firstName", firstName);
@@ -52,7 +55,13 @@ public class CheckSingInDataCommand implements Command {
 
         try {
             request.getRequestDispatcher(pageToLoad).forward(request, response);
-        } catch (ServletException | IOException e) {
+            Properties userParameters = new Properties();
+            userParameters.setProperty("firstName", firstName);
+            userParameters.setProperty("lastName", lastName);
+            userParameters.setProperty("role", role);
+            request.setAttribute("user_info", CustomServiceImpl.getInstance().
+                    getUserParameter(userParameters));
+        } catch (ServletException | IOException | ServiceException e) {
             logger.error("can't upload error page");
         }
     }

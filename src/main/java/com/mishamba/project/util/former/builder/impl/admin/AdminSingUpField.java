@@ -1,18 +1,19 @@
-package com.mishamba.project.util.former.builder.impl.anonym;
+package com.mishamba.project.util.former.builder.impl.admin;
 
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class AnonymUserInfo implements Former {
+public class AdminSingUpField implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSingInSingOutButton());
+        builder.append("<p>role</p><br>").
+                append("<form>").
+                append("<input type=\"text\" name=\"role\">").
+                append("</form><br>");
 
         return builder.toString();
     }
