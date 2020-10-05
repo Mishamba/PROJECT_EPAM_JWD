@@ -11,7 +11,7 @@
     <title>Check hometask</title>
 </head>
 <body>
-    ${hometask}
+    ${hometask_data}
 <form>
     <label>
         <input type="number" name="mark">

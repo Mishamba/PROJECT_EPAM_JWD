@@ -17,15 +17,21 @@ public class GetMainPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        String userInfo = null;
+        String userInfo;
         HttpSession session = req.getSession();
         logger.info("getting user role");
         String role = (String) session.getAttribute("role");
+        String firstName = (String) session.getAttribute("firstName");
+        String lastName = (String) session.getAttribute("lastName");
         if (role == null) {
             logger.info("user has no role, so role set as \"aninym\"");
             role = "anonym";
         }
         Properties properties = new Properties();
+        if (firstName != null && lastName != null) {
+            properties.setProperty("firstName", firstName);
+            properties.setProperty("lastName", lastName);
+        }
         properties.setProperty("role", role);
         properties.setProperty("page", "main");
         properties.setProperty("target", "user info");
@@ -37,7 +43,7 @@ public class GetMainPageCommand implements Command {
             userInfo = "can't upload user info";
         }
 
-        String menu = null;
+        String menu;
         properties.setProperty("target", "menu");
         try {
             logger.info("getting menu buttons");

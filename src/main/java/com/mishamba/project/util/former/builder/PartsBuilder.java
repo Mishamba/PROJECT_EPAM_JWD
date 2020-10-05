@@ -54,7 +54,7 @@ public class PartsBuilder {
                 append("</p><br>");
         builder.append("<p>Second name</p><br>");
         builder.append("<p>").
-                append((String) properties.get("secondName")).
+                append((String) properties.get("lastName")).
                 append("</p><br>");
 
         return builder.toString();

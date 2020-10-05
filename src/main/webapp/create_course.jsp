@@ -36,6 +36,9 @@
     <input type="number" name="max_students_quantity">
 </form>
 <br>
-
+<p>Enter quantity of course program steps</p>
+<form>
+    <input type = "number" name="course_program_steps_quantity">
+</form>
 </body>
 </html>

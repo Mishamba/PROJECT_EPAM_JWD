@@ -4,7 +4,6 @@ import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.*;
 
 import java.util.ArrayList;
-import java.util.Properties;
 
 public interface DAO {
     ArrayList<User> getStudentByFirstNameLastName(
@@ -26,5 +25,5 @@ public interface DAO {
     boolean createHometask(Hometask hometask) throws DAOException;
     boolean createMarkReview(MarkReview markReview) throws DAOException;
     boolean checkSingInData(String email, int password) throws DAOException;
-    String getUserParameterNameBy(Properties data) throws DAOException;
+    User getUserByEmail(String email) throws DAOException;
 }

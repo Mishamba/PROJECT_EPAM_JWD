@@ -27,7 +27,7 @@ public class GetSingUpPageCommand implements Command {
         Properties definer = new Properties();
         definer.setProperty("role", role);
         definer.setProperty("page", "sing up");
-        definer.setProperty("targer", "field");
+        definer.setProperty("target", "field");
         String roleDefiner = null;
         try {
             roleDefiner = CustomServiceImpl.getInstance().

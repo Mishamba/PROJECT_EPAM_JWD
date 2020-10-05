@@ -11,7 +11,6 @@ import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.FormerProvider;
 import com.mishamba.project.util.parser.DateParser;
-import com.mishamba.project.util.validator.DateValidator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -126,7 +125,7 @@ public class CustomServiceImpl implements CustomService {
 
     @Override
     public String formPageParameter(Properties properties) throws ServiceException {
-        Former former = null;
+        Former former;
         try {
             former = FormerProvider.getInstance().getFormer(properties);
             if (former == null) {
@@ -152,16 +151,24 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public String getUserParameter(Properties info) throws ServiceException {
+    public Properties getUserByEmail(String email) throws ServiceException {
+        Properties userInfo = new Properties();
         try {
-            return DAOImpl.getInstance().getUserParameterNameBy(info);
+            User user = DAOImpl.getInstance().getUserByEmail(email);
+            userInfo.setProperty("id", user.getId().toString());
+            userInfo.setProperty("firstName", user.getFirstName());
+            userInfo.setProperty("lastName", user.getLastName());
+            userInfo.setProperty("email", user.getEmail());
+            userInfo.setProperty("birthday", user.getBirthday().toString());
+            userInfo.setProperty("role", user.getRole());
+            return userInfo;
         } catch (DAOException e) {
             throw new ServiceException("can't get first name", e);
         }
     }
 
     @Override
-    public boolean singInUser(Properties userInfo) throws ServiceException {
+    public boolean createUser(Properties userInfo) throws ServiceException {
         String firstName = userInfo.getProperty("firstName");
         String lastName = userInfo.getProperty("lastName");
         String email = userInfo.getProperty("email");
@@ -169,7 +176,7 @@ public class CustomServiceImpl implements CustomService {
         String password = userInfo.getProperty("password");
         int passwordHash = password.hashCode();
         passwordHash = Integer.valueOf(passwordHash).hashCode();
-        Date birthday = null;
+        Date birthday;
         try {
             birthday = new DateParser().parseDate(birthdayDate);
         } catch (UtilException e) {
