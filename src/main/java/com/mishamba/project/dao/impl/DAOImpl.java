@@ -343,7 +343,7 @@ public class DAOImpl implements DAO {
     @Override
     public boolean createUser(User user, int password) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement = null;
+        PreparedStatement statement;
         ResultSet resultSet = null;
 
         try {
@@ -359,6 +359,12 @@ public class DAOImpl implements DAO {
             logger.info("email is unique. going to create user");
         } catch (SQLException e) {
             throw new DAOException("can't check email unique", e);
+        } finally {
+            try {
+                resultSet.close();
+            } catch (SQLException throwables) {
+                logger.warn("result set is null");
+            }
         }
 
         try {
@@ -370,9 +376,18 @@ public class DAOImpl implements DAO {
             statement.setDate(5, new java.sql.Date(user.getBirthday().getYear(),
                     user.getBirthday().getMonth(), user.getBirthday().getDay()));
             statement.setString(6, user.getRole());
+            statement.execute();
         } catch (SQLException e) {
             throw new DAOException("can't make a write in " +
                     "database with new user", e);
+        }
+        finally {
+            try {
+                statement.close();
+            } catch (SQLException throwables) {
+                logger.warn("statement is null");
+            }
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
         return true;

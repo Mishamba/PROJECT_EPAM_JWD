@@ -15,6 +15,8 @@ public class StudentMainPagesButtons implements Former {
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formCoursesCatalogButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formSignOutButton());
 
         return builder.toString();
     }

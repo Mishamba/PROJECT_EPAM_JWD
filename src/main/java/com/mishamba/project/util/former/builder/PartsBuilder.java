@@ -24,7 +24,7 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formSingInSingOutButton() {
+    public String formSingInSingUpButton() {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<h2>Sign In</h2>");
@@ -56,6 +56,16 @@ public class PartsBuilder {
         builder.append("<p>").
                 append((String) properties.get("lastName")).
                 append("</p><br>");
+
+        return builder.toString();
+    }
+
+    public String formSignOutButton() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br><form action=\"/PROJECT_EPAM_JWD_war/sing_out?command=sing_out>");
+        builder.append("<input type=\"submit\" value=\"Sing Out\">");
+        builder.append("</form><br>");
 
         return builder.toString();
     }

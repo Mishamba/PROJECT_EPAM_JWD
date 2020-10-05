@@ -18,32 +18,46 @@ public class SingUpProcessCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         Properties singUpInfo = formSingUpInfo(request);
-
-        boolean result;
-        try {
-            result = CustomServiceImpl.getInstance().createUser(singUpInfo);
-        } catch (ServiceException e) {
-            logger.error("can't create user");
-            result = false;
-        }
-
-        String pageToLoad;
-        if (result) {
-            HttpSession session = request.getSession();
-            if (!session.getAttribute("role").equals("admin")) {
-                session.setAttribute("role", singUpInfo.get("role"));
-                session.setAttribute("firstName", singUpInfo.get("firstName"));
-                session.setAttribute("lastName", singUpInfo.get("lastName"));
+        HttpSession session = request.getSession();
+        String userRole = (String) session.getAttribute("role");
+        if (!(userRole == null || ((singUpInfo.get("role").equals("admin") ||
+                singUpInfo.get("role").equals("teacher")) &&
+                userRole.equals("admin")))) {
+            logger.warn("someone is with role \"" + userRole +
+                    "\" tries to create user with role \"" +
+                    singUpInfo.get("role"));
+            try {
+                request.getRequestDispatcher("index.jsp").forward(request, response);
+            } catch (ServletException | IOException e) {
+                logger.error("can't upload index.jsp");
             }
-            pageToLoad = "main.jsp";
         } else {
-            pageToLoad = "error.html";
-        }
 
-        try {
-            request.getRequestDispatcher(pageToLoad).forward(request, response);
-        } catch (ServletException | IOException e) {
-            logger.error("can't upload page");
+            boolean result;
+            try {
+                result = CustomServiceImpl.getInstance().createUser(singUpInfo);
+            } catch (ServiceException e) {
+                logger.error("can't create user");
+                result = false;
+            }
+
+            String pageToLoad;
+            if (result) {
+                if (userRole == null) {
+                    session.setAttribute("role", singUpInfo.get("role"));
+                    session.setAttribute("firstName", singUpInfo.get("firstName"));
+                    session.setAttribute("lastName", singUpInfo.get("lastName"));
+                }
+                pageToLoad = "main.jsp";
+            } else {
+                pageToLoad = "error.html";
+            }
+
+            try {
+                request.getRequestDispatcher(pageToLoad).forward(request, response);
+            } catch (ServletException | IOException e) {
+                logger.error("can't upload page");
+            }
         }
     }
 

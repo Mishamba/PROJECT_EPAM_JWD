@@ -13,6 +13,7 @@ public class AdminMainPageButtons implements Former {
         StringBuilder builder = new StringBuilder();
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formMainPageButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formSignOutButton());
 
         return builder.toString();
     }
