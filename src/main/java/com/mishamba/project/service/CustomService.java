@@ -11,4 +11,5 @@ public interface CustomService {
     boolean checkSingInData(String email, String password) throws ServiceException;
     Properties getUserByEmail(String email) throws ServiceException;
     boolean createUser(Properties userInfo) throws ServiceException;
+    String formCourseProfile(int courseId) throws ServiceException;
 }

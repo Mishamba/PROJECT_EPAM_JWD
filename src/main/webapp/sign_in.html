@@ -3,14 +3,13 @@
     <title>Sing In</title>
 </head>
 <body>
+    <input type="email" name="email">
+    <br>
+    <input type="password" name="password">
+    <br>
     <form action="/PROJECT_EPAM_JWD_war/university" method="post">
-        <label>
-            <input type="email" name="email">
-        </label>
-        <label>
-            <input type="password" name="password">
-        </label>
-        <input type="submit" value="Sign In">
+        <input type="hidden" name="command" value="sing_in_check">
+        <input type="submit" value="Sing in">
     </form>
 </body>
 </html>

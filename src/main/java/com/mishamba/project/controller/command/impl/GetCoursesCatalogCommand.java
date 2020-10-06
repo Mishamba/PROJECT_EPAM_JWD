@@ -8,14 +8,50 @@ import org.apache.log4j.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Properties;
 
 public class GetCoursesCatalogCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        String courses = null;
+        HttpSession session = request.getSession();
+        String role = (String) session.getAttribute("role");
+        String firstName = (String) session.getAttribute("firstName");
+        String lastName = (String) session.getAttribute("lastName");
+        if (role == null) {
+            role = "anonym";
+        }
+
+        Properties userProp = new Properties();
+        userProp.setProperty("role", role);
+        if (firstName != null && lastName != null) {
+            userProp.setProperty("firstName", firstName);
+            userProp.setProperty("lastName", lastName);
+        }
+        userProp.setProperty("target", "user info");
+
+        String userInfo;
+        try {
+            userInfo = CustomServiceImpl.getInstance().formPageParameter(userProp);
+        } catch (ServiceException e) {
+            logger.error("can't upload user info");
+            userInfo = "<br><p>can't upload user info</p><br>";
+        }
+
+        userProp.setProperty("target", "menu");
+        String menu;
+        try {
+            menu = CustomServiceImpl.getInstance().formPageParameter(userProp);
+        } catch (ServiceException e) {
+            logger.error("can't upload some menu functionality");
+            menu = "<br><p>can't upload some menu buttons";
+        }
+
+
+        String courses;
         try {
             logger.info("getting courses");
             courses = CustomServiceImpl.getInstance().formCoursesCatalog();
@@ -24,6 +60,8 @@ public class GetCoursesCatalogCommand implements Command {
         }
 
         logger.info("setting page attributes");
+        request.setAttribute("user_info", userInfo);
+        request.setAttribute("menu", menu);
         request.setAttribute("courses", courses);
 
         try {

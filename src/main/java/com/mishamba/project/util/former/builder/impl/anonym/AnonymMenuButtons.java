@@ -2,12 +2,11 @@ package com.mishamba.project.util.former.builder.impl.anonym;
 
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.builder.PartsBuilder;
 import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class AnonymMainPagesButtons implements Former {
+public class AnonymMenuButtons implements Former {
 
     @Override
     public String form(Properties properties) throws UtilException {

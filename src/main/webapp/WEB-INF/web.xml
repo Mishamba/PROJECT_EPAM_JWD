@@ -13,9 +13,10 @@
         <servlet-name>CustomController</servlet-name>
         <url-pattern>/university</url-pattern>
         <url-pattern>/courses_catalog</url-pattern>
+        <url-pattern>/course_profile</url-pattern>
         <url-pattern>/authorization</url-pattern>
         <url-pattern>/sing_in</url-pattern>
-        <url-pattern>/sign_up</url-pattern>
+        <url-pattern>/sing_up</url-pattern>
         <url-pattern>/hometask</url-pattern>
     </servlet-mapping>
 

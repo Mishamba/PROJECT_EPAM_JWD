@@ -20,9 +20,10 @@ public class SingUpProcessCommand implements Command {
         Properties singUpInfo = formSingUpInfo(request);
         HttpSession session = request.getSession();
         String userRole = (String) session.getAttribute("role");
-        if (!(userRole == null || ((singUpInfo.get("role").equals("admin") ||
-                singUpInfo.get("role").equals("teacher")) &&
-                userRole.equals("admin")))) {
+        if (singUpInfo == null || !(userRole == null ||
+                ((singUpInfo.get("role").equals("admin") ||
+                        singUpInfo.get("role").equals("teacher")) &&
+                        userRole.equals("admin")))) {
             logger.warn("someone is with role \"" + userRole +
                     "\" tries to create user with role \"" +
                     singUpInfo.get("role"));
@@ -69,13 +70,19 @@ public class SingUpProcessCommand implements Command {
         String birthday = request.getParameter("birthday");
         String role = request.getParameter("role");
 
-        Properties singUpInfo = new Properties();
-        singUpInfo.setProperty("firstName", firstName);
-        singUpInfo.setProperty("lastName", lastName);
-        singUpInfo.setProperty("email", email);
-        singUpInfo.setProperty("password", password);
-        singUpInfo.setProperty("birthday", birthday);
-        singUpInfo.setProperty("role", role);
+        Properties singUpInfo;
+        if (firstName != null || lastName != null || email != null ||
+                password != null || birthday != null || role != null) {
+            singUpInfo = new Properties();
+            singUpInfo.setProperty("firstName", firstName);
+            singUpInfo.setProperty("lastName", lastName);
+            singUpInfo.setProperty("email", email);
+            singUpInfo.setProperty("password", password);
+            singUpInfo.setProperty("birthday", birthday);
+            singUpInfo.setProperty("role", role);
+        } else {
+            singUpInfo = null;
+        }
 
         return singUpInfo;
     }

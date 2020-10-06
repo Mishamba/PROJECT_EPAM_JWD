@@ -44,66 +44,11 @@ public class CustomServiceImpl implements CustomService {
 
         StringBuilder answer = new StringBuilder();
         for (Course course : courses) {
-            answer.append(formHtmlCourse(course));
+            answer.append(formCourseAdd(course));
         }
         answer.append("<br>");
 
         return answer.toString();
-    }
-
-    private StringBuilder formHtmlCourse(Course course) {
-        if (course == null) {
-            return null;
-        }
-
-        StringBuilder courseString = new StringBuilder();
-        courseString.append("<h3>").append(course.getCourseName()).
-                append("</h3>");
-        courseString.append("<br><br>");
-        courseString.append("<h3>begin date</h3><br>");
-        courseString.append("<p>").append(course.getBeginOfCourse()).
-                append("</p>");
-        courseString.append("<br><br>");
-        courseString.append("<h3>end date</h3><br>");
-        courseString.append("<p>").append(course.getEndOfCourse()).
-                append("</p>");
-        courseString.append("<br><br>");
-        courseString.append("<h3>course teacher</h3><br>");
-        if (course.getTeacher() != null) {
-            courseString.append("<p>").append(course.getTeacher().getFirstName()).
-                    append(" ").append(course.getTeacher().getLastName()).
-                    append("</p>");
-        } else {
-            courseString.append("<p>need teacher!</p>");
-        }
-        courseString.append("<br><br>");
-        courseString.append("<h3>max quantity of students</h3>");
-        courseString.append("<p>").append(course.getMaxStudentQuantity()).
-                append("</p>");
-        courseString.append("<h3>CourseProgram</h3><br>");
-        if (course.getCourseProgram() != null) {
-            for (ProgramStep programStep : course.getCourseProgram()) {
-                courseString.append("<h4>step number  ").append(
-                        programStep.getStep()).append("</h4><br>");
-                courseString.append("<h4> step name  ").append(
-                        programStep.getStepName()).append("</h4><br>");
-                if (programStep.getDescription() != null) {
-                    courseString.append("<h4>step Description  ").append(
-                            programStep.getDescription()).append("</h4><br>");
-                } else {
-                    courseString.append("<p>no description</p><br>");
-                }
-                courseString.append("<h4>step start date  ").append(
-                        programStep.getStartDate()).append("</h4><br>");
-                courseString.append("<h4>step end date  ").append(
-                        programStep.getEndDate()).append("</h4><br>");
-            }
-        } else {
-            courseString.append("<p>no program right now</p>");
-        }
-        courseString.append("<br><br>");
-
-        return courseString;
     }
 
     @Override
@@ -117,10 +62,29 @@ public class CustomServiceImpl implements CustomService {
 
         StringBuilder answer = new StringBuilder();
         for (Course course : courses) {
-            answer.append(formHtmlCourse(course));
+            answer.append(formCourseAdd(course));
         }
 
         return answer.toString();
+    }
+
+    private String formCourseAdd(Course course) {
+        if (course == null) {
+            return "no course to form given";
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<h3>Course name</h3><br>");
+        builder.append("<p>").append(course.getCourseName()).append("</p><br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/course_profile\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"course_profile\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
+                append(course.getId()).append("\">");
+        builder.append("<input type=\"submit\" value=\"Course Profile\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
     }
 
     @Override
@@ -191,5 +155,78 @@ public class CustomServiceImpl implements CustomService {
         } catch (DAOException e) {
             throw new ServiceException("can't sing up new user", e);
         }
+    }
+
+    @Override
+    public String formCourseProfile(int courseId) throws ServiceException {
+        Course course;
+        try {
+            course= DAOImpl.getInstance().getCourseById(courseId);
+        } catch (DAOException e) {
+            throw new ServiceException("can't get course info", e);
+        }
+
+        StringBuilder builder = formHtmlCourse(course);
+
+        if (course.getFinished()) {
+            builder.append("<h3>Course is active</h3><br>");
+        } else {
+            builder.append("<h3>Course is finished</h3><br>");
+        }
+
+        return builder.toString();
+    }
+
+    private StringBuilder formHtmlCourse(Course course) throws ServiceException {
+        Integer studentsOnCourseQuantity;
+        try {
+            studentsOnCourseQuantity = DAOImpl.getInstance().getStudentsOnCourseQuantity(course);
+        } catch (DAOException e) {
+            throw new ServiceException("can't get course info", e);
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<h3>Course name</h3><br>");
+        builder.append("<p>").append(course.getCourseName()).append("</p><br>");
+        builder.append("<h3>Begin course date</h3><br>");
+        builder.append("<p>").append(course.getBeginOfCourse()).append("</p><br>");
+        builder.append("<h3>End course date</h3><br>");
+        builder.append("<p>").append(course.getEndOfCourse()).append("</p><br>");
+        builder.append("<h3>Course teacher</h3><br>");
+        builder.append("<h4>First name</h4><br>");
+        builder.append("<p>").append(course.getTeacher().getFirstName()).
+                append("</p><br>");
+        builder.append("<h4>Last name</h4><br>");
+        builder.append("<p>").append(course.getTeacher().getLastName()).
+                append("</p><br>");
+        builder.append("<h4>Birthday</h4><br>");
+        builder.append("<p>").append(course.getTeacher().getBirthday()).
+                append("</p><br>");
+        builder.append("<h3>Students on course</h3>");
+        builder.append("<p>").append(studentsOnCourseQuantity).append("/").
+                append(course.getMaxStudentQuantity()).append("</p><br>");
+        if (course.getCourseProgram() != null) {
+            for (ProgramStep programStep : course.getCourseProgram()) {
+                builder.append("<h4>step number  ").append(
+                        programStep.getStep()).append("</h4><br>");
+                builder.append("<h4> step name  ").append(
+                        programStep.getStepName()).append("</h4><br>");
+                if (programStep.getDescription() != null) {
+                    builder.append("<h4>step Description  ").append(
+                            programStep.getDescription()).append("</h4><br>");
+                } else {
+                    builder.append("<p>no description</p><br>");
+                }
+                builder.append("<h4>step start date  ").append(
+                        programStep.getStartDate()).append("</h4><br>");
+                builder.append("<h4>step end date  ").append(
+                        programStep.getEndDate()).append("</h4><br>");
+            }
+        } else {
+            builder.append("<p>no program right now</p>");
+        }
+
+        return builder;
     }
 }

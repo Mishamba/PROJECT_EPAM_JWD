@@ -7,7 +7,7 @@ import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class AdminMainPageButtons implements Former {
+public class AdminMenuButtons implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();

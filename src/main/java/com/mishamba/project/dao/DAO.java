@@ -26,4 +26,5 @@ public interface DAO {
     boolean createMarkReview(MarkReview markReview) throws DAOException;
     boolean checkSingInData(String email, int password) throws DAOException;
     User getUserByEmail(String email) throws DAOException;
+    Course getCourseById(int id) throws DAOException;
 }

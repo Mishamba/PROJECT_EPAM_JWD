@@ -21,6 +21,8 @@ public class CommandProvider {
         repository.put("sing_in_check", new SingInProcessCommand());
         repository.put("sing_up_check", new SingUpProcessCommand());
         repository.put("create_hometask", new GetHometaskCreatePageCommand());
+        repository.put("sing_out", new SignOutProcessCommand());
+        repository.put("course_profile", new GetCourseProfileCommand());
     }
 
     public static CommandProvider getInstance() {

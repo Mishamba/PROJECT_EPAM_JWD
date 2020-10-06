@@ -33,7 +33,6 @@ public class GetMainPageCommand implements Command {
             properties.setProperty("lastName", lastName);
         }
         properties.setProperty("role", role);
-        properties.setProperty("page", "main");
         properties.setProperty("target", "user info");
         try {
             logger.info("getting user info");

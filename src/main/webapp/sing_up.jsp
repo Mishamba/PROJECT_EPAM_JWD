@@ -37,7 +37,8 @@
 </form>
 <br>
 ${role_definer}
-<form action="/PROJECT_EPAM_JWD/university?command=sing_up" method="post">
+<form action="/PROJECT_EPAM_JWD_war/university" method="post">
+    <input type="hidden" name="command" value="sing_up_check">
     <input type="submit" value="Sign Up">
 </form>
 </body>

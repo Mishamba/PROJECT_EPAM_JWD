@@ -33,6 +33,7 @@ public class SingInProcessCommand implements Command {
                 session.setAttribute("firstName", info.get("firstName"));
                 session.setAttribute("lastName", info.get("lastName"));
                 session.setAttribute("role", info.get("role"));
+                session.setAttribute("email", email);
                 pageToLoad = "index.jsp";
             }
         } catch (ServiceException e) {
