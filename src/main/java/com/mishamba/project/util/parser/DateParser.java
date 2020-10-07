@@ -9,11 +9,25 @@ import java.util.Locale;
 
 public class DateParser {
     public Date parseDate(String date) throws UtilException {
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        if (date == null) {
+            return null;
+        }
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd",
+                Locale.ENGLISH);
         try {
             return format.parse(date);
         } catch (ParseException e) {
             throw new UtilException("can't parse this date", e);
         }
+    }
+
+    public String parseDateToString(Date date) {
+        if (date == null) {
+            return null;
+        }
+        SimpleDateFormat format = new SimpleDateFormat("yyy-MM-dd",
+                Locale.ENGLISH);
+        return format.format(date);
     }
 }

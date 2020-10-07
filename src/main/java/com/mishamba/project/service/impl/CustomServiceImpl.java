@@ -1,7 +1,7 @@
 package com.mishamba.project.service.impl;
 
+import com.mishamba.project.dao.DAOFactory;
 import com.mishamba.project.dao.exception.DAOException;
-import com.mishamba.project.dao.impl.DAOImpl;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
 import com.mishamba.project.model.User;
@@ -11,6 +11,7 @@ import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.FormerProvider;
 import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.validator.DateValidator;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -29,14 +30,14 @@ public class CustomServiceImpl implements CustomService {
     public String formMainCourses() throws ServiceException {
         ArrayList<Course> courses;
         try {
-            courses = DAOImpl.getInstance().getCoursesWithoutTeacher();
+            courses = DAOFactory.getInstance().getCourseDAO().getCoursesWithoutTeacher();
         } catch (DAOException e) {
             throw new ServiceException("can't get courses without teacher");
         }
         for (Course course : courses) {
             try {
-                course.setCourseProgram(DAOImpl.getInstance().
-                        getCourseProgram(course));
+                course.setCourseProgram(DAOFactory.getInstance().
+                        getProgramStepDAO().getCourseProgram(course));
             } catch (DAOException e) {
                 throw new ServiceException("can't find course program", e);
             }
@@ -55,7 +56,7 @@ public class CustomServiceImpl implements CustomService {
     public String formCoursesCatalog() throws ServiceException {
         ArrayList<Course> courses;
         try {
-            courses = DAOImpl.getInstance().getActiveCourses();
+            courses = DAOFactory.getInstance().getCourseDAO().getActiveCourses();
         } catch (DAOException e) {
             throw new ServiceException("can't get active courses", e);
         }
@@ -108,7 +109,8 @@ public class CustomServiceImpl implements CustomService {
         passwordHash = Integer.valueOf(passwordHash).hashCode();
 
         try {
-            return DAOImpl.getInstance().checkSingInData(email, passwordHash);
+            return DAOFactory.getInstance().getUserDAO().
+                    checkSingInData(email, passwordHash);
         } catch (DAOException e) {
             throw new ServiceException("can't check sing in data", e);
         }
@@ -118,7 +120,8 @@ public class CustomServiceImpl implements CustomService {
     public Properties getUserByEmail(String email) throws ServiceException {
         Properties userInfo = new Properties();
         try {
-            User user = DAOImpl.getInstance().getUserByEmail(email);
+            User user = DAOFactory.getInstance().getUserDAO().
+                    getUserByEmail(email);
             userInfo.setProperty("id", user.getId().toString());
             userInfo.setProperty("firstName", user.getFirstName());
             userInfo.setProperty("lastName", user.getLastName());
@@ -148,12 +151,17 @@ public class CustomServiceImpl implements CustomService {
         }
         String role = userInfo.getProperty("role");
 
-        User newUser = new User(null, firstName, lastName, email, birthday,
-                role);
-        try {
-            return DAOImpl.getInstance().createUser(newUser, passwordHash);
-        } catch (DAOException e) {
-            throw new ServiceException("can't sing up new user", e);
+        DateValidator dateValidator = new DateValidator();
+        if (!dateValidator.inFuture(birthday)) {
+            User newUser = new User(null, firstName, lastName, email, birthday,
+                    role);
+            try {
+                return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
+            } catch (DAOException e) {
+                throw new ServiceException("can't sing up new user", e);
+            }
+        } else {
+            return false;
         }
     }
 
@@ -161,7 +169,8 @@ public class CustomServiceImpl implements CustomService {
     public String formCourseProfile(int courseId) throws ServiceException {
         Course course;
         try {
-            course= DAOImpl.getInstance().getCourseById(courseId);
+            course = DAOFactory.getInstance().getCourseDAO().
+                    getCourseById(courseId);
         } catch (DAOException e) {
             throw new ServiceException("can't get course info", e);
         }
@@ -180,7 +189,8 @@ public class CustomServiceImpl implements CustomService {
     private StringBuilder formHtmlCourse(Course course) throws ServiceException {
         Integer studentsOnCourseQuantity;
         try {
-            studentsOnCourseQuantity = DAOImpl.getInstance().getStudentsOnCourseQuantity(course);
+            studentsOnCourseQuantity = DAOFactory.getInstance().getCourseDAO().
+                    getStudentsOnCourseQuantity(course);
         } catch (DAOException e) {
             throw new ServiceException("can't get course info", e);
         }
@@ -194,15 +204,19 @@ public class CustomServiceImpl implements CustomService {
         builder.append("<h3>End course date</h3><br>");
         builder.append("<p>").append(course.getEndOfCourse()).append("</p><br>");
         builder.append("<h3>Course teacher</h3><br>");
-        builder.append("<h4>First name</h4><br>");
-        builder.append("<p>").append(course.getTeacher().getFirstName()).
-                append("</p><br>");
-        builder.append("<h4>Last name</h4><br>");
-        builder.append("<p>").append(course.getTeacher().getLastName()).
-                append("</p><br>");
-        builder.append("<h4>Birthday</h4><br>");
-        builder.append("<p>").append(course.getTeacher().getBirthday()).
-                append("</p><br>");
+        if (course.getTeacher() != null) {
+            builder.append("<h4>First name</h4><br>");
+            builder.append("<p>").append(course.getTeacher().getFirstName()).
+                    append("</p><br>");
+            builder.append("<h4>Last name</h4><br>");
+            builder.append("<p>").append(course.getTeacher().getLastName()).
+                    append("</p><br>");
+            builder.append("<h4>Birthday</h4><br>");
+            builder.append("<p>").append(course.getTeacher().getBirthday()).
+                    append("</p><br>");
+        } else {
+            builder.append("<p>course has no teacher<p>");
+        }
         builder.append("<h3>Students on course</h3>");
         builder.append("<p>").append(studentsOnCourseQuantity).append("/").
                 append(course.getMaxStudentQuantity()).append("</p><br>");
