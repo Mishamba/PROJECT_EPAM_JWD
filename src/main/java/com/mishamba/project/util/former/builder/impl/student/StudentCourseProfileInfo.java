@@ -10,7 +10,7 @@ public class StudentCourseProfileInfo implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
-        Integer courseId = (Integer) properties.get("course_id");
+        int courseId = Integer.parseInt((String) properties.get("course_id"));
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formStudentSingUpForCourseButton(courseId));

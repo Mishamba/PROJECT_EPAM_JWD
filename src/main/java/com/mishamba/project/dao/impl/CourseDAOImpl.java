@@ -20,6 +20,13 @@ import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String CHECK_STUDENT_COURSE_REFERENCES = "SELECT EXISTS (" +
+            "SELECT student_id, course_id " +
+            "FROM student_course_references " +
+            "WHERE student_id = ? AND course_id = ?) AS exists_value";
+    private final String ENTER_STUDENT_ON_COURSE = "INSERT INTO " +
+            "student_course_references (student_id, course_id) " +
+            "VALUES (?, ?)";
     private final String COURSES_WITHOUT_TEACHER_QUEUE =
             "SELECT id, course_name, begin_of_course, " +
                     "end_of_course, max_students_quantity, finished " +
@@ -194,5 +201,39 @@ public class CourseDAOImpl implements CourseDAO {
             logger.error("can't execute queue");
             throw new DAOException("can't execute queue", e);
         }
+    }
+
+    @Override
+    public boolean enterStudentOnCourse(int studentId, int courseId) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(CHECK_STUDENT_COURSE_REFERENCES);
+            statement.setInt(1, studentId);
+            statement.setInt(2, courseId);
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            if (resultSet.getInt("exists_value") == 1) {
+                return false;
+            }
+        } catch (SQLException e) {
+            logger.error("can't check is there any such a student");
+            throw new DAOException("can't check is there already " +
+                    "such a student on course", e);
+        }
+
+        try {
+            statement = connection.prepareStatement(ENTER_STUDENT_ON_COURSE);
+            statement.setInt(1, studentId);
+            statement.setInt(2, courseId);
+            statement.execute();
+        } catch (SQLException e) {
+            logger.error("can't enter student on course");
+            throw new DAOException("can't enter student on course", e);
+        }
+
+        return true;
     }
 }

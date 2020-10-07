@@ -1,8 +1,8 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.ServiceException;
-import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -36,10 +36,28 @@ public class SingUpProcessCommand implements Command {
 
             boolean result;
             try {
-                result = CustomServiceImpl.getInstance().createUser(singUpInfo);
+                result = CustomServiceFactory.getInstance().getCustomService().
+                        createUser(singUpInfo);
             } catch (ServiceException e) {
                 logger.error("can't create user");
                 result = false;
+            }
+
+            Properties info;
+            try {
+                info = CustomServiceFactory.getInstance().
+                        getCustomService().getUserByEmail(singUpInfo.getProperty("email"));
+            } catch (ServiceException e) {
+                logger.error("can't get user info");
+                request.setAttribute("info", "u singed up. now go and sing in");
+                try {
+                    request.getRequestDispatcher("info_page_with_parameter.jsp").
+                            forward(request, response);
+                } catch (ServletException | IOException servletException) {
+                    logger.error("can't upload info page with answer");
+                }
+
+                return;
             }
 
             String pageToLoad;
@@ -48,8 +66,9 @@ public class SingUpProcessCommand implements Command {
                     session.setAttribute("role", singUpInfo.get("role"));
                     session.setAttribute("firstName", singUpInfo.get("firstName"));
                     session.setAttribute("lastName", singUpInfo.get("lastName"));
+                    session.setAttribute("id", Integer.parseInt((String) info.get("id")));
                 }
-                pageToLoad = "main.jsp";
+                pageToLoad = "index.jsp";
             } else {
                 pageToLoad = "error.html";
             }
@@ -69,10 +88,13 @@ public class SingUpProcessCommand implements Command {
         String password = request.getParameter("password");
         String birthday = request.getParameter("birthday");
         String role = request.getParameter("role");
+        if (role == null) {
+            role = "student";
+        }
 
         Properties singUpInfo;
         if (firstName != null || lastName != null || email != null ||
-                password != null || birthday != null || role != null) {
+                password != null || birthday != null) {
             singUpInfo = new Properties();
             singUpInfo.setProperty("firstName", firstName);
             singUpInfo.setProperty("lastName", lastName);

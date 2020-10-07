@@ -27,7 +27,11 @@ ${birthday}
 <br>
 ${email}
 <br>
-<h3>Passed courses </h3>
+<h3>Active courses</h3>
+<br>
+${active_courses}
+<br>
+<h3>Passed courses</h3>
 ${passed_courses}
 </body>
 </html>

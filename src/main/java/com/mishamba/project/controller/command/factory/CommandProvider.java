@@ -23,6 +23,7 @@ public class CommandProvider {
         repository.put("create_hometask", new GetHometaskCreatePageCommand());
         repository.put("sing_out", new SignOutProcessCommand());
         repository.put("course_profile", new GetCourseProfileCommand());
+        repository.put("student_sing_up_for_course", new StudentSingUpOnCourseCommand());
     }
 
     public static CommandProvider getInstance() {

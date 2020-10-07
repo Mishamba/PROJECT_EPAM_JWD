@@ -2,6 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomService;
+import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -24,16 +25,17 @@ public class SingInProcessCommand implements Command {
         String pageToLoad = "error.html";
 
         try {
-            if (CustomServiceImpl.getInstance().
+            if (CustomServiceFactory.getInstance().getCustomService().
                     checkSingInData(email, password)) {
                 logger.info("user entered correct sing in data");
-                Properties info = CustomServiceImpl.getInstance().
-                        getUserByEmail(email);
+                Properties info = CustomServiceFactory.getInstance().
+                        getCustomService().getUserByEmail(email);
                 HttpSession session = request.getSession();
                 session.setAttribute("firstName", info.get("firstName"));
                 session.setAttribute("lastName", info.get("lastName"));
                 session.setAttribute("role", info.get("role"));
                 session.setAttribute("email", email);
+                session.setAttribute("id", Integer.parseInt((String) info.get("id")));
                 pageToLoad = "index.jsp";
             }
         } catch (ServiceException e) {

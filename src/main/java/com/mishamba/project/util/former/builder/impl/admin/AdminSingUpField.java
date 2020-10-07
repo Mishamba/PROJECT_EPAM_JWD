@@ -10,10 +10,10 @@ public class AdminSingUpField implements Former {
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<p>role</p><br>").
-                append("<form>").
-                append("<input type=\"text\" name=\"role\">").
-                append("</form><br>");
+        builder.append("<p>role</p><br>");
+        builder.append("<label>");
+        builder.append("<input type=\"text\" name=\"role\">");
+        builder.append("</label><br>");
 
         return builder.toString();
     }

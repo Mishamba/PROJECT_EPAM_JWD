@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -29,8 +30,8 @@ public class GetSingUpPageCommand implements Command {
         definer.setProperty("target", "sing up");
         String roleDefiner;
         try {
-            roleDefiner = CustomServiceImpl.getInstance().
-                    formPageParameter(definer);
+            roleDefiner = CustomServiceFactory.getInstance().
+                    getCustomService().formPageParameter(definer);
         } catch (ServiceException e) {
             logger.error("can't form role definer");
             roleDefiner = "error happened. your role is student.";

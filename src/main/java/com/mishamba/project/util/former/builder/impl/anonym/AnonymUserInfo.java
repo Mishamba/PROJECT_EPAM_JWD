@@ -12,7 +12,9 @@ public class AnonymUserInfo implements Former {
         StringBuilder builder = new StringBuilder();
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSingInSingUpButton());
+                formSingInButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formSingUpButton());
 
         return builder.toString();
     }

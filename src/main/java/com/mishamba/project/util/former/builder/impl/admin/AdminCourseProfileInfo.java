@@ -17,6 +17,10 @@ public class AdminCourseProfileInfo implements Former {
         int courseId = (int) properties.get("course_id");
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formAppendTeacherOnCourseButton(courseId));
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formRemoveTeacherFromCourseButton(courseId));
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formFinishCourseButton(courseId));
 
         return builder.toString();

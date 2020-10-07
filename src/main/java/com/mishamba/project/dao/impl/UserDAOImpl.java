@@ -16,6 +16,9 @@ import java.util.Date;
 
 public class UserDAOImpl implements UserDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String STUDENT_ID_BY_EMAIL = "SELECT id " +
+            "FROM users " +
+            "WHERE email = ?";
     private final String STUDENT_QUEUE =
             "SELECT id, first_name, last_name, email, birthday " +
                     "FROM users WHERE role = 'student' " +
@@ -220,5 +223,29 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return users;
+    }
+
+    @Override
+    public int getUserIdByEmail(String email) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(STUDENT_ID_BY_EMAIL);
+            statement.setString(1, email);
+        } catch (SQLException e) {
+            logger.error("can't set queue parameters");
+            throw new DAOException("can't set queue parameters", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            return resultSet.getInt("id");
+        } catch (SQLException e) {
+            logger.error("can't execute queue");
+            throw new DAOException("can't execute queue", e);
+        }
     }
 }

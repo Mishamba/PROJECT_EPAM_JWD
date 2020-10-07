@@ -28,7 +28,7 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formSingInSingUpButton() {
+    public String formSingInButton() {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<h2>Sign In</h2>");
@@ -36,6 +36,13 @@ public class PartsBuilder {
         builder.append("<input type=\"hidden\" name=\"command\" value=\"sing_in\">");
         builder.append("<input type=\"submit\" value=\"Sign in\">");
         builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formSingUpButton() {
+        StringBuilder builder = new StringBuilder();
+
         builder.append("<h2>Sign Up<h2>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/sing_up\">");
         builder.append("<input type=\"hidden\" name=\"command\" value=\"sing_up\">");
@@ -67,10 +74,11 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formSignOutButton() {
+    public String formSingOutButton() {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<br><form action=\"/PROJECT_EPAM_JWD_war/sing_out?command=sing_out>");
+        builder.append("<br><form action=\"/PROJECT_EPAM_JWD_war/sing_out\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"sing_out\">");
         builder.append("<input type=\"submit\" value=\"Sing Out\">");
         builder.append("</form><br>");
 
@@ -111,7 +119,7 @@ public class PartsBuilder {
                 "value=\"student_sing_up_for_course\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=").
                 append(courseId).append(">");
-        builder.append("<input type=\"submit\" name=\"Sing up for course\">");
+        builder.append("<input type=\"submit\" value=\"Sing up for course\">");
         builder.append("</form><br>");
 
         return builder.toString();
@@ -126,6 +134,89 @@ public class PartsBuilder {
         builder.append("<input type=\"hidden\" name=\"course_id\" value=").
                 append(courseId).append(">");
         builder.append("<input type=\"submit\" name=\"Manage course\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formCreateUserButton() {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"sing_up\">");
+        builder.append("<input type=\"submit\" value=\"Sing up someone\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formRemoveTeacherFromCourseButton(int courseId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"remove_teacher_from_course\">");
+        builder.append("<input type=\"submit\" value=\"Remove teacher from course\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formAppendTeacherOnCourseButton(int courseId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" " +
+                "value=\"append_teacher_on_course>");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
+                append(courseId).append("\">");
+        builder.append("<input type=\"submit\" value=\"Append teacher on course\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formCourseHometasksButton(int courseId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
+        builder.append("<input type=\"hidden\" name=\"command\" " +
+                "value=\"course_hometask\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
+                append(courseId).append("\">");
+        builder.append("<input type=\"submit\" value=\"View hometask\">");
+
+        return builder.toString();
+    }
+
+    public String formAnswerHometaskButton(int hometaskId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
+        builder.append("<input type=\"hidden\" name=\"command\" " +
+                "value=\"answer_hometask\">");
+        builder.append("<input type=\"hidden\" name=\"hometask_id\" value=\"").
+                append(hometaskId).append("\">");
+        builder.append("<input type=\"submit\" value=\"Answer hometask\">");
+
+        return builder.toString();
+    }
+
+    public String formCheckHometaskButton(int hometaskId, int studentId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
+        builder.append("<input type=\"hidden\" name=\"command\" " +
+                "value=\"check_hometask\">");
+        builder.append("<input type=\"hidden\" name=\"hometask_id\" value=\"").
+                append(hometaskId).append("\">");
+        builder.append("<input type=\"hidden\" name=\"student_id\" value=\"").
+                append(studentId).append("\">");
         builder.append("</form><br>");
 
         return builder.toString();

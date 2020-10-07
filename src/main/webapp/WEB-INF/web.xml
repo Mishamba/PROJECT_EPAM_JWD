@@ -17,6 +17,7 @@
         <url-pattern>/authorization</url-pattern>
         <url-pattern>/sing_in</url-pattern>
         <url-pattern>/sing_up</url-pattern>
+        <url-pattern>/sing_out</url-pattern>
         <url-pattern>/hometask</url-pattern>
     </servlet-mapping>
 

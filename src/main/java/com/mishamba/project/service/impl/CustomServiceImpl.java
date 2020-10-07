@@ -12,20 +12,14 @@ import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.FormerProvider;
 import com.mishamba.project.util.parser.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
+import org.apache.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Properties;
 
 public class CustomServiceImpl implements CustomService {
-    private static class CustomServiceImplHolder {
-        private static final CustomServiceImpl HOLDER = new CustomServiceImpl();
-    }
-
-    public static CustomServiceImpl getInstance() {
-        return CustomServiceImplHolder.HOLDER;
-    }
-
+    private final Logger logger = Logger.getRootLogger();
     @Override
     public String formMainCourses() throws ServiceException {
         ArrayList<Course> courses;
@@ -152,7 +146,7 @@ public class CustomServiceImpl implements CustomService {
         String role = userInfo.getProperty("role");
 
         DateValidator dateValidator = new DateValidator();
-        if (!dateValidator.inFuture(birthday)) {
+        if (dateValidator.checkForFuture(birthday)) {
             User newUser = new User(null, firstName, lastName, email, birthday,
                     role);
             try {
@@ -184,6 +178,28 @@ public class CustomServiceImpl implements CustomService {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public boolean enterStudentOnCourse(int studentId, int courseId)
+            throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getCourseDAO().
+                    enterStudentOnCourse(studentId, courseId);
+        } catch (DAOException e) {
+            logger.error("can't enter student on course");
+            throw new ServiceException("can't enter student on course", e);
+        }
+    }
+
+    @Override
+    public int getUserIdByEmail(String email) throws ServiceException {
+        try {
+            return DAOFactory.getInstance().getUserDAO().getUserIdByEmail(email);
+        } catch (DAOException e) {
+            logger.error("can't get user id");
+            throw new ServiceException("can't get user id", e);
+        }
     }
 
     private StringBuilder formHtmlCourse(Course course) throws ServiceException {

@@ -11,33 +11,33 @@
     <title>Sing Up</title>
 </head>
 <body>
+<form action="/PROJECT_EPAM_JWD_war/university" method="post">
 <p>first name</p>
-<form>
-    <input type="text" name="first_name">
-</form>
-<br>
+    <label>
+        <input type="text" name="first_name">
+    </label>
+    <br>
 <p>last name</p>
-<form>
-    <input type="text" name="last_name">
-</form>
-<br>
+    <label>
+        <input type="text" name="last_name">
+    </label>
 <p>email</p>
-<form>
+<label>
     <input type="email" name="email">
-</form>
+</label>
 <br>
 <p>password</p>
-<form>
+<label>
     <input type="password" name="password">
-</form>
+</label>
 <br>
 <p>birthday (enter like YYYY-MM-DD)</p>
-<form>
+<label>
     <input type="text" name="birthday">
-</form>
+</label>
 <br>
 ${role_definer}
-<form action="/PROJECT_EPAM_JWD_war/university" method="post">
+<br>
     <input type="hidden" name="command" value="sing_up_check">
     <input type="submit" value="Sign Up">
 </form>

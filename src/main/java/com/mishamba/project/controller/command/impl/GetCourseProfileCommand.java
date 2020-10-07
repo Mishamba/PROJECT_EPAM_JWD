@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -43,7 +44,7 @@ public class GetCourseProfileCommand implements Command {
 
         String menu;
         try {
-            menu = CustomServiceImpl.getInstance().
+            menu = CustomServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
             logger.info("got menu buttons code");
         } catch (ServiceException e) {
@@ -53,16 +54,19 @@ public class GetCourseProfileCommand implements Command {
 
         String courseInfo;
         try {
-            courseInfo = CustomServiceImpl.getInstance().formCourseProfile(courseId);
+            courseInfo = CustomServiceFactory.getInstance().getCustomService().
+                    formCourseProfile(courseId);
             logger.info("got course info");
         } catch (ServiceException e) {
             courseInfo = "<p>Can't get course info</p>";
         }
 
         properties.setProperty("target", "course profile button");
+        properties.setProperty("course_id", String.valueOf(courseId));
         String buttons;
         try {
-            buttons = CustomServiceImpl.getInstance().formPageParameter(properties);
+            buttons = CustomServiceFactory.getInstance().getCustomService().
+                    formPageParameter(properties);
             logger.info("got buttons for couse profile");
         } catch (ServiceException e) {
             logger.error("can't get course action buttons");

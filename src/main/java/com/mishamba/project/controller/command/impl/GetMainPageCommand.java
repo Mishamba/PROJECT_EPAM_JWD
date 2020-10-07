@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -36,7 +37,8 @@ public class GetMainPageCommand implements Command {
         properties.setProperty("target", "user info");
         try {
             logger.info("getting user info");
-            userInfo = CustomServiceImpl.getInstance().formPageParameter(properties);
+            userInfo = CustomServiceFactory.getInstance().getCustomService().
+                    formPageParameter(properties);
         } catch (ServiceException e) {
             logger.error("can't get user info");
             userInfo = "can't upload user info";
@@ -46,7 +48,7 @@ public class GetMainPageCommand implements Command {
         properties.setProperty("target", "menu");
         try {
             logger.info("getting menu buttons");
-            menu = CustomServiceImpl.getInstance().formPageParameter(properties);
+            menu = CustomServiceFactory.getInstance().getCustomService().formPageParameter(properties);
         } catch (ServiceException e) {
             logger.error("can't get menu buttons");
             menu = "can't upload menu (((";
@@ -55,7 +57,8 @@ public class GetMainPageCommand implements Command {
         String coursesAdd;
         try {
             logger.info("getting courses add");
-            coursesAdd = CustomServiceImpl.getInstance().formMainCourses();
+            coursesAdd = CustomServiceFactory.getInstance().getCustomService().
+                    formMainCourses();
         } catch (ServiceException e) {
             coursesAdd = "can't get courses add ((((";
         }

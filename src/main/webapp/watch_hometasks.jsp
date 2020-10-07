@@ -14,10 +14,6 @@
     <h2>Hometasks on course</h2>
     <br>
     ${hometasks}
-<form action="/PROJECT_EPAM_JWD_war/university">
-    <input type="hidden" name="command" value="sing_up_form_course">
-    <input type="hidden" name="course_id" value="">
-    <input type="submit" name="Sing up for course">
 </form>
 </body>
 </html>

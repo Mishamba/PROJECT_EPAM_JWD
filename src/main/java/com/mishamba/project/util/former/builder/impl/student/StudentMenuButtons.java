@@ -15,7 +15,7 @@ public class StudentMenuButtons implements Former {
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formCoursesCatalogButton());
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSignOutButton());
+                formSingOutButton());
 
         return builder.toString();
     }

@@ -6,6 +6,11 @@ import com.mishamba.project.dao.impl.ProgramStepDAOImpl;
 import com.mishamba.project.dao.impl.UserDAOImpl;
 
 public class DAOFactory {
+    private final UserDAO userDAO = new UserDAOImpl();
+    private final CourseDAO courseDAO = new CourseDAOImpl();
+    private final HometaskDAO hometaskDAO = new HometaskDAOImpl();
+    private final ProgramStepDAO programStepDAO = new ProgramStepDAOImpl();
+
     private DAOFactory() {}
 
     private static class DAOFactoryHolder {
@@ -17,18 +22,18 @@ public class DAOFactory {
     }
 
     public UserDAO getUserDAO() {
-        return new UserDAOImpl();
+        return userDAO;
     }
 
     public CourseDAO getCourseDAO() {
-        return new CourseDAOImpl();
+        return courseDAO;
     }
 
     public HometaskDAO getHometaskDAO() {
-        return new HometaskDAOImpl();
+        return hometaskDAO;
     }
 
     public ProgramStepDAO getProgramStepDAO() {
-        return new ProgramStepDAOImpl();
+        return programStepDAO;
     }
 }

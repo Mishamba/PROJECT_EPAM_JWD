@@ -14,7 +14,9 @@ public class AnonymCourseProfileInfo implements Former {
         builder.append("<p>anonym can't make any actions with course, " +
                 "please sing in to</p><br>");
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSingInSingUpButton());
+                formSingInButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formSingUpButton());
 
         return builder.toString();
     }
