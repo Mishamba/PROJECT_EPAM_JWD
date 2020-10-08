@@ -2,11 +2,13 @@ package com.mishamba.project.controller.command.factory;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.controller.command.impl.*;
+import org.apache.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
+    private final Logger logger = Logger.getRootLogger();
     private final Map<String, Command> repository = new HashMap<>();
 
     private static class CommandProviderHolder {
@@ -33,6 +35,7 @@ public class CommandProvider {
     }
 
     public Command getCommand(String commandType) {
+        logger.info("getting Command by \"" + commandType + "\"");
         return repository.get(commandType);
     }
 }

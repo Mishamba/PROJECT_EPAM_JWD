@@ -11,9 +11,14 @@ public class AdminMenuButtons implements Former {
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formMainPageButton());
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formSignOutButton());
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formCreateUserButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formMainPageButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formSignOutButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formUserProfileButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formCreateUserButton());
 
         return builder.toString();
     }

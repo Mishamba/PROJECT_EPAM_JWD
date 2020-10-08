@@ -215,7 +215,7 @@ public class CustomServiceImpl implements CustomService {
         ArrayList<Course> courses;
         try {
             courses = DAOFactory.getInstance().getCourseDAO().
-                    getStudentCourses(userId, finished);
+                    getStudentsCourses(userId, finished);
         } catch (DAOException e) {
             throw new ServiceException("can't get courses", e);
         }
@@ -227,6 +227,35 @@ public class CustomServiceImpl implements CustomService {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public boolean isStudentOnCourse(int studentId, int courseId)
+            throws ServiceException {
+        try {
+            ArrayList<Course> usersCourses = DAOFactory.getInstance().getCourseDAO().
+                    getStudentsCourses(studentId, false);
+            for (Course course : usersCourses) {
+                if (course.getId() == courseId) {
+                    return true;
+                }
+            }
+        } catch (DAOException e) {
+            throw new ServiceException("can't check is student on course", e);
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean isTeacherLeadsCourse(int teacherId, int courseId)
+            throws ServiceException {
+        try {
+            return (DAOFactory.getInstance().getCourseDAO().getTeachersCourse(teacherId).getId() == courseId);
+        } catch (DAOException e) {
+            logger.error("can't get teachers course", e);
+            throw new ServiceException("can't get teachers course", e);
+        }
     }
 
     private String formUserCourseList(Course course) {

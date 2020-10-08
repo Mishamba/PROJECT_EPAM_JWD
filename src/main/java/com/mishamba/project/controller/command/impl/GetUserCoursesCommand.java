@@ -17,22 +17,27 @@ public class GetUserCoursesCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        logger.info("getting and checking info sent by user");
         HttpSession session = request.getSession();
         int id = (int) session.getAttribute("id");
         String role = (String) session.getAttribute("role");
         String finished = (String) request.getAttribute("finished");
 
-        if (role == null || role.equals("admin")) {
-            logger.warn("anonym user tries to get active courses");
+        if (role == null || role.equals("admin") || finished == null) {
+            logger.warn("anonym user or admin or someone who didn't send " +
+                    "finish parameter tries to get active courses");
 
             try {
-                request.getRequestDispatcher("error.html").forward(request, response);
+                request.getRequestDispatcher("error.html").
+                        forward(request, response);
             } catch (ServletException | IOException e) {
                 logger.error("can't send error page");
             }
 
             return;
         }
+
+        logger.info("user send correct info to ");
 
         Properties properties = new Properties();
         properties.setProperty("userId", String.valueOf(id));

@@ -22,10 +22,6 @@ public class AdminCourseProfileButtons implements Former {
                 formRemoveTeacherFromCourseButton(courseId));
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formFinishCourseButton(courseId));
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formAppendTeacherOnCourseButton(courseId));
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formRemoveTeacherFromCourseButton(courseId));
 
         return builder.toString();
     }

@@ -1,4 +1,4 @@
-package com.mishamba.project.util.former.builder.impl.student;
+package com.mishamba.project.util.former.builder.impl.same;
 
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
@@ -6,18 +6,19 @@ import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class StudentMenuButtons implements Former {
-
+public class TeacherStudentProfile implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
+        String activeCoursesButtonSign = properties.
+                getProperty("activeCoursesButtonSign");
+        String passedCoursesButtonSign = properties.
+                getProperty("passedCoursesButtonSign");
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formCoursesCatalogButton());
+                formUserActiveCourses(activeCoursesButtonSign));
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formUserProfileButton());
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSignOutButton());
+                formUserPassedCourses(passedCoursesButtonSign));
 
         return builder.toString();
     }

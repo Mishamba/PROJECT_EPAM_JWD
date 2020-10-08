@@ -17,4 +17,6 @@ public interface CustomService {
             throws ServiceException;
     int getUserIdByEmail(String email) throws ServiceException;
     String formUserCourses(Properties properties) throws ServiceException;
+    boolean isStudentOnCourse(int studentId, int courseId) throws ServiceException;
+    boolean isTeacherLeadsCourse(int teacherId, int courseId) throws ServiceException;
 }

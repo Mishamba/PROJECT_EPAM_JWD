@@ -100,34 +100,6 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formEnterTeacherOnCourse(int courseId) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("<br>");
-        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"append_teacher_on_course\"");
-        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
-                append(courseId).append("\">");
-        builder.append("<input type=\"submit\" value=\"Append teacher on course\">");
-        builder.append("</form><br>");
-
-        return builder.toString();
-    }
-
-    public String removeTeacherFromCourse(int courseId) {
-        StringBuilder builder = new StringBuilder();
-
-        builder.append("<br>");
-        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"remove_teacher_from_course\">");
-        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
-                append(courseId).append("\">");
-        builder.append("<input type=\"submit\" value=\"Remove teacher from course\">");
-        builder.append("</form><br>");
-
-        return builder.toString();
-    }
-
     public String formStudentSignUpForCourseButton(int courseId) {
         StringBuilder builder = new StringBuilder();
 
@@ -255,7 +227,7 @@ public class PartsBuilder {
     public String formUserActiveCourses(String buttonSign) {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<br>");
+        builder.append("<br>"); // TODO: 10/8/20 can't get finished parameter
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/active_courses\">");
         builder.append("<input type=\"hidden\" name=\"command\" " +
                 "value=\"user_courses\">");
@@ -270,7 +242,7 @@ public class PartsBuilder {
     public String formUserPassedCourses(String buttonSign) {
         StringBuilder builder = new StringBuilder();
 
-        builder.append("<br>");
+        builder.append("<br>"); // TODO: 10/8/20 can't get finished parameter
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/passed_courses\">");
         builder.append("<input type=\"hidden\" name=\"command=\" " +
                 "value=\"user_courses\">");
@@ -287,10 +259,23 @@ public class PartsBuilder {
 
         builder.append("<br>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/course_info\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"course_info\"");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"course_info\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
                 append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"View\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formStudentLeaveCourse(int courseId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"leave_course\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").append(courseId).append("\">");
+        builder.append("<input type=\"submit\" value=\"Leave course\">");
         builder.append("</form><br>");
 
         return builder.toString();

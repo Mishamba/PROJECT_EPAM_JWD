@@ -34,9 +34,18 @@ public class GetUserProfilePageCommand implements Command {
             return;
         }
 
+        String activeCoursesButtonSign = (role.equals("teacher")) ?
+                "Managing Courses" : (role.equals("student")) ?
+                "Active courses" : null;
+        String passedCoursesButtonSign = (role.equals("teacher")) ?
+                "Managed Courses" : (role.equals("student")) ?
+                "Passed courses" : null;
+
         Properties properties = new Properties();
         properties.setProperty("role", role);
         properties.setProperty("target", "profile");
+        properties.setProperty("activeCoursesButtonSign", activeCoursesButtonSign);
+        properties.setProperty("passedCoursesButtonSign", passedCoursesButtonSign);
 
         String courses_buttons;
         try {
@@ -55,7 +64,7 @@ public class GetUserProfilePageCommand implements Command {
         request.setAttribute("courses_buttons", courses_buttons);
 
         try {
-            request.getRequestDispatcher("user_profile").forward(request, response);
+            request.getRequestDispatcher("user_profile.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't send profile page");
         }

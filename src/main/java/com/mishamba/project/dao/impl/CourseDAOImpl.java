@@ -20,14 +20,27 @@ import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
     private final Logger logger = Logger.getRootLogger();
-    private final String STUDENT_ACTIVE_PASSED_COURSES = "SELECT id, " +
-            "course_name, begin_of_course, end_of_course, course_teacher, " +
-            "max_students_quantity, finished " +
+    private final String GET_COURSE_BY_TEACHERS_ID = "SELECT courses.id, courses.course_name, " +
+            "courses.begin_of_course, courses.end_of_course, courses.course_teacher, " +
+            "courses.max_students_quantity, courses.finished, users.id, " +
+            "users.first_name, users.last_name, users.birthday, users.email " +
+            "FROM courses " +
+            "LEFT JOIN users " +
+            "ON courses.course_teacher = users.id " +
+            "WHERE course_teacher=? AND finished=?";
+    private final String STUDENT_ACTIVE_PASSED_COURSES = "SELECT courses.id, " +
+            "courses.course_name, courses.begin_of_course, " +
+            "courses.end_of_course, courses.course_teacher, " +
+            "courses.max_students_quantity, courses.finished, " +
+            "users.id as teacher_id, users.first_name, users.last_name, " +
+            "users.birthday, users.email " +
             "FROM courses " +
             "LEFT JOIN " +
             "student_course_references " +
             "ON courses.id=student_course_references.course_id AND " +
-            "student_course_references.student_id=?" +
+            "student_course_references.student_id=? " +
+            "LEFT JOIN users " +
+            "ON courses.course_teacher = users.id " +
             "WHERE finished=?";
     private final String CHECK_STUDENT_COURSE_REFERENCES = "SELECT EXISTS (" +
             "SELECT student_id, course_id " +
@@ -247,7 +260,7 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public ArrayList<Course> getStudentCourses(int userId, boolean passed) throws DAOException {
+    public ArrayList<Course> getStudentsCourses(int userId, boolean passed) throws DAOException {
         ArrayList<Course> courses = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
@@ -273,5 +286,52 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return courses;
+    }
+
+    @Override
+    public Course getTeachersCourse(int teacherId) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(GET_COURSE_BY_TEACHERS_ID);
+            statement.setInt(1, teacherId);
+            statement.setBoolean(2, false);
+        } catch (SQLException throwables) {
+            logger.error("can't set queue parameters");
+            throw new DAOException("can't set queue parameters");
+        }
+
+        DateParser dateParser = new DateParser();
+
+        try {
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            int courseId = resultSet.getInt("id");
+            String courseName = resultSet.getString("course_name");
+            Date beginOfCourse = dateParser.parseDate(resultSet.
+                    getString("begin_of_course"));
+            Date endOfCourse = dateParser.parseDate(resultSet.
+                    getString("end_of_course"));
+            int maxStudentsQuantity = resultSet.getInt("max_students_quantity");
+            String firstName = resultSet.getString("first_name");
+            String lastName = resultSet.getString("last_name");
+            Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+            String email = resultSet.getString("email");
+            User teacher = new User(teacherId, firstName, lastName, email, birthday, "teacher");
+            Course course = new Course(courseId, courseName, beginOfCourse,
+                    endOfCourse, teacher, maxStudentsQuantity, null, false);
+
+            ArrayList<ProgramStep> courseProgram = DAOFactory.getInstance().
+                    getProgramStepDAO().getCourseProgram(course);
+
+            course.setCourseProgram(courseProgram);
+
+            return course;
+        } catch (SQLException | UtilException e) {
+            logger.error("can't execute queue");
+            throw new DAOException("cant execute queue", e);
+        }
     }
 }
