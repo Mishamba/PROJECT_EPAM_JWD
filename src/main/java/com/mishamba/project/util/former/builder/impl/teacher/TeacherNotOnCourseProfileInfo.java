@@ -6,19 +6,14 @@ import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class TeacherProfile implements Former {
+public class TeacherNotOnCourseProfileInfo implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
-        String activeCoursesButtonSign = properties.
-                getProperty("activeCoursesButtonSign");
-        String passedCoursesButtonSign = properties.
-                getProperty("passedCoursesButtonSign");
+        Integer courseId = (Integer) properties.get("courseId");
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formUserActiveCourses(activeCoursesButtonSign));
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formUserPassedCourses(passedCoursesButtonSign));
+                formTeacherManageCourseButton(courseId));
 
         return builder.toString();
     }

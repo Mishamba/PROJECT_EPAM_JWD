@@ -6,7 +6,7 @@ import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class StudentCourseProfileInfo implements Former {
+public class StudentNotOnCourseProfileInfo implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
