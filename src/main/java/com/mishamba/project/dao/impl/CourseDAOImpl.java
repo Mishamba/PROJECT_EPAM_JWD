@@ -20,6 +20,15 @@ import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String STUDENT_ACTIVE_PASSED_COURSES = "SELECT id, " +
+            "course_name, begin_of_course, end_of_course, course_teacher, " +
+            "max_students_quantity, finished " +
+            "FROM courses " +
+            "LEFT JOIN " +
+            "student_course_references " +
+            "ON courses.id=student_course_references.course_id AND " +
+            "student_course_references.student_id=?" +
+            "WHERE finished=?";
     private final String CHECK_STUDENT_COURSE_REFERENCES = "SELECT EXISTS (" +
             "SELECT student_id, course_id " +
             "FROM student_course_references " +
@@ -235,5 +244,34 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return true;
+    }
+
+    @Override
+    public ArrayList<Course> getStudentCourses(int userId, boolean passed) throws DAOException {
+        ArrayList<Course> courses = new ArrayList<>();
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(STUDENT_ACTIVE_PASSED_COURSES);
+            statement.setInt(1, userId);
+            statement.setBoolean(2, passed);
+        } catch (SQLException e) {
+            logger.error("can't form queue");
+            throw new DAOException("can't form queue", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                courses.add(formCourseFromResultSet(resultSet));
+            }
+        } catch (SQLException | UtilException e) {
+            logger.error("can't execute queue");
+            throw new DAOException("can't execute queue", e);
+        }
+
+        return courses;
     }
 }

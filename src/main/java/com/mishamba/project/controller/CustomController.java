@@ -14,31 +14,31 @@ public class CustomController extends HttpServlet {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         logger.info("got GET request");
 
         process(req, resp);
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         logger.info("got POST request");
 
         process(req, resp);
     }
 
-    private void process(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void process(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
         String commandType = req.getParameter("command");
         logger.info("got commandType");
-        if (commandType != null) {
-            Command command = CommandProvider.getInstance().
-                    getCommand(commandType);
-            logger.info("got command to execute");
+        Command command = CommandProvider.getInstance().getCommand(commandType);
+        if (command != null) {
             command.execute(req, resp);
             logger.info("command executed");
         } else {
-            logger.warn("can't get command type request parameter, " +
-                    "so uploading error page");
+            logger.warn("can't get command, so uploading error page");
             req.getRequestDispatcher("error.html").forward(req, resp);
         }
     }

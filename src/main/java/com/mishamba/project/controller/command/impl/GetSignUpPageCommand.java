@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Properties;
 
-public class GetSingUpPageCommand implements Command {
+public class GetSignUpPageCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
@@ -27,7 +27,7 @@ public class GetSingUpPageCommand implements Command {
         }
         Properties definer = new Properties();
         definer.setProperty("role", role);
-        definer.setProperty("target", "sing up");
+        definer.setProperty("target", "sign up");
         String roleDefiner;
         try {
             roleDefiner = CustomServiceFactory.getInstance().
@@ -40,11 +40,11 @@ public class GetSingUpPageCommand implements Command {
         request.setAttribute("role_definer", roleDefiner);
 
         try {
-            logger.info("uploading sing up page");
-            request.getRequestDispatcher("sing_up.jsp").
+            logger.info("uploading sign up page");
+            request.getRequestDispatcher("sign_up.jsp").
                     forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.error("can't upload sing up page");
+            logger.error("can't upload sign up page");
         }
     }
 }

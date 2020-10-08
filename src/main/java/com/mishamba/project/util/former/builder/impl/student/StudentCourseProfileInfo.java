@@ -13,7 +13,7 @@ public class StudentCourseProfileInfo implements Former {
         int courseId = Integer.parseInt((String) properties.get("course_id"));
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formStudentSingUpForCourseButton(courseId));
+                formStudentSignUpForCourseButton(courseId));
 
         return builder.toString();
     }

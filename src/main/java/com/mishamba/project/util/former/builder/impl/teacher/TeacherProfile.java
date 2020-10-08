@@ -1,4 +1,4 @@
-package com.mishamba.project.util.former.builder.impl.admin;
+package com.mishamba.project.util.former.builder.impl.teacher;
 
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
@@ -6,22 +6,19 @@ import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
-public class AdminCourseProfileInfo implements Former {
+public class TeacherProfile implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
-        if (properties == null) {
-            throw new UtilException("properties ara null");
-        }
         StringBuilder builder = new StringBuilder();
+        String activeCoursesButtonSign = properties.
+                getProperty("activeCoursesButtonSign");
+        String passedCoursesButtonSign = properties.
+                getProperty("passedCoursesButtonSign");
 
-        int courseId = (int) properties.get("course_id");
-
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formAppendTeacherOnCourseButton(courseId));
+                formUserActiveCourses(activeCoursesButtonSign));
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formRemoveTeacherFromCourseButton(courseId));
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formFinishCourseButton(courseId));
+                formUserPassedCourses(passedCoursesButtonSign));
 
         return builder.toString();
     }

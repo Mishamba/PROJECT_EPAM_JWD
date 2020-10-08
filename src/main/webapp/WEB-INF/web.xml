@@ -15,10 +15,14 @@
         <url-pattern>/courses_catalog</url-pattern>
         <url-pattern>/course_profile</url-pattern>
         <url-pattern>/authorization</url-pattern>
-        <url-pattern>/sing_in</url-pattern>
-        <url-pattern>/sing_up</url-pattern>
-        <url-pattern>/sing_out</url-pattern>
+        <url-pattern>/sign_in</url-pattern>
+        <url-pattern>/sign_up</url-pattern>
+        <url-pattern>/sign_out</url-pattern>
+        <url-pattern>/user_profile</url-pattern>
         <url-pattern>/hometask</url-pattern>
+        <url-pattern>/active_courses</url-pattern>
+        <url-pattern>/passed_courses</url-pattern>
+        <url-pattern>/course_info</url-pattern>
     </servlet-mapping>
 
 </web-app>

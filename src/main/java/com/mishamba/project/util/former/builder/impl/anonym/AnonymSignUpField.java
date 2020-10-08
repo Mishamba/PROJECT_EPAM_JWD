@@ -5,7 +5,7 @@ import com.mishamba.project.util.former.builder.Former;
 
 import java.util.Properties;
 
-public class AnonymSingUpField implements Former {
+public class AnonymSignUpField implements Former {
 
     @Override
     public String form(Properties properties) throws UtilException {

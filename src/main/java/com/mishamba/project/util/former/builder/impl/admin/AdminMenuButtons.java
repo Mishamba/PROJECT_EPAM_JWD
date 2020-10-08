@@ -12,7 +12,7 @@ public class AdminMenuButtons implements Former {
         StringBuilder builder = new StringBuilder();
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formMainPageButton());
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formSingOutButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formSignOutButton());
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formCreateUserButton());
 
         return builder.toString();

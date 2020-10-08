@@ -5,7 +5,7 @@ import com.mishamba.project.util.former.builder.Former;
 
 import java.util.Properties;
 
-public class AdminSingUpField implements Former {
+public class AdminSignUpField implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();

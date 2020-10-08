@@ -27,7 +27,7 @@ public class UserDAOImpl implements UserDAO {
     private final String TEACHER_BY_FIRST_LAST_NAME_QUEUE = "SELECT id, first_name, last_name, email, birthday " +
             "FROM users " +
             "WHERE role = 'teacher' AND first_name = ? AND last_name = ?";
-    private final String CHECK_SING_IN_DATA = "SELECT EXISTS (" +
+    private final String CHECK_SIGN_IN_DATA = "SELECT EXISTS (" +
             "SELECT email, password_hash " +
             "FROM users " +
             "WHERE email = ? AND password_hash = ?) as exists_value";
@@ -42,12 +42,12 @@ public class UserDAOImpl implements UserDAO {
             "VALUES (?, ?, ?, ?, ?, ?)";
 
     @Override
-    public boolean checkSingInData(String givenEmail, int givenPasswordHash) throws DAOException {
+    public boolean checkSignInData(String givenEmail, int givenPasswordHash) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
         ResultSet resultSet;
         try {
-            statement = connection.prepareStatement(CHECK_SING_IN_DATA);
+            statement = connection.prepareStatement(CHECK_SIGN_IN_DATA);
         } catch (SQLException e) {
             throw new DAOException("can't create statement", e);
         }

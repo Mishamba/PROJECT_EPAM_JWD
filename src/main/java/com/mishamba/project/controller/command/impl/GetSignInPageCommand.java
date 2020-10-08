@@ -14,10 +14,10 @@ public class GetSignInPageCommand implements Command {
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {
         try {
-            logger.info("uploading sing in page");
+            logger.info("uploading sign in page");
             req.getRequestDispatcher("sign_in.html").forward(req, resp);
         } catch (ServletException | IOException e) {
-            logger.error("can't upload sing in page");
+            logger.error("can't upload sign in page");
         }
     }
 }

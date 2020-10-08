@@ -10,6 +10,7 @@ import com.mishamba.project.service.exception.ServiceException;
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.former.builder.Former;
 import com.mishamba.project.util.former.FormerProvider;
+import com.mishamba.project.util.former.factory.PartsBuilderFactory;
 import com.mishamba.project.util.parser.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
 import org.apache.log4j.Logger;
@@ -98,21 +99,23 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public boolean checkSingInData(String email, String password) throws ServiceException {
+    public boolean checkSignInData(String email, String password) throws ServiceException {
         int passwordHash = password.hashCode();
         passwordHash = Integer.valueOf(passwordHash).hashCode();
 
         try {
             return DAOFactory.getInstance().getUserDAO().
-                    checkSingInData(email, passwordHash);
+                    checkSignInData(email, passwordHash);
         } catch (DAOException e) {
-            throw new ServiceException("can't check sing in data", e);
+            throw new ServiceException("can't check sign in data", e);
         }
     }
 
     @Override
     public Properties getUserByEmail(String email) throws ServiceException {
         Properties userInfo = new Properties();
+        DateParser dateParser = new DateParser();
+
         try {
             User user = DAOFactory.getInstance().getUserDAO().
                     getUserByEmail(email);
@@ -120,7 +123,8 @@ public class CustomServiceImpl implements CustomService {
             userInfo.setProperty("firstName", user.getFirstName());
             userInfo.setProperty("lastName", user.getLastName());
             userInfo.setProperty("email", user.getEmail());
-            userInfo.setProperty("birthday", user.getBirthday().toString());
+            userInfo.setProperty("birthday", dateParser.parseDateToString(
+                    user.getBirthday()));
             userInfo.setProperty("role", user.getRole());
             return userInfo;
         } catch (DAOException e) {
@@ -152,7 +156,7 @@ public class CustomServiceImpl implements CustomService {
             try {
                 return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
             } catch (DAOException e) {
-                throw new ServiceException("can't sing up new user", e);
+                throw new ServiceException("can't sign up new user", e);
             }
         } else {
             return false;
@@ -169,7 +173,8 @@ public class CustomServiceImpl implements CustomService {
             throw new ServiceException("can't get course info", e);
         }
 
-        StringBuilder builder = formHtmlCourse(course);
+        StringBuilder builder = new StringBuilder();
+        builder.append(formHtmlCourse(course));
 
         if (course.getFinished()) {
             builder.append("<h3>Course is active</h3><br>");
@@ -202,7 +207,42 @@ public class CustomServiceImpl implements CustomService {
         }
     }
 
-    private StringBuilder formHtmlCourse(Course course) throws ServiceException {
+    @Override
+    public String formUserCourses(Properties properties) throws ServiceException {
+        boolean finished = (boolean) properties.get("finished");
+        int userId = (int) properties.get("userId");
+
+        ArrayList<Course> courses;
+        try {
+            courses = DAOFactory.getInstance().getCourseDAO().
+                    getStudentCourses(userId, finished);
+        } catch (DAOException e) {
+            throw new ServiceException("can't get courses", e);
+        }
+
+        StringBuilder builder = new StringBuilder();
+
+        for (Course course : courses) {
+            builder.append(formUserCourseList(course));
+        }
+
+        return builder.toString();
+    }
+
+    private String formUserCourseList(Course course) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<h3>").append(course.getCourseName()).append("</h3>");
+        builder.append("<br>");
+        builder.append("<h3>").append(PartsBuilderFactory.getInstance().
+                getPartsBuilder().formViewCourseInfoButton(course.getId()));
+        builder.append("<br>");
+
+        return builder.toString();
+    }
+
+    private String formHtmlCourse(Course course) throws ServiceException {
         Integer studentsOnCourseQuantity;
         try {
             studentsOnCourseQuantity = DAOFactory.getInstance().getCourseDAO().
@@ -257,6 +297,6 @@ public class CustomServiceImpl implements CustomService {
             builder.append("<p>no program right now</p>");
         }
 
-        return builder;
+        return builder.toString();
     }
 }

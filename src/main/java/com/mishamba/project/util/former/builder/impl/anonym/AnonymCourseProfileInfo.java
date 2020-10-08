@@ -12,11 +12,11 @@ public class AnonymCourseProfileInfo implements Former {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<p>anonym can't make any actions with course, " +
-                "please sing in to</p><br>");
+                "please sign in to</p><br>");
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSingInButton());
+                formSignInButton());
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
-                formSingUpButton());
+                formSignUpButton());
 
         return builder.toString();
     }

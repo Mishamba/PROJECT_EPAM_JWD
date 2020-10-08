@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>Sing Up</title>
+    <title>Sign Up</title>
 </head>
 <body>
 <form action="/PROJECT_EPAM_JWD_war/university" method="post">
@@ -38,7 +38,7 @@
 <br>
 ${role_definer}
 <br>
-    <input type="hidden" name="command" value="sing_up_check">
+    <input type="hidden" name="command" value="sign_up_check">
     <input type="submit" value="Sign Up">
 </form>
 </body>

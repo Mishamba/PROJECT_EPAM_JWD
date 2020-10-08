@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-public class StudentSingUpOnCourseCommand implements Command {
+public class StudentSignUpOnCourseCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override

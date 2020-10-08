@@ -6,7 +6,7 @@ import com.mishamba.project.model.User;
 import java.util.ArrayList;
 
 public interface UserDAO {
-    boolean checkSingInData(String email, int password) throws DAOException;
+    boolean checkSignInData(String email, int password) throws DAOException;
     User getUserByEmail(String email) throws DAOException;
     boolean createUser(User user, int password) throws DAOException;
     ArrayList<User> getTeacherByFirstNameLastName(
