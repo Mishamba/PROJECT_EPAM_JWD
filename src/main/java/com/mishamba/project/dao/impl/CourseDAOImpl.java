@@ -20,6 +20,12 @@ import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String GET_STUDENTS_ON_COURSE = "SELECT id, first_name, " +
+            "last_name, birthday, email " +
+            "FROM users " +
+            "LEFT JOIN student_course_references " +
+            "ON student_course_references.student_id=users.id " +
+            "WHERE student_course_references.course_id=?";
     private final String GET_COURSE_BY_TEACHERS_ID = "SELECT courses.id, courses.course_name, " +
             "courses.begin_of_course, courses.end_of_course, courses.course_teacher, " +
             "courses.max_students_quantity, courses.finished, users.id, " +

@@ -21,7 +21,8 @@ public class GetUserCoursesCommand implements Command {
         HttpSession session = request.getSession();
         int id = (int) session.getAttribute("id");
         String role = (String) session.getAttribute("role");
-        String finished = (String) request.getAttribute("finished");
+        String finished = request.getParameter("passed");
+        // TODO: 10/9/20 can't get "finished" parameter
 
         if (role == null || role.equals("admin") || finished == null) {
             logger.warn("anonym user or admin or someone who didn't send " +

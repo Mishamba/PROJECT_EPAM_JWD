@@ -231,7 +231,7 @@ public class PartsBuilder {
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/active_courses\">");
         builder.append("<input type=\"hidden\" name=\"command\" " +
                 "value=\"user_courses\">");
-        builder.append("<input type=\"hidden\" name=\"finished\" value=\"false\">");
+        builder.append("<input type=\"hidden\" name=\"passed\" value=\"false\">");
         builder.append("<input type=\"submit\" value=\"").append(buttonSign).
                 append("\">");
         builder.append("</form><br>");
@@ -246,7 +246,7 @@ public class PartsBuilder {
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/passed_courses\">");
         builder.append("<input type=\"hidden\" name=\"command=\" " +
                 "value=\"user_courses\">");
-        builder.append("<input type=\"hidden\" name=\"finished\" value=\"true\">");
+        builder.append("<input type=\"hidden\" name=\"passed\" value=\"true\">");
         builder.append("<input type=\"submit\" value=\"").append(buttonSign).
                 append("\">");
         builder.append("</form><br>");
@@ -259,7 +259,7 @@ public class PartsBuilder {
 
         builder.append("<br>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/course_info\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"course_info\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"course_profile\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
                 append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"View\">");
@@ -274,8 +274,39 @@ public class PartsBuilder {
         builder.append("<br>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
         builder.append("<input type=\"hidden\" name=\"command\" value=\"leave_course\">");
-        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").append(courseId).append("\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
+                append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"Leave course\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formStudentProgressButton(int courseId, int studentId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"student_progress\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
+                append(courseId).append("\">");
+        builder.append("<input type=\"hidden\" name=\"student_id\" value=\"").
+                append(studentId).append("\">");
+        builder.append("<input type=\"submit\" value=\"View progress\">");
+        builder.append("</form><br>");
+
+        return builder.toString();
+    }
+
+    public String formKickStudentOutFromCourse(int courseId, int studentId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"dedicate_student\">");
+        builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").append(courseId).append("\">");
+        builder.append("<input type=\"hidden\" name=\"student_id\" value=\"").append(studentId).append("\">");
+        builder.append("<input type=\"submit\" value=\"Kick student out\">");
         builder.append("</form><br>");
 
         return builder.toString();

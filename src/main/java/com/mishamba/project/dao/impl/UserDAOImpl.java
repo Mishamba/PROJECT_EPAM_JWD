@@ -16,6 +16,12 @@ import java.util.Date;
 
 public class UserDAOImpl implements UserDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String GET_STUDENTS_ON_COURSE = "SELECT id, first_name, " +
+            "last_name, birthday, email, role " +
+            "FROM users " +
+            "LEFT JOIN student_course_references " +
+            "ON student_course_references.student_id=users.id " +
+            "WHERE student_course_references.course_id=?";
     private final String STUDENT_ID_BY_EMAIL = "SELECT id " +
             "FROM users " +
             "WHERE email = ?";
@@ -247,5 +253,45 @@ public class UserDAOImpl implements UserDAO {
             logger.error("can't execute queue");
             throw new DAOException("can't execute queue", e);
         }
+    }
+
+    @Override
+    public ArrayList<User> getStudentsOnCourse(int courseId) throws DAOException {
+        ArrayList<User> students = new ArrayList<>();
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(GET_STUDENTS_ON_COURSE);
+            statement.setInt(1, courseId);
+        } catch (SQLException e) {
+            logger.error("can't form queue");
+            throw new DAOException("can't form queue", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                students.add(formUser(resultSet));
+            }
+        } catch (SQLException | UtilException throwables) {
+            throwables.printStackTrace();
+        }
+
+        return students;
+    }
+
+    private User formUser(ResultSet resultSet) throws SQLException, UtilException {
+        DateParser dateParser = new DateParser();
+
+        int id = resultSet.getInt("id");
+        String firstName = resultSet.getString("firstName");
+        String lastName = resultSet.getString("lastName");
+        Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+        String email = resultSet.getString("email");
+        String role = resultSet.getString("role");
+
+        return new User(id, firstName, lastName, email, birthday, role);
     }
 }

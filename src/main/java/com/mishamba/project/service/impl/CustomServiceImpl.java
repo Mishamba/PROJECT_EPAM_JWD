@@ -209,8 +209,8 @@ public class CustomServiceImpl implements CustomService {
 
     @Override
     public String formUserCourses(Properties properties) throws ServiceException {
-        boolean finished = (boolean) properties.get("finished");
-        int userId = (int) properties.get("userId");
+        boolean finished = Boolean.parseBoolean((String) properties.get("finished"));
+        int userId = Integer.parseInt((String) properties.get("userId"));
 
         ArrayList<Course> courses;
         try {
@@ -256,6 +256,65 @@ public class CustomServiceImpl implements CustomService {
             logger.error("can't get teachers course", e);
             throw new ServiceException("can't get teachers course", e);
         }
+    }
+
+    @Override
+    public Properties getCourseById(int courseId) throws ServiceException {
+        try {
+            Course course = DAOFactory.getInstance().getCourseDAO().getCourseById(courseId);
+            DateParser dateParser = new DateParser();
+
+            Properties courseInfo = new Properties();
+            courseInfo.setProperty("id", String.valueOf(course.getId()));
+            courseInfo.setProperty("courseName", course.getCourseName());
+            courseInfo.setProperty("beginOfCourse", dateParser.
+                    parseDateToString(course.getBeginOfCourse()));
+            courseInfo.setProperty("endOfCourse", dateParser.
+                    parseDateToString(course.getEndOfCourse()));
+            courseInfo.setProperty("teacherId", String.valueOf(course.getTeacher().getId()));
+            courseInfo.setProperty("teacherFirstName", course.getTeacher().getFirstName());
+            courseInfo.setProperty("teacherLastName", course.getTeacher().getLastName());
+            courseInfo.setProperty("teacherEmail", course.getTeacher().getEmail());
+            courseInfo.setProperty("maxStudentsQuantity", String.valueOf(course.getMaxStudentQuantity()));
+            courseInfo.setProperty("finished", String.valueOf(course.getFinished()));
+
+            return courseInfo;
+        } catch (DAOException e) {
+            logger.error("can't get course");
+            throw new ServiceException("can't get course", e);
+        }
+    }
+
+    @Override
+    public String formStudentsOnCourse(int courseId) throws ServiceException {
+        StringBuilder builder = new StringBuilder();
+
+        try {
+            ArrayList<User> students = DAOFactory.getInstance().getUserDAO().
+                    getStudentsOnCourse(courseId);
+            for (User student : students) {
+                builder.append(formStudentForList(student, courseId));
+            }
+        } catch (DAOException e) {
+            logger.error("can't get students on course");
+        }
+
+        return builder.toString();
+    }
+
+    private String formStudentForList(User student, int courseId) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<br>");
+        builder.append("<h3>").append(student.getFirstName()).append("</h3>");
+        builder.append("<br>");
+        builder.append("<h3>").append(student.getLastName()).append("</h3>");
+        builder.append("<br>");
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formStudentProgressButton(courseId, student.getId()));
+        builder.append("<br>");
+
+        return builder.toString();
     }
 
     private String formUserCourseList(Course course) {
