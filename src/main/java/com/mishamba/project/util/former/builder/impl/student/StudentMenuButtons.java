@@ -13,6 +13,8 @@ public class StudentMenuButtons implements Former {
         StringBuilder builder = new StringBuilder();
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formMainPageButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formCoursesCatalogButton());
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formUserProfileButton());

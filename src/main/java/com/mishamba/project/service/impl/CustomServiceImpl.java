@@ -15,9 +15,9 @@ import com.mishamba.project.util.parser.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
 import org.apache.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Properties;
+import java.util.*;
+
+import static java.util.List.of;
 
 public class CustomServiceImpl implements CustomService {
     private final Logger logger = Logger.getRootLogger();
@@ -151,7 +151,7 @@ public class CustomServiceImpl implements CustomService {
 
         DateValidator dateValidator = new DateValidator();
         if (dateValidator.checkForFuture(birthday)) {
-            User newUser = new User(null, firstName, lastName, email, birthday,
+            User newUser = new User(null, firstName, lastName, email, birthday, null,
                     role);
             try {
                 return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
@@ -211,11 +211,16 @@ public class CustomServiceImpl implements CustomService {
     public String formUserCourses(Properties properties) throws ServiceException {
         boolean finished = Boolean.parseBoolean((String) properties.get("finished"));
         int userId = Integer.parseInt((String) properties.get("userId"));
+        String role = properties.getProperty("role");
 
-        ArrayList<Course> courses;
+        List<Course> courses;
         try {
-            courses = DAOFactory.getInstance().getCourseDAO().
-                    getStudentsCourses(userId, finished);
+            courses = (role.equals("student")) ? DAOFactory.getInstance().
+                    getCourseDAO().getStudentsCourses(userId, finished) :
+                    (finished) ? DAOFactory.getInstance().getCourseDAO().
+                            getTeacherManagedCourses(userId) :
+                            Collections.singletonList(DAOFactory.getInstance().
+                                    getCourseDAO().getTeacherManageCourse(userId));
         } catch (DAOException e) {
             throw new ServiceException("can't get courses", e);
         }
@@ -223,7 +228,11 @@ public class CustomServiceImpl implements CustomService {
         StringBuilder builder = new StringBuilder();
 
         for (Course course : courses) {
-            builder.append(formUserCourseList(course));
+            if (course != null) {
+                builder.append(formUserCourseList(course));
+            } else {
+                builder.append("<p>U not managing any courses now</p>");
+            }
         }
 
         return builder.toString();
@@ -248,10 +257,25 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public boolean isTeacherLeadsCourse(int teacherId, int courseId)
+    public boolean isTeacherLeadsOrLeadedCourse(int teacherId, int courseId,
+                                                boolean finished)
             throws ServiceException {
         try {
-            return (DAOFactory.getInstance().getCourseDAO().getTeachersCourse(teacherId).getId() == courseId);
+            if (!finished) {
+                return (DAOFactory.getInstance().getCourseDAO().
+                        getTeacherManageCourse(teacherId).getId() == courseId);
+            } else {
+                ArrayList <Course> courses = DAOFactory.getInstance().
+                        getCourseDAO().getTeacherManagedCourses(teacherId);
+
+                for (Course course : courses) {
+                    if (course.getId() == courseId) {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
         } catch (DAOException e) {
             logger.error("can't get teachers course", e);
             throw new ServiceException("can't get teachers course", e);
@@ -340,11 +364,14 @@ public class CustomServiceImpl implements CustomService {
         }
 
         StringBuilder builder = new StringBuilder();
+        DateParser dateParser = new DateParser();
 
         builder.append("<h3>Course name</h3><br>");
         builder.append("<p>").append(course.getCourseName()).append("</p><br>");
         builder.append("<h3>Begin course date</h3><br>");
-        builder.append("<p>").append(course.getBeginOfCourse()).append("</p><br>");
+        builder.append("<p>").
+                append(dateParser.parseDateToString(course.getBeginOfCourse())).
+                append("</p><br>");
         builder.append("<h3>End course date</h3><br>");
         builder.append("<p>").append(course.getEndOfCourse()).append("</p><br>");
         builder.append("<h3>Course teacher</h3><br>");
@@ -366,20 +393,27 @@ public class CustomServiceImpl implements CustomService {
                 append(course.getMaxStudentQuantity()).append("</p><br>");
         if (course.getCourseProgram() != null) {
             for (ProgramStep programStep : course.getCourseProgram()) {
-                builder.append("<h4>step number  ").append(
-                        programStep.getStep()).append("</h4><br>");
-                builder.append("<h4> step name  ").append(
-                        programStep.getStepName()).append("</h4><br>");
+                builder.append("<h4>step number</h4><br>");
+                builder.append("<p>").append(programStep.getStep()).
+                        append("</p><br>");
+                builder.append("<h4> step name</h4><br>");
+                builder.append("<p>").append(programStep.getStepName()).
+                        append("</p><br>");
                 if (programStep.getDescription() != null) {
-                    builder.append("<h4>step Description  ").append(
-                            programStep.getDescription()).append("</h4><br>");
+                    builder.append("<h4>step Description</h4><br>");
+                    builder.append("<p>").append(programStep.getDescription()).
+                            append("</p><br>");
                 } else {
                     builder.append("<p>no description</p><br>");
                 }
-                builder.append("<h4>step start date  ").append(
-                        programStep.getStartDate()).append("</h4><br>");
-                builder.append("<h4>step end date  ").append(
-                        programStep.getEndDate()).append("</h4><br>");
+                builder.append("<h4>step start date</h4>");
+                builder.append("<p>").append(dateParser.
+                        parseDateToString(programStep.getStartDate())).
+                        append("</p><br>");
+                builder.append("<h4>step end date</h4><br>");
+                builder.append("<p>").append(dateParser.
+                        parseDateToString(programStep.getEndDate())).
+                        append("</p><br>");
             }
         } else {
             builder.append("<p>no program right now</p>");

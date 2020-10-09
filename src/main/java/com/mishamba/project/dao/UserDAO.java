@@ -15,4 +15,5 @@ public interface UserDAO {
             String firstName, String lastName) throws DAOException;
     int getUserIdByEmail(String email) throws DAOException;
     ArrayList<User> getStudentsOnCourse(int courseId) throws DAOException;
+    ArrayList<String> getTeacherSubjects(int teacherId) throws DAOException;
 }

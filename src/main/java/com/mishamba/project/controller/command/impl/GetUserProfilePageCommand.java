@@ -23,6 +23,7 @@ public class GetUserProfilePageCommand implements Command {
         String lastName = (String) session.getAttribute("lastName");
         String birthday = (String) session.getAttribute("birthday");
         String email = (String) session.getAttribute("email");
+        int userId = (int) session.getAttribute("id");
         if (role == null || firstName == null || lastName == null ||
                 birthday == null || email == null) {
             logger.warn("user without role tries to get profile page");
@@ -34,6 +35,18 @@ public class GetUserProfilePageCommand implements Command {
             return;
         }
 
+        Properties properties = new Properties();
+        properties.setProperty("role", role);
+        properties.setProperty("target", "menu");
+        String menu;
+        try {
+            menu = CustomServiceFactory.getInstance().getCustomService().
+                    formPageParameter(properties);
+        } catch (ServiceException e) {
+            logger.warn("can't get menu buttons");
+            menu = "<p>can't get menu buttons</p>";
+        }
+
         String activeCoursesButtonSign = (role.equals("teacher")) ?
                 "Managing Courses" : (role.equals("student")) ?
                 "Active courses" : null;
@@ -41,11 +54,10 @@ public class GetUserProfilePageCommand implements Command {
                 "Managed Courses" : (role.equals("student")) ?
                 "Passed courses" : null;
 
-        Properties properties = new Properties();
-        properties.setProperty("role", role);
         properties.setProperty("target", "profile");
         properties.setProperty("activeCoursesButtonSign", activeCoursesButtonSign);
         properties.setProperty("passedCoursesButtonSign", passedCoursesButtonSign);
+        properties.setProperty("userId", String.valueOf(userId));
 
         String courses_buttons;
         try {
@@ -62,6 +74,7 @@ public class GetUserProfilePageCommand implements Command {
         request.setAttribute("birthday", birthday);
         request.setAttribute("email", email);
         request.setAttribute("courses_buttons", courses_buttons);
+        request.setAttribute("menu", menu);
 
         try {
             request.getRequestDispatcher("user_profile.jsp").forward(request, response);

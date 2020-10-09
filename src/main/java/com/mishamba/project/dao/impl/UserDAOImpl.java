@@ -16,6 +16,9 @@ import java.util.Date;
 
 public class UserDAOImpl implements UserDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String GET_TEACHER_SUBJECTS_BY_TEACHER_ID = "SELECT subject_name " +
+            "FROM teacher_subjects " +
+            "WHERE teacher_id = ?";
     private final String GET_STUDENTS_ON_COURSE = "SELECT id, first_name, " +
             "last_name, birthday, email, role " +
             "FROM users " +
@@ -46,6 +49,10 @@ public class UserDAOImpl implements UserDAO {
     private final String CREATE_USER = "INSERT INTO users " +
             "(first_name, last_name, email, password_hash, birthday, role) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
+    private final String GET_USER_BY_ID = "SELECT id, first_name, last_name, " +
+            "birthday, email, role " +
+            "FROM users " +
+            "WHERE id = ?";
 
     @Override
     public boolean checkSignInData(String givenEmail, int givenPasswordHash) throws DAOException {
@@ -102,7 +109,8 @@ public class UserDAOImpl implements UserDAO {
             String lastName = resultSet.getString("last_name");
             Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
             String role = resultSet.getString("role");
-            return new User(id, firstName, lastName, email, birthday, role);
+            ArrayList<String> teacherSubjects = getTeacherSubjects(id);
+            return new User(id, firstName, lastName, email, birthday,teacherSubjects, role);
         } catch (SQLException | UtilException e) {
             throw new DAOException("can't get result from result set", e);
         }
@@ -178,8 +186,9 @@ public class UserDAOImpl implements UserDAO {
                 Integer id = resultSet.getInt("id");
                 String email = resultSet.getString("email");
                 Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+                ArrayList<String> teacherSubjects = getTeacherSubjects(id);
                 teachers.add(new User(id, firstName, lastName, email, birthday,
-                        "teacher"));
+                        teacherSubjects, "teacher"));
             }
         } catch (SQLException | UtilException throwables) {
             throwables.printStackTrace();
@@ -206,7 +215,7 @@ public class UserDAOImpl implements UserDAO {
                 int id = resultSet.getInt("id");
                 String email = resultSet.getString("email");
                 Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
-                users.add(new User(id, firstName, lastName, email, birthday,
+                users.add(new User(id, firstName, lastName, email, birthday, null,
                         "student"));
             }
         } catch (SQLException | UtilException throwable) {
@@ -282,7 +291,36 @@ public class UserDAOImpl implements UserDAO {
         return students;
     }
 
-    private User formUser(ResultSet resultSet) throws SQLException, UtilException {
+    @Override
+    public ArrayList<String> getTeacherSubjects(int teacherId) throws DAOException {
+        ArrayList<String> subjects = new ArrayList<>();
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+        ResultSet resultSet;
+
+        try {
+            statement = connection.prepareStatement(
+                    GET_TEACHER_SUBJECTS_BY_TEACHER_ID);
+            statement.setInt(1, teacherId);
+        } catch (SQLException e) {
+            logger.error("can't form queue");
+            throw new DAOException("can't form queue", e);
+        }
+
+        try {
+            resultSet = statement.executeQuery();
+            while(resultSet.next()) {
+                subjects.add(resultSet.getString("subject_name"));
+            }
+        } catch (SQLException e) {
+            logger.error("can't execute queue");
+            throw new DAOException("can't execute queue", e);
+        }
+
+        return subjects;
+    }
+
+    private User formUser(ResultSet resultSet) throws SQLException, UtilException, DAOException {
         DateParser dateParser = new DateParser();
 
         int id = resultSet.getInt("id");
@@ -291,7 +329,8 @@ public class UserDAOImpl implements UserDAO {
         Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
         String email = resultSet.getString("email");
         String role = resultSet.getString("role");
+        ArrayList<String> teacherSubjects = getTeacherSubjects(id);
 
-        return new User(id, firstName, lastName, email, birthday, role);
+        return new User(id, firstName, lastName, email, birthday, teacherSubjects, role);
     }
 }

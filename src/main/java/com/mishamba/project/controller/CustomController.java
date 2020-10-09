@@ -1,7 +1,7 @@
 package com.mishamba.project.controller;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.controller.command.factory.CommandProvider;
+import com.mishamba.project.controller.command.provider.CommandProvider;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;

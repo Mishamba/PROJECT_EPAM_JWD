@@ -7,15 +7,8 @@ import com.mishamba.project.util.former.builder.impl.anonym.AnonymCourseProfileI
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymMenuButtons;
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymSignUpField;
 import com.mishamba.project.util.former.builder.impl.anonym.AnonymUserInfo;
-import com.mishamba.project.util.former.builder.impl.same.TeacherStudentProfile;
-import com.mishamba.project.util.former.builder.impl.student.StudentNotOnCourseProfileInfo;
-import com.mishamba.project.util.former.builder.impl.student.StudentMenuButtons;
-import com.mishamba.project.util.former.builder.impl.student.StudentOnCourseProfileInfo;
-import com.mishamba.project.util.former.builder.impl.student.StudentUserInfo;
-import com.mishamba.project.util.former.builder.impl.teacher.TeacherNotOnCourseProfileInfo;
-import com.mishamba.project.util.former.builder.impl.teacher.TeacherMenuButtons;
-import com.mishamba.project.util.former.builder.impl.teacher.TeacherOnCourseProfileInfo;
-import com.mishamba.project.util.former.builder.impl.teacher.TeacherUserInfo;
+import com.mishamba.project.util.former.builder.impl.student.*;
+import com.mishamba.project.util.former.builder.impl.teacher.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +33,8 @@ public class FormerProvider {
         repository.put("student not on course profile button", new StudentNotOnCourseProfileInfo());
         repository.put("teacher on course profile button", new TeacherOnCourseProfileInfo());
         repository.put("student on course profile button", new StudentOnCourseProfileInfo());
-        repository.put("student profile", new TeacherStudentProfile());
-        repository.put("teacher profile", new TeacherStudentProfile());
+        repository.put("student profile", new StudentProfileButtons());
+        repository.put("teacher profile", new TeacherProfileButtons());
         repository.put("admin profile", new AdminProfile());
     }
 

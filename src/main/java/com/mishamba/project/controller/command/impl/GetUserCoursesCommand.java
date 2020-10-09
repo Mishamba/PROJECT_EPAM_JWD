@@ -22,7 +22,6 @@ public class GetUserCoursesCommand implements Command {
         int id = (int) session.getAttribute("id");
         String role = (String) session.getAttribute("role");
         String finished = request.getParameter("passed");
-        // TODO: 10/9/20 can't get "finished" parameter
 
         if (role == null || role.equals("admin") || finished == null) {
             logger.warn("anonym user or admin or someone who didn't send " +
@@ -38,9 +37,20 @@ public class GetUserCoursesCommand implements Command {
             return;
         }
 
-        logger.info("user send correct info to ");
-
         Properties properties = new Properties();
+        properties.setProperty("role", role);
+        properties.setProperty("target", "menu");
+        String menu;
+        try {
+            menu = CustomServiceFactory.getInstance().getCustomService().
+                    formPageParameter(properties);
+        } catch (ServiceException e) {
+            logger.error("can't get menu buttons");
+            menu = "<p>can't get menu buttons</p>";
+        }
+
+        logger.info("got menu buttons");
+
         properties.setProperty("userId", String.valueOf(id));
         properties.setProperty("finished", finished);
 
@@ -53,10 +63,14 @@ public class GetUserCoursesCommand implements Command {
             courses = "<p>can't get your courses list</p>";
         }
 
+        logger.info("got courses content");
+
+        request.setAttribute("menu", menu);
         request.setAttribute("courses", courses);
 
         try {
-            request.getRequestDispatcher("user_courses_list.jsp").forward(request, response);
+            request.getRequestDispatcher("user_courses_page.jsp").forward(request, response);
+            logger.info("set responce");
         } catch (ServletException | IOException e) {
             logger.error("can't upload courses list page");
         }

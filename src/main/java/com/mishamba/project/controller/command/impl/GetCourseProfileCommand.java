@@ -60,7 +60,17 @@ public class GetCourseProfileCommand implements Command {
             userId = 0;
         }
 
-        formPropertiesToButtonForm(properties, role, userId, courseId);
+        boolean finished;
+        try {
+            finished = (Integer.parseInt(CustomServiceFactory.getInstance().
+                    getCustomService().getCourseById(courseId).
+                    getProperty("teacherId")) == userId);
+        } catch (ServiceException e) {
+            logger.warn("can't check is teacher leads the course right now");
+            finished = false;
+        }
+
+        formPropertiesToButtonForm(properties, role, userId, courseId, finished);
 
         String buttons = formButtons(properties);
 
@@ -98,13 +108,13 @@ public class GetCourseProfileCommand implements Command {
 
     private void formPropertiesToButtonForm(Properties properties,
                                             String role, int userId,
-                                            int courseId) {
+                                            int courseId, boolean finished) {
         try {
             if ((role.equals("student") && CustomServiceFactory.getInstance().
                     getCustomService().isStudentOnCourse(userId, courseId)) ||
                     (role.equals("teacher") && CustomServiceFactory.getInstance().
                             getCustomService().
-                            isTeacherLeadsCourse(userId, courseId))) {
+                            isTeacherLeadsOrLeadedCourse(userId, courseId, finished))) {
                 properties.setProperty("target", "on course profile button");
                 properties.setProperty("courseId", String.valueOf(courseId));
                 properties.setProperty("userId", String.valueOf(userId));

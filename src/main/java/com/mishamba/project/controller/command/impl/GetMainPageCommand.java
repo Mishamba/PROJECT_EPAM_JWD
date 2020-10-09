@@ -25,7 +25,7 @@ public class GetMainPageCommand implements Command {
         String firstName = (String) session.getAttribute("firstName");
         String lastName = (String) session.getAttribute("lastName");
         if (role == null) {
-            logger.info("user has no role, so role set as \"aninym\"");
+            logger.info("user has no role, so role set as \"anonym\"");
             role = "anonym";
         }
         Properties properties = new Properties();

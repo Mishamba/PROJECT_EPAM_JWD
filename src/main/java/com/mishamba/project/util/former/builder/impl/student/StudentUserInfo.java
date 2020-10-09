@@ -10,6 +10,7 @@ import java.util.Properties;
 public class StudentUserInfo implements Former {
     @Override
     public String form(Properties properties) throws UtilException {
-        return PartsBuilderFactory.getInstance().getPartsBuilder().formUserInfo(properties);
+        return PartsBuilderFactory.getInstance().getPartsBuilder().
+                formUserInfo(properties);
     }
 }

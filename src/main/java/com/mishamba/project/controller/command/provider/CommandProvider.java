@@ -1,4 +1,4 @@
-package com.mishamba.project.controller.command.factory;
+package com.mishamba.project.controller.command.provider;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.controller.command.impl.*;

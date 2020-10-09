@@ -1,5 +1,6 @@
 package com.mishamba.project.dao.impl;
 
+import com.mishamba.project.dao.DAOFactory;
 import com.mishamba.project.dao.MarkReviewDAO;
 import com.mishamba.project.dao.ProxyConnection;
 import com.mishamba.project.dao.exception.DAOException;
@@ -50,14 +51,16 @@ public class MarkReviewDAOImpl implements MarkReviewDAO {
             DateParser dateParser = new DateParser();
 
             while(resultSet.next()) {
-                Integer teacher_id = resultSet.getInt("teacher_id");
+                Integer teacherId = resultSet.getInt("teacher_id");
                 String teacherFirstName = resultSet.getString("teacher_first_name");
                 String teacherLastName = resultSet.getString("teacher_last_name");
                 Date teacherBirthday = dateParser.parseDate(resultSet.getString("teacher_birthday"));
                 String teacherEmail = resultSet.getString("teacher_email");
-                User teacher = new User(teacher_id, teacherFirstName,
+                ArrayList<String> teacherSubjects = DAOFactory.getInstance().
+                        getUserDAO().getTeacherSubjects(teacherId);
+                User teacher = new User(teacherId, teacherFirstName,
                         teacherLastName, teacherEmail, teacherBirthday,
-                        "teacher");
+                        teacherSubjects, "teacher");
                 Boolean finished = resultSet.getBoolean("finished");
                 Integer mark = resultSet.getInt("mark");
                 Date finishDate = dateParser.parseDate(resultSet.getString("finish_date"));

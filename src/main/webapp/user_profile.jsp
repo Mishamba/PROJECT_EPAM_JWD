@@ -34,5 +34,9 @@ ${email}
 <h3>Courses you participated</h3>
 <br>
 ${courses_buttons}
+<br>
+<h3>Menu</h3>
+<br>
+${menu}
 </body>
 </html>

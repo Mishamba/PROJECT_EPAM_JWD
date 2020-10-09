@@ -11,6 +11,13 @@
     <title>Courses</title>
 </head>
 <body>
+<h1>Menu</h1>
+<br>
+${menu}
+<br>
+<h1>Courses</h1>
+<br>
 ${courses}
+<br>
 </body>
 </html>

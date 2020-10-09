@@ -12,7 +12,10 @@ public class AnonymMenuButtons implements Former {
     public String form(Properties properties) throws UtilException {
         StringBuilder builder = new StringBuilder();
 
-        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().formCoursesCatalogButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formMainPageButton());
+        builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                formCoursesCatalogButton());
 
         return builder.toString();
     }

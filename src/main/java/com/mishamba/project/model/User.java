@@ -1,5 +1,6 @@
 package com.mishamba.project.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 public class User {
@@ -8,10 +9,16 @@ public class User {
     private String lastName;
     private String email;
     private Date birthday;
+    private final ArrayList<String> teacherSkills;
     private String role;
 
     public User(Integer id, String firstName, String lastName, String email,
-                Date birthday, String role) {
+                Date birthday, ArrayList<String> teacherSkills, String role) {
+        if (role.equals("teacher")) {
+            this.teacherSkills = teacherSkills;
+        } else {
+            this.teacherSkills = null;
+        }
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,6 +67,10 @@ public class User {
         this.birthday = birthday;
     }
 
+    public ArrayList<String> getTeacherSkills() {
+        return teacherSkills;
+    }
+
     public String getRole() {
         return role;
     }
@@ -79,12 +90,13 @@ public class User {
         }
 
         User user = (User) o;
-        return user.getId() == this.getId() &&
+        return user.getId().equals(this.getId()) &&
                 getFirstName().equals(user.getFirstName()) &&
                 getLastName().equals(user.getLastName()) &&
                 getEmail().equals(user.getEmail()) &&
                 getBirthday().equals(user.getBirthday()) &&
-                getRole().equals(user.getRole());
+                getRole().equals(user.getRole()) &&
+                getTeacherSkills().equals(user.getTeacherSkills());
     }
 
     @Override
@@ -97,6 +109,7 @@ public class User {
         hash *= prime * email.hashCode();
         hash *= prime * birthday.hashCode();
         hash *= prime * role.hashCode();
+        hash *= prime * teacherSkills.hashCode();
 
         return hash;
     }
