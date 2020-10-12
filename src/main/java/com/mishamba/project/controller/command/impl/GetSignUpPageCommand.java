@@ -2,8 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
-import com.mishamba.project.service.exception.ServiceException;
-import com.mishamba.project.service.impl.CustomServiceImpl;
+import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -17,34 +16,40 @@ public class GetSignUpPageCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
-    public void execute(HttpServletRequest request,
+    public void execute(HttpServletRequest req,
                         HttpServletResponse response) {
-        logger.info("getting user role info");
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        if (role == null) {
-            role = "anonym";
-        }
-        Properties definer = new Properties();
-        definer.setProperty("role", role);
-        definer.setProperty("target", "sign up");
+        Properties properties = formProperties(req);
         String roleDefiner;
         try {
             roleDefiner = CustomServiceFactory.getInstance().
-                    getCustomService().formPageParameter(definer);
-        } catch (ServiceException e) {
+                    getCustomService().formPageParameter(properties);
+        } catch (CustomServiceException e) {
             logger.error("can't form role definer");
             roleDefiner = "error happened. your role is student.";
         }
 
-        request.setAttribute("role_definer", roleDefiner);
+        req.setAttribute("role_definer", roleDefiner);
 
         try {
             logger.info("uploading sign up page");
-            request.getRequestDispatcher("sign_up.jsp").
-                    forward(request, response);
+            req.getRequestDispatcher("sign_up.jsp").
+                    forward(req, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload sign up page");
         }
+    }
+
+    private Properties formProperties(HttpServletRequest req) {
+        logger.info("getting user role info");
+        HttpSession session = req.getSession();
+        String role = (String) session.getAttribute("role");
+        if (role == null) {
+            role = "anonym";
+        }
+        Properties userProp = new Properties();
+        userProp.setProperty("role", role);
+        userProp.setProperty("target", "sign up");
+
+        return userProp;
     }
 }

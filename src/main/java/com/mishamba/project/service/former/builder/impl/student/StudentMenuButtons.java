@@ -1,15 +1,16 @@
-package com.mishamba.project.util.former.builder.impl.student;
+package com.mishamba.project.service.former.builder.impl.student;
 
+import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.factory.PartsBuilderFactory;
+import com.mishamba.project.service.former.builder.Former;
+import com.mishamba.project.service.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
 public class StudentMenuButtons implements Former {
 
     @Override
-    public String form(Properties properties) throws UtilException {
+    public String form(Properties properties) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().

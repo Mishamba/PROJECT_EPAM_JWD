@@ -28,6 +28,8 @@ public class CommandProvider {
         repository.put("student_sign_up_for_course", new StudentSignUpOnCourseCommand());
         repository.put("user_profile", new GetUserProfilePageCommand());
         repository.put("user_courses", new GetUserCoursesCommand());
+        repository.put("students_on_course_list", new GetStudentsOnCourseListCommand());
+        repository.put("course_hometask", new GetCourseHometaskPageCommand());
     }
 
     public static CommandProvider getInstance() {

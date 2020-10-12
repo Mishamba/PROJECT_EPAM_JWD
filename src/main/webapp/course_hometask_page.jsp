@@ -11,6 +11,13 @@
     <title>Hometasks</title>
 </head>
 <body>
+<h2>Menu</h2>
+<br>
+${menu}
+<br>
+<h2>Hometask</h2>
+<br>
 ${hometasks}
+<br>
 </body>
 </html>

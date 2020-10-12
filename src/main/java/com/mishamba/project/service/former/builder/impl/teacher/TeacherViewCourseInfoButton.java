@@ -1,14 +1,15 @@
-package com.mishamba.project.util.former.builder.impl.teacher;
+package com.mishamba.project.service.former.builder.impl.teacher;
 
+import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.factory.PartsBuilderFactory;
+import com.mishamba.project.service.former.builder.Former;
+import com.mishamba.project.service.former.factory.PartsBuilderFactory;
 
 import java.util.Properties;
 
 public class TeacherViewCourseInfoButton implements Former {
     @Override
-    public String form(Properties properties) throws UtilException {
+    public String form(Properties properties) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
         int courseId = Integer.parseInt(properties.getProperty("courseId"));
 

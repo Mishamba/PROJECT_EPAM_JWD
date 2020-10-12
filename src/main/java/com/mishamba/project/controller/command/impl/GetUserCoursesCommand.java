@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
-import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -44,7 +44,7 @@ public class GetUserCoursesCommand implements Command {
         try {
             menu = CustomServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
-        } catch (ServiceException e) {
+        } catch (CustomServiceException e) {
             logger.error("can't get menu buttons");
             menu = "<p>can't get menu buttons</p>";
         }
@@ -57,8 +57,8 @@ public class GetUserCoursesCommand implements Command {
         String courses;
         try {
             courses = CustomServiceFactory.getInstance().getCustomService().
-                    formUserCourses(properties);
-        } catch (ServiceException e) {
+                    getUserCourses(properties);
+        } catch (CustomServiceException e) {
             logger.error("can't get user courses list");
             courses = "<p>can't get your courses list</p>";
         }

@@ -1,19 +1,19 @@
 package com.mishamba.project.service.exception;
 
-public class ServiceException extends Exception {
-    public ServiceException(String message) {
+public class CustomServiceException extends Exception {
+    public CustomServiceException(String message) {
         super(message);
     }
 
-    public ServiceException(String message, Throwable cause) {
+    public CustomServiceException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ServiceException(Throwable cause) {
+    public CustomServiceException(Throwable cause) {
         super(cause);
     }
 
-    public ServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public CustomServiceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

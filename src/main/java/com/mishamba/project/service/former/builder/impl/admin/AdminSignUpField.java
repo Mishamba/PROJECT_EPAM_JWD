@@ -1,13 +1,14 @@
-package com.mishamba.project.util.former.builder.impl.admin;
+package com.mishamba.project.service.former.builder.impl.admin;
 
+import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
+import com.mishamba.project.service.former.builder.Former;
 
 import java.util.Properties;
 
 public class AdminSignUpField implements Former {
     @Override
-    public String form(Properties properties) throws UtilException {
+    public String form(Properties properties) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<p>role</p><br>");

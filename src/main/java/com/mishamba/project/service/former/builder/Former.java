@@ -1,10 +1,9 @@
-package com.mishamba.project.util.former.builder;
+package com.mishamba.project.service.former.builder;
 
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.service.exception.CustomServiceException;
 
-import javax.servlet.http.HttpSession;
 import java.util.Properties;
 
 public interface Former {
-    String form(Properties properties) throws UtilException;
+    String form(Properties properties) throws CustomServiceException;
 }

@@ -1,25 +1,26 @@
 package com.mishamba.project.service;
 
-import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.service.exception.CustomServiceException;
 
 import java.util.Properties;
 
 public interface CustomService {
-    String formMainCourses() throws ServiceException;
-    String formCoursesCatalog() throws ServiceException;
-    String formPageParameter(Properties properties) throws ServiceException;
+    String getCourseHometask(int courseId) throws CustomServiceException;
+    String getMainCourses() throws CustomServiceException;
+    String getCoursesCatalog() throws CustomServiceException;
+    String formPageParameter(Properties properties) throws CustomServiceException;
     boolean checkSignInData(String email, String password)
-            throws ServiceException;
-    Properties getUserByEmail(String email) throws ServiceException;
-    boolean createUser(Properties userInfo) throws ServiceException;
-    String formCourseProfile(int courseId) throws ServiceException;
+            throws CustomServiceException;
+    Properties getUserByEmail(String email) throws CustomServiceException;
+    boolean createUser(Properties userInfo) throws CustomServiceException;
+    String getCourseProfile(int courseId) throws CustomServiceException;
     boolean enterStudentOnCourse(int studentId, int courseId)
-            throws ServiceException;
-    int getUserIdByEmail(String email) throws ServiceException;
-    String formUserCourses(Properties properties) throws ServiceException;
-    boolean isStudentOnCourse(int studentId, int courseId) throws ServiceException;
+            throws CustomServiceException;
+    int getUserIdByEmail(String email) throws CustomServiceException;
+    String getUserCourses(Properties properties) throws CustomServiceException;
+    boolean isStudentOnCourse(int studentId, int courseId) throws CustomServiceException;
     boolean isTeacherLeadsOrLeadedCourse(int teacherId, int courseId,
-                                         boolean finished) throws ServiceException;
-    Properties getCourseById(int courseId) throws ServiceException;
-    String formStudentsOnCourse(int courseId) throws ServiceException;
+                                         boolean finished) throws CustomServiceException;
+    Properties getCourseById(int courseId) throws CustomServiceException;
+    String getStudentsOnCourse(int courseId) throws CustomServiceException;
 }

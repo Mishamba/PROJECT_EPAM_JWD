@@ -2,8 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
-import com.mishamba.project.service.exception.ServiceException;
-import com.mishamba.project.service.impl.CustomServiceImpl;
+import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -17,28 +16,14 @@ public class GetCoursesCatalogCommand implements Command {
     private final Logger logger = Logger.getRootLogger();
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        String firstName = (String) session.getAttribute("firstName");
-        String lastName = (String) session.getAttribute("lastName");
-        if (role == null) {
-            role = "anonym";
-        }
-
-        Properties userProp = new Properties();
-        userProp.setProperty("role", role);
-        if (firstName != null && lastName != null) {
-            userProp.setProperty("firstName", firstName);
-            userProp.setProperty("lastName", lastName);
-        }
-        userProp.setProperty("target", "user info");
+    public void execute(HttpServletRequest req, HttpServletResponse resp) {
+        Properties userProp = formProperties(req);
 
         String userInfo;
         try {
             userInfo = CustomServiceFactory.getInstance().getCustomService().
                     formPageParameter(userProp);
-        } catch (ServiceException e) {
+        } catch (CustomServiceException e) {
             logger.error("can't upload user info");
             userInfo = "<br><p>can't upload user info</p><br>";
         }
@@ -48,7 +33,7 @@ public class GetCoursesCatalogCommand implements Command {
         try {
             menu = CustomServiceFactory.getInstance().getCustomService().
                     formPageParameter(userProp);
-        } catch (ServiceException e) {
+        } catch (CustomServiceException e) {
             logger.error("can't upload some menu functionality");
             menu = "<br><p>can't upload some menu buttons";
         }
@@ -58,21 +43,43 @@ public class GetCoursesCatalogCommand implements Command {
         try {
             logger.info("getting courses");
             courses = CustomServiceFactory.getInstance().getCustomService().
-                    formCoursesCatalog();
-        } catch (ServiceException e) {
+                    getCoursesCatalog();
+        } catch (CustomServiceException e) {
             courses = "can't upload courses";
         }
 
         logger.info("setting page attributes");
-        request.setAttribute("user_info", userInfo);
-        request.setAttribute("menu", menu);
-        request.setAttribute("courses", courses);
+        req.setAttribute("user_info", userInfo);
+        req.setAttribute("menu", menu);
+        req.setAttribute("courses", courses);
 
         try {
             logger.info("uploading courses catalog page");
-            request.getRequestDispatcher("courses_catalog.jsp").forward(request, response);
+            req.getRequestDispatcher("courses_catalog.jsp").forward(req, resp);
         } catch (ServletException | IOException e) {
             logger.error("can't send courses catalog for user");
         }
+    }
+
+    private Properties formProperties(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        String role = (String) session.getAttribute("role");
+        String firstName = (String) session.getAttribute("firstName");
+        String lastName = (String) session.getAttribute("lastName");
+        String localization = (String) session.getAttribute("localization");
+        if (role == null) {
+            role = "anonym";
+        }
+
+        Properties userProp = new Properties();
+        userProp.setProperty("role", role);
+        if (firstName != null && lastName != null) {
+            userProp.setProperty("firstName", firstName);
+            userProp.setProperty("lastName", lastName);
+            userProp.setProperty("localization", localization);
+        }
+        userProp.setProperty("target", "user info");
+
+        return userProp;
     }
 }

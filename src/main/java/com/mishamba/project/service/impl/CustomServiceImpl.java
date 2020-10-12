@@ -3,44 +3,63 @@ package com.mishamba.project.service.impl;
 import com.mishamba.project.dao.DAOFactory;
 import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.Course;
+import com.mishamba.project.model.Hometask;
 import com.mishamba.project.model.ProgramStep;
 import com.mishamba.project.model.User;
 import com.mishamba.project.service.CustomService;
-import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.FormerProvider;
-import com.mishamba.project.util.former.factory.PartsBuilderFactory;
+import com.mishamba.project.service.former.builder.Former;
+import com.mishamba.project.service.former.FormerProvider;
+import com.mishamba.project.service.former.factory.PartsBuilderFactory;
 import com.mishamba.project.util.parser.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
 
-import static java.util.List.of;
-
 public class CustomServiceImpl implements CustomService {
     private final Logger logger = Logger.getRootLogger();
+
     @Override
-    public String formMainCourses() throws ServiceException {
+    public String getCourseHometask(int courseId) throws CustomServiceException {
+        ArrayList<Hometask> hometasks;
+        try {
+            logger.info("getting hometask on course");
+            hometasks = DAOFactory.getInstance().getHometaskDAO().getHometasksOnCourse(courseId);
+        } catch (DAOException e) {
+            throw new CustomServiceException("can't get course hometask", e);
+        }
+
+        StringBuilder hometasksList = new StringBuilder();
+
+        for (Hometask hometask : hometasks) {
+            hometasksList.append(formHometaskForList(hometask));
+        }
+
+        return hometasksList.toString();
+    }
+
+    @Override
+    public String getMainCourses() throws CustomServiceException {
         ArrayList<Course> courses;
         try {
             courses = DAOFactory.getInstance().getCourseDAO().getCoursesWithoutTeacher();
         } catch (DAOException e) {
-            throw new ServiceException("can't get courses without teacher");
+            throw new CustomServiceException("can't get courses without teacher");
         }
         for (Course course : courses) {
             try {
                 course.setCourseProgram(DAOFactory.getInstance().
                         getProgramStepDAO().getCourseProgram(course));
             } catch (DAOException e) {
-                throw new ServiceException("can't find course program", e);
+                throw new CustomServiceException("can't find course program", e);
             }
         }
 
         StringBuilder answer = new StringBuilder();
         for (Course course : courses) {
-            answer.append(formCourseAdd(course));
+            answer.append(getCourseAdd(course));
         }
         answer.append("<br>");
 
@@ -48,23 +67,23 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public String formCoursesCatalog() throws ServiceException {
+    public String getCoursesCatalog() throws CustomServiceException {
         ArrayList<Course> courses;
         try {
             courses = DAOFactory.getInstance().getCourseDAO().getActiveCourses();
         } catch (DAOException e) {
-            throw new ServiceException("can't get active courses", e);
+            throw new CustomServiceException("can't get active courses", e);
         }
 
         StringBuilder answer = new StringBuilder();
         for (Course course : courses) {
-            answer.append(formCourseAdd(course));
+            answer.append(getCourseAdd(course));
         }
 
         return answer.toString();
     }
 
-    private String formCourseAdd(Course course) {
+    private String getCourseAdd(Course course) {
         if (course == null) {
             return "no course to form given";
         }
@@ -84,22 +103,18 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public String formPageParameter(Properties properties) throws ServiceException {
+    public String formPageParameter(Properties properties) throws CustomServiceException {
         Former former;
-        try {
-            former = FormerProvider.getInstance().getFormer(properties);
-            if (former == null) {
-                throw new ServiceException("can't get such former");
-            }
-
-            return former.form(properties);
-        } catch (UtilException e) {
-            throw new ServiceException("can't get page parameters", e);
+        former = FormerProvider.getInstance().getFormer(properties);
+        if (former == null) {
+            throw new CustomServiceException("can't get such former");
         }
+
+        return former.form(properties);
     }
 
     @Override
-    public boolean checkSignInData(String email, String password) throws ServiceException {
+    public boolean checkSignInData(String email, String password) throws CustomServiceException {
         int passwordHash = password.hashCode();
         passwordHash = Integer.valueOf(passwordHash).hashCode();
 
@@ -107,12 +122,12 @@ public class CustomServiceImpl implements CustomService {
             return DAOFactory.getInstance().getUserDAO().
                     checkSignInData(email, passwordHash);
         } catch (DAOException e) {
-            throw new ServiceException("can't check sign in data", e);
+            throw new CustomServiceException("can't check sign in data", e);
         }
     }
 
     @Override
-    public Properties getUserByEmail(String email) throws ServiceException {
+    public Properties getUserByEmail(String email) throws CustomServiceException {
         Properties userInfo = new Properties();
         DateParser dateParser = new DateParser();
 
@@ -128,12 +143,12 @@ public class CustomServiceImpl implements CustomService {
             userInfo.setProperty("role", user.getRole());
             return userInfo;
         } catch (DAOException e) {
-            throw new ServiceException("can't get first name", e);
+            throw new CustomServiceException("can't get first name", e);
         }
     }
 
     @Override
-    public boolean createUser(Properties userInfo) throws ServiceException {
+    public boolean createUser(Properties userInfo) throws CustomServiceException {
         String firstName = userInfo.getProperty("firstName");
         String lastName = userInfo.getProperty("lastName");
         String email = userInfo.getProperty("email");
@@ -145,7 +160,7 @@ public class CustomServiceImpl implements CustomService {
         try {
             birthday = new DateParser().parseDate(birthdayDate);
         } catch (UtilException e) {
-            throw new ServiceException("date entered incorrect", e);
+            throw new CustomServiceException("date entered incorrect", e);
         }
         String role = userInfo.getProperty("role");
 
@@ -156,7 +171,7 @@ public class CustomServiceImpl implements CustomService {
             try {
                 return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
             } catch (DAOException e) {
-                throw new ServiceException("can't sign up new user", e);
+                throw new CustomServiceException("can't sign up new user", e);
             }
         } else {
             return false;
@@ -164,13 +179,13 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public String formCourseProfile(int courseId) throws ServiceException {
+    public String getCourseProfile(int courseId) throws CustomServiceException {
         Course course;
         try {
             course = DAOFactory.getInstance().getCourseDAO().
                     getCourseById(courseId);
         } catch (DAOException e) {
-            throw new ServiceException("can't get course info", e);
+            throw new CustomServiceException("can't get course info", e);
         }
 
         StringBuilder builder = new StringBuilder();
@@ -187,28 +202,28 @@ public class CustomServiceImpl implements CustomService {
 
     @Override
     public boolean enterStudentOnCourse(int studentId, int courseId)
-            throws ServiceException {
+            throws CustomServiceException {
         try {
             return DAOFactory.getInstance().getCourseDAO().
                     enterStudentOnCourse(studentId, courseId);
         } catch (DAOException e) {
             logger.error("can't enter student on course");
-            throw new ServiceException("can't enter student on course", e);
+            throw new CustomServiceException("can't enter student on course", e);
         }
     }
 
     @Override
-    public int getUserIdByEmail(String email) throws ServiceException {
+    public int getUserIdByEmail(String email) throws CustomServiceException {
         try {
             return DAOFactory.getInstance().getUserDAO().getUserIdByEmail(email);
         } catch (DAOException e) {
             logger.error("can't get user id");
-            throw new ServiceException("can't get user id", e);
+            throw new CustomServiceException("can't get user id", e);
         }
     }
 
     @Override
-    public String formUserCourses(Properties properties) throws ServiceException {
+    public String getUserCourses(Properties properties) throws CustomServiceException {
         boolean finished = Boolean.parseBoolean((String) properties.get("finished"));
         int userId = Integer.parseInt((String) properties.get("userId"));
         String role = properties.getProperty("role");
@@ -222,7 +237,7 @@ public class CustomServiceImpl implements CustomService {
                             Collections.singletonList(DAOFactory.getInstance().
                                     getCourseDAO().getTeacherManageCourse(userId));
         } catch (DAOException e) {
-            throw new ServiceException("can't get courses", e);
+            throw new CustomServiceException("can't get courses", e);
         }
 
         StringBuilder builder = new StringBuilder();
@@ -240,7 +255,7 @@ public class CustomServiceImpl implements CustomService {
 
     @Override
     public boolean isStudentOnCourse(int studentId, int courseId)
-            throws ServiceException {
+            throws CustomServiceException {
         try {
             ArrayList<Course> usersCourses = DAOFactory.getInstance().getCourseDAO().
                     getStudentsCourses(studentId, false);
@@ -250,7 +265,7 @@ public class CustomServiceImpl implements CustomService {
                 }
             }
         } catch (DAOException e) {
-            throw new ServiceException("can't check is student on course", e);
+            throw new CustomServiceException("can't check is student on course", e);
         }
 
         return false;
@@ -259,7 +274,7 @@ public class CustomServiceImpl implements CustomService {
     @Override
     public boolean isTeacherLeadsOrLeadedCourse(int teacherId, int courseId,
                                                 boolean finished)
-            throws ServiceException {
+            throws CustomServiceException {
         try {
             if (!finished) {
                 return (DAOFactory.getInstance().getCourseDAO().
@@ -278,12 +293,12 @@ public class CustomServiceImpl implements CustomService {
             }
         } catch (DAOException e) {
             logger.error("can't get teachers course", e);
-            throw new ServiceException("can't get teachers course", e);
+            throw new CustomServiceException("can't get teachers course", e);
         }
     }
 
     @Override
-    public Properties getCourseById(int courseId) throws ServiceException {
+    public Properties getCourseById(int courseId) throws CustomServiceException {
         try {
             Course course = DAOFactory.getInstance().getCourseDAO().getCourseById(courseId);
             DateParser dateParser = new DateParser();
@@ -305,12 +320,12 @@ public class CustomServiceImpl implements CustomService {
             return courseInfo;
         } catch (DAOException e) {
             logger.error("can't get course");
-            throw new ServiceException("can't get course", e);
+            throw new CustomServiceException("can't get course", e);
         }
     }
 
     @Override
-    public String formStudentsOnCourse(int courseId) throws ServiceException {
+    public String getStudentsOnCourse(int courseId) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
 
         try {
@@ -322,6 +337,24 @@ public class CustomServiceImpl implements CustomService {
         } catch (DAOException e) {
             logger.error("can't get students on course");
         }
+
+        return builder.toString();
+    }
+
+    private String formHometaskForList(Hometask hometask) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<h3>").append("Hometask title").append("</h3>");
+        builder.append("<br>");
+        builder.append(hometask.getTitle());
+        builder.append("<br>");
+        builder.append("<h3>").append("Hometask description").append("</h3>");
+        builder.append("<br>");
+        builder.append(hometask.getDescription());
+        builder.append("<br>");
+        builder.append("<h3>").append("Deadline").append("</h3>");
+        builder.append(hometask.getDeadline());
+        builder.append("<br>");
 
         return builder.toString();
     }
@@ -354,13 +387,13 @@ public class CustomServiceImpl implements CustomService {
         return builder.toString();
     }
 
-    private String formHtmlCourse(Course course) throws ServiceException {
+    private String formHtmlCourse(Course course) throws CustomServiceException {
         Integer studentsOnCourseQuantity;
         try {
             studentsOnCourseQuantity = DAOFactory.getInstance().getCourseDAO().
                     getStudentsOnCourseQuantity(course);
         } catch (DAOException e) {
-            throw new ServiceException("can't get course info", e);
+            throw new CustomServiceException("can't get course info", e);
         }
 
         StringBuilder builder = new StringBuilder();

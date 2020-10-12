@@ -1,6 +1,6 @@
-package com.mishamba.project.util.former.builder;
+package com.mishamba.project.service.former.builder;
 
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.service.exception.CustomServiceException;
 
 import java.util.Properties;
 
@@ -52,9 +52,9 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formUserInfo(Properties properties) throws UtilException {
+    public String formUserInfo(Properties properties) throws CustomServiceException {
         if (properties == null) {
-            throw new UtilException("given session is null");
+            throw new CustomServiceException("given session is null");
         }
         StringBuilder builder = new StringBuilder();
 
@@ -330,7 +330,7 @@ public class PartsBuilder {
 
         builder.append("<br>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"students_list\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"students_on_course_list\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
                 append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"Students list\">");

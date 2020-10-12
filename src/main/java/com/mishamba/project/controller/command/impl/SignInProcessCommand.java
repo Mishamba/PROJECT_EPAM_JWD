@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
-import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -37,7 +37,7 @@ public class SignInProcessCommand implements Command {
                 session.setAttribute("id", Integer.parseInt((String) info.get("id")));
                 pageToLoad = "index.jsp";
             }
-        } catch (ServiceException e) {
+        } catch (CustomServiceException e) {
             logger.error("can't check sign in data");
         }
 

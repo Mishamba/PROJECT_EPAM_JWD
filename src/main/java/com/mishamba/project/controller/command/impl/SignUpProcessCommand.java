@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
-import com.mishamba.project.service.exception.ServiceException;
+import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -38,7 +38,7 @@ public class SignUpProcessCommand implements Command {
             try {
                 result = CustomServiceFactory.getInstance().getCustomService().
                         createUser(signUpInfo);
-            } catch (ServiceException e) {
+            } catch (CustomServiceException e) {
                 logger.error("can't create user");
                 result = false;
             }
@@ -47,7 +47,7 @@ public class SignUpProcessCommand implements Command {
             try {
                 info = CustomServiceFactory.getInstance().
                         getCustomService().getUserByEmail(signUpInfo.getProperty("email"));
-            } catch (ServiceException e) {
+            } catch (CustomServiceException e) {
                 logger.error("can't get user info");
                 request.setAttribute("info", "u signed up. now go and sign in");
                 try {

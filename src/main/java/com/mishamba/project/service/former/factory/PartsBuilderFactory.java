@@ -1,6 +1,6 @@
-package com.mishamba.project.util.former.factory;
+package com.mishamba.project.service.former.factory;
 
-import com.mishamba.project.util.former.builder.PartsBuilder;
+import com.mishamba.project.service.former.builder.PartsBuilder;
 
 public class PartsBuilderFactory {
     private PartsBuilderFactory() {}

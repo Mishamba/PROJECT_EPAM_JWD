@@ -1,14 +1,15 @@
-package com.mishamba.project.util.former;
+package com.mishamba.project.service.former;
 
+import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.former.builder.Former;
-import com.mishamba.project.util.former.builder.impl.admin.*;
-import com.mishamba.project.util.former.builder.impl.anonym.AnonymCourseProfileInfo;
-import com.mishamba.project.util.former.builder.impl.anonym.AnonymMenuButtons;
-import com.mishamba.project.util.former.builder.impl.anonym.AnonymSignUpField;
-import com.mishamba.project.util.former.builder.impl.anonym.AnonymUserInfo;
-import com.mishamba.project.util.former.builder.impl.student.*;
-import com.mishamba.project.util.former.builder.impl.teacher.*;
+import com.mishamba.project.service.former.builder.Former;
+import com.mishamba.project.service.former.builder.impl.admin.*;
+import com.mishamba.project.service.former.builder.impl.anonym.AnonymCourseProfileInfo;
+import com.mishamba.project.service.former.builder.impl.anonym.AnonymMenuButtons;
+import com.mishamba.project.service.former.builder.impl.anonym.AnonymSignUpField;
+import com.mishamba.project.service.former.builder.impl.anonym.AnonymUserInfo;
+import com.mishamba.project.service.former.builder.impl.student.*;
+import com.mishamba.project.service.former.builder.impl.teacher.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,9 +47,9 @@ public class FormerProvider {
         return FormerProviderHolder.HOLDER;
     }
 
-    public Former getFormer(Properties properties) throws UtilException {
+    public Former getFormer(Properties properties) throws CustomServiceException {
         if (properties == null) {
-            throw new UtilException("property is null");
+            throw new CustomServiceException("property is null");
         }
         StringBuilder parameters = new StringBuilder();
         String role = properties.getProperty("role");

@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <head>
     <meta charset="UTF-8">
     <title>Create Hometask</title>
@@ -26,4 +25,3 @@
     <input type="submit" value="Send hometask">
 </form>
 </body>
-</html>

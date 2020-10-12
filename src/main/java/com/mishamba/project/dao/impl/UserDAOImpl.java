@@ -8,6 +8,7 @@ import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.util.parser.DateParser;
 import org.apache.log4j.Logger;
 
+import javax.security.auth.login.AccountLockedException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -49,10 +50,6 @@ public class UserDAOImpl implements UserDAO {
     private final String CREATE_USER = "INSERT INTO users " +
             "(first_name, last_name, email, password_hash, birthday, role) " +
             "VALUES (?, ?, ?, ?, ?, ?)";
-    private final String GET_USER_BY_ID = "SELECT id, first_name, last_name, " +
-            "birthday, email, role " +
-            "FROM users " +
-            "WHERE id = ?";
 
     @Override
     public boolean checkSignInData(String givenEmail, int givenPasswordHash) throws DAOException {
@@ -158,10 +155,17 @@ public class UserDAOImpl implements UserDAO {
                     "database with new user", e);
         } finally {
             try {
+                resultSet.close();
+            } catch (SQLException e) {
+                logger.error("can't close result set");
+            }
+
+            try {
                 statement.close();
             } catch (SQLException throwables) {
-                logger.warn("statement is null");
+                logger.warn("can't close statement");
             }
+
             ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
@@ -172,8 +176,9 @@ public class UserDAOImpl implements UserDAO {
     public ArrayList<User> getTeacherByFirstNameLastName(String firstName, String lastName) throws DAOException {
         ArrayList<User> teachers = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement;
-        ResultSet resultSet;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
         DateParser dateParser = new DateParser();
 
         try {
@@ -190,8 +195,26 @@ public class UserDAOImpl implements UserDAO {
                 teachers.add(new User(id, firstName, lastName, email, birthday,
                         teacherSubjects, "teacher"));
             }
-        } catch (SQLException | UtilException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException | UtilException e) {
+            logger.error("can't get teacher");
+            throw new DAOException("can't get teacher", e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (NullPointerException | SQLException e) {
+                logger.error("can't close null result set");
+            }
+
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (NullPointerException | SQLException e) {
+                logger.error("can't close null statement");
+            }
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
         return teachers;
@@ -223,17 +246,23 @@ public class UserDAOImpl implements UserDAO {
         }
         finally {
             try {
-                resultSet.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
             } catch (SQLException throwable) {
                 logger.warn("result set is null");
                 throwable.printStackTrace();
             }
+
             try {
-                statement.close();
+                if (statement != null) {
+                    statement.close();
+                }
             } catch (SQLException throwable) {
                 logger.warn("statement is null");
                 throwable.printStackTrace();
             }
+
             ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
@@ -243,24 +272,36 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public int getUserIdByEmail(String email) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement;
-        ResultSet resultSet;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
         try {
             statement = connection.prepareStatement(STUDENT_ID_BY_EMAIL);
             statement.setString(1, email);
-        } catch (SQLException e) {
-            logger.error("can't set queue parameters");
-            throw new DAOException("can't set queue parameters", e);
-        }
-
-        try {
             resultSet = statement.executeQuery();
             resultSet.next();
             return resultSet.getInt("id");
         } catch (SQLException e) {
             logger.error("can't execute queue");
             throw new DAOException("can't execute queue", e);
+        } finally {
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close statement");
+            }
+
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close result set");
+            }
+
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
     }
 
@@ -268,24 +309,36 @@ public class UserDAOImpl implements UserDAO {
     public ArrayList<User> getStudentsOnCourse(int courseId) throws DAOException {
         ArrayList<User> students = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement;
-        ResultSet resultSet;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
         try {
             statement = connection.prepareStatement(GET_STUDENTS_ON_COURSE);
             statement.setInt(1, courseId);
-        } catch (SQLException e) {
-            logger.error("can't form queue");
-            throw new DAOException("can't form queue", e);
-        }
-
-        try {
             resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 students.add(formUser(resultSet));
             }
         } catch (SQLException | UtilException throwables) {
             throwables.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close result set");
+            }
+
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close result set");
+            }
+
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
         return students;
@@ -295,19 +348,13 @@ public class UserDAOImpl implements UserDAO {
     public ArrayList<String> getTeacherSubjects(int teacherId) throws DAOException {
         ArrayList<String> subjects = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement;
-        ResultSet resultSet;
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
 
         try {
             statement = connection.prepareStatement(
                     GET_TEACHER_SUBJECTS_BY_TEACHER_ID);
             statement.setInt(1, teacherId);
-        } catch (SQLException e) {
-            logger.error("can't form queue");
-            throw new DAOException("can't form queue", e);
-        }
-
-        try {
             resultSet = statement.executeQuery();
             while(resultSet.next()) {
                 subjects.add(resultSet.getString("subject_name"));
@@ -315,6 +362,23 @@ public class UserDAOImpl implements UserDAO {
         } catch (SQLException e) {
             logger.error("can't execute queue");
             throw new DAOException("can't execute queue", e);
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close result set");
+            }
+
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                logger.error("can't close statement");
+            }
+            ConnectionPoolImpl.getInstance().returnConnection(connection);
         }
 
         return subjects;
@@ -324,8 +388,8 @@ public class UserDAOImpl implements UserDAO {
         DateParser dateParser = new DateParser();
 
         int id = resultSet.getInt("id");
-        String firstName = resultSet.getString("firstName");
-        String lastName = resultSet.getString("lastName");
+        String firstName = resultSet.getString("first_name");
+        String lastName = resultSet.getString("last_name");
         Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
         String email = resultSet.getString("email");
         String role = resultSet.getString("role");

@@ -56,12 +56,13 @@ public class CourseDAOImpl implements CourseDAO {
                     "WHERE finished = FALSE AND course_teacher IS NULL";
     private final String ACTIVE_COURSES = "SELECT courses.id, courses.course_name, " +
             "courses.begin_of_course, courses.end_of_course, " +
-            "courses.max_students_quantity, courses.finished, " +
-            "users.first_name, users.last_name, users.birthday " +
+            "courses.max_students_quantity, courses.finished, users.id as teacher_id, " +
+            "users.first_name, users.last_name, users.birthday, users.email " +
             "FROM courses " +
             "LEFT JOIN " +
             "users " +
-            "on courses.course_teacher = users.id";
+            "on courses.course_teacher = users.id " +
+            "WHERE finished=FALSE";
     private final String STUDENTS_ON_COURSE_QUANTITY_QUEUE =
             "SELECT COUNT(student_id) AS quantity " +
                     "FROM student_course_references " +
@@ -175,7 +176,8 @@ public class CourseDAOImpl implements CourseDAO {
         }
     }
 
-    private Course formCourseFromResultSet(ResultSet resultSet) throws SQLException, DAOException, UtilException {
+    private Course formCourseFromResultSet(ResultSet resultSet) throws
+            SQLException, DAOException, UtilException {
         DateParser dateParser = new DateParser();
 
         Integer courseId = resultSet.getInt("id");
@@ -279,6 +281,13 @@ public class CourseDAOImpl implements CourseDAO {
             throw new DAOException("can't form queue", e);
         }
 
+        return getCourses(courses, statement);
+    }
+
+    private ArrayList<Course> getCourses(ArrayList<Course> courses,
+                                         PreparedStatement statement)
+            throws DAOException {
+        ResultSet resultSet;
         try {
             resultSet = statement.executeQuery();
             while(resultSet.next()) {
@@ -361,16 +370,6 @@ public class CourseDAOImpl implements CourseDAO {
             throw new DAOException("can't form queue", e);
         }
 
-        try {
-            resultSet = statement.executeQuery();
-            while(resultSet.next()) {
-                courses.add(formCourseFromResultSet(resultSet));
-            }
-        } catch (SQLException | UtilException e) {
-            logger.error("can't execute queue");
-            throw new DAOException("can't execute queue", e);
-        }
-
-        return courses;
+        return getCourses(courses, statement);
     }
 }
