@@ -26,4 +26,5 @@ public interface CustomService {
     String getStudentsOnCourse(int courseId) throws CustomServiceException;
     void createHometask(Properties hometaskProperties) throws CustomServiceException;
     String getHometaskById(int hometaskId) throws CustomServiceException;
+    void writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException;
 }

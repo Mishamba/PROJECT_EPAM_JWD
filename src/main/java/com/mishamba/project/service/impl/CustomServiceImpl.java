@@ -2,12 +2,10 @@ package com.mishamba.project.service.impl;
 
 import com.mishamba.project.dao.DAOFactory;
 import com.mishamba.project.dao.exception.DAOException;
-import com.mishamba.project.model.Course;
-import com.mishamba.project.model.Hometask;
-import com.mishamba.project.model.ProgramStep;
-import com.mishamba.project.model.User;
+import com.mishamba.project.model.*;
 import com.mishamba.project.service.CustomService;
 import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.service.former.builder.PartsBuilder;
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.service.former.builder.Former;
 import com.mishamba.project.service.former.FormerProvider;
@@ -396,6 +394,17 @@ public class CustomServiceImpl implements CustomService {
         }
     }
 
+    @Override
+    public void writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException {
+        HometaskResponse response = new HometaskResponse(hometaskId, studentId, answer, null);
+
+        try {
+            DAOFactory.getInstance().getHometaskDAO().writeHometaskResponse(response);
+        } catch (DAOException e) {
+            logger.error("can't write hometask response");
+        }
+    }
+
     private String formHometask(Hometask hometask) {
         StringBuilder builder = new StringBuilder();
 
@@ -419,6 +428,17 @@ public class CustomServiceImpl implements CustomService {
         StringBuilder builder = new StringBuilder();
 
         builder.append(formHometask(hometask));
+        builder.append(formHometaskResponce(hometask, role));
+
+        return builder.toString();
+    }
+
+    private String formHometaskResponce(Hometask hometask, String role) {
+        if (hometask == null) {
+            return "";
+        }
+
+        StringBuilder builder = new StringBuilder();
 
         if (hometask.getResponse() != null && role.equals("student")) {
             builder.append("<h3>Your answer</h3>");
@@ -427,11 +447,16 @@ public class CustomServiceImpl implements CustomService {
             builder.append("<br>");
             builder.append("<h3>Mark</h3>");
             builder.append("<br>");
-            builder.append(hometask.getResponse().getMark());
+            int mark = hometask.getResponse().getMark();
+            builder.append((mark == 0) ? "no mark given" : mark);
             builder.append("<br>");
-        } else {
+        } else if (hometask.getResponse() == null && role.equals("student")) {
             builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                     formAnswerHometaskButton(hometask.getId()));
+        } else if (hometask.getResponse() != null && role.equals("teacher")) {
+            builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
+                    formCheckHometaskButton(hometask.getId(),
+                            hometask.getResponse().getStudentId()));
         }
 
         return builder.toString();

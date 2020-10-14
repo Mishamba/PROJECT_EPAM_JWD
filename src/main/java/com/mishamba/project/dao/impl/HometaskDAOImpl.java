@@ -18,6 +18,9 @@ import java.util.Date;
 public class HometaskDAOImpl implements HometaskDAO {
     private final Logger logger = Logger.getRootLogger();
 
+    private final String ENTER_HOMETASK_RESPONSE = "INSERT INTO hometask_responce " +
+            "(hometask_id, student_id, answer)" +
+            "VALUES (?, ?, ?)";
     private final String GET_HOMETASK_BY_ID = "SELECT id, course_id, " +
             "hometask_title as title, hometask_description as description, image, begin_date, deadline " +
             "FROM hometasks " +
@@ -185,6 +188,23 @@ public class HometaskDAOImpl implements HometaskDAO {
         }
 
         return null;
+    }
+
+    @Override
+    public void writeHometaskResponse(HometaskResponse response) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+
+        try {
+            statement = connection.prepareStatement(ENTER_HOMETASK_RESPONSE);
+            statement.setInt(1, response.getHometaskId());
+            statement.setInt(2, response.getStudentId());
+            statement.setString(3, response.getAnswer());
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            logger.error("can't write hometask responce");
+        }
     }
 
     private HometaskResponse formHometaskResponse(ResultSet resultSet) throws SQLException {

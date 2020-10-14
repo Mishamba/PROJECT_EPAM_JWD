@@ -55,7 +55,6 @@ public class GetAnswerHometaskPageCommand implements Command {
 
         request.setAttribute("menu", menu);
         request.setAttribute("hometask", hometask);
-        request.setAttribute("hometask_id", properties.getProperty("hometask_id"));
 
         try {
             request.getRequestDispatcher("answer_hometask.jsp").forward(request, response);

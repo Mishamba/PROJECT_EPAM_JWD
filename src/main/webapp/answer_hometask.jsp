@@ -25,7 +25,7 @@ ${hometask}
     <label>
         <input type="text" name="answer">
     </label>
-    <input type="hidden" name="hometask_id" value="${hometask_id}">
+    <input type="hidden" name="hometask_id" value=<%= request.getParameter("hometask_id")%>>
     <input type="hidden" name="command" value="enter_hometask_answer">
     <input type="submit" value="Send answer">
 </form>

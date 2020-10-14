@@ -32,6 +32,8 @@ public class CommandProvider {
         repository.put("course_hometask", new GetCourseHometaskPageCommand());
         repository.put("check_create_hometask", new CreateHometaskProcessCommand());
         repository.put("answer_hometask", new GetAnswerHometaskPageCommand());
+        repository.put("enter_hometask_answer", new AnswerHometaskProcessCommand());
+        repository.put("student_progress", new GetStudentProgressCommand());
     }
 
     public static CommandProvider getInstance() {
