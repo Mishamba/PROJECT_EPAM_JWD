@@ -33,17 +33,21 @@ public class GetCourseHometaskPageCommand implements Command {
 
         String menu;
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().formPageParameter(properties);
+            menu = CustomServiceFactory.getInstance().getCustomService().
+                    formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.error("can't get menu buttons");
             menu = MENU_ERROR_SIGN;
         }
 
         int courseId = getCourseId(req);
+        int userId = getUserId(req);
+        String role = properties.getProperty("role");
 
         String hometasks;
         try {
-            hometasks = CustomServiceFactory.getInstance().getCustomService().getCourseHometask(courseId);
+            hometasks = CustomServiceFactory.getInstance().getCustomService().
+                    getCourseHometaskForUser(courseId, userId, role);
         } catch (CustomServiceException e) {
             hometasks = HOMETASK_ERROR_SIGN;
         }
@@ -81,12 +85,17 @@ public class GetCourseHometaskPageCommand implements Command {
     private int getCourseId(HttpServletRequest req) {
         int courseId;
         try {
-            courseId = Integer.parseInt(req.getParameter("courseId"));
+            courseId = Integer.parseInt(req.getParameter("course_id"));
         } catch (NullPointerException | NumberFormatException e) {
             logger.warn("can't get course id from request");
             courseId = 0;
         }
 
         return courseId;
+    }
+
+    private int getUserId(HttpServletRequest req) {
+        HttpSession session = req.getSession();
+        return (int) session.getAttribute("id");
     }
 }

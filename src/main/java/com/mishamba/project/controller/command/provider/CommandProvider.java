@@ -22,7 +22,7 @@ public class CommandProvider {
         repository.put("sign_in", new GetSignInPageCommand());
         repository.put("sign_in_check", new SignInProcessCommand());
         repository.put("sign_up_check", new SignUpProcessCommand());
-        repository.put("create_hometask", new GetHometaskCreatePageCommand());
+        repository.put("create_hometask", new GetCreateHometaskPageCommand());
         repository.put("sign_out", new SignOutProcessCommand());
         repository.put("course_profile", new GetCourseProfileCommand());
         repository.put("student_sign_up_for_course", new StudentSignUpOnCourseCommand());
@@ -30,6 +30,8 @@ public class CommandProvider {
         repository.put("user_courses", new GetUserCoursesCommand());
         repository.put("students_on_course_list", new GetStudentsOnCourseListCommand());
         repository.put("course_hometask", new GetCourseHometaskPageCommand());
+        repository.put("check_create_hometask", new CreateHometaskProcessCommand());
+        repository.put("answer_hometask", new GetAnswerHometaskPageCommand());
     }
 
     public static CommandProvider getInstance() {

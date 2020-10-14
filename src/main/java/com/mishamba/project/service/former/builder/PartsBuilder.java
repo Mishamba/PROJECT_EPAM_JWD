@@ -178,6 +178,8 @@ public class PartsBuilder {
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
                 append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"View hometask\">");
+        builder.append("</form>");
+        builder.append("<br>");
 
         return builder.toString();
     }
@@ -325,7 +327,7 @@ public class PartsBuilder {
         return builder.toString();
     }
 
-    public String formStudentsListButton(int courseId) {
+   public String formStudentsListButton(int courseId) {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<br>");
@@ -343,8 +345,9 @@ public class PartsBuilder {
         StringBuilder builder = new StringBuilder();
 
         builder.append("<br>");
-        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"create_hometask\">");
+        builder.append("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
+        builder.append("<input type=\"hidden\" name=\"command\" " +
+                "value=\"create_hometask\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").
                 append(courseId).append("\">");
         builder.append("<input type=\"submit\" value=\"Create hometask\">");

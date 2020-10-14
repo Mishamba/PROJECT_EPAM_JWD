@@ -30,18 +30,17 @@ public class CourseDAOImpl implements CourseDAO {
             "WHERE course_teacher=? AND finished=?";
     private final String STUDENT_ACTIVE_PASSED_COURSES = "SELECT courses.id, " +
             "courses.course_name, courses.begin_of_course, " +
-            "courses.end_of_course, courses.course_teacher, " +
-            "courses.max_students_quantity, courses.finished, " +
-            "users.id as teacher_id, users.first_name, users.last_name, " +
-            "users.birthday, users.email " +
+            "courses.end_of_course, courses.course_teacher as teacher_id, " +
+            "courses.max_students_quantity, courses.finished, users.first_name, " +
+            "users.last_name, users.birthday, users.email " +
             "FROM courses " +
             "LEFT JOIN " +
             "student_course_references " +
-            "ON courses.id=student_course_references.course_id AND " +
-            "student_course_references.student_id=? " +
-            "LEFT JOIN users " +
-            "ON courses.course_teacher = users.id " +
-            "WHERE finished=?";
+            "ON courses.id=student_course_references.course_id " +
+            "LEFT JOIN " +
+            "users " +
+            "ON users.id=courses.course_teacher " +
+            "WHERE student_course_references.student_id=? AND courses.finished=?";
     private final String CHECK_STUDENT_COURSE_REFERENCES = "SELECT EXISTS (" +
             "SELECT student_id, course_id " +
             "FROM student_course_references " +
@@ -232,7 +231,7 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public boolean enterStudentOnCourse(int studentId, int courseId) throws DAOException {
+    public void enterStudentOnCourse(int studentId, int courseId) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
         ResultSet resultSet;
@@ -244,7 +243,7 @@ public class CourseDAOImpl implements CourseDAO {
             resultSet = statement.executeQuery();
             resultSet.next();
             if (resultSet.getInt("exists_value") == 1) {
-                return false;
+                throw new DAOException("user is already on course");
             }
         } catch (SQLException e) {
             logger.error("can't check is there any such a student");
@@ -261,19 +260,18 @@ public class CourseDAOImpl implements CourseDAO {
             logger.error("can't enter student on course");
             throw new DAOException("can't enter student on course", e);
         }
-
-        return true;
     }
 
     @Override
-    public ArrayList<Course> getStudentsCourses(int userId, boolean passed) throws DAOException {
+    public ArrayList<Course> getStudentsCourses(int userId, boolean passed)
+            throws DAOException {
         ArrayList<Course> courses = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
-        ResultSet resultSet;
 
         try {
-            statement = connection.prepareStatement(STUDENT_ACTIVE_PASSED_COURSES);
+            statement = connection.prepareStatement(
+                    STUDENT_ACTIVE_PASSED_COURSES);
             statement.setInt(1, userId);
             statement.setBoolean(2, passed);
         } catch (SQLException e) {

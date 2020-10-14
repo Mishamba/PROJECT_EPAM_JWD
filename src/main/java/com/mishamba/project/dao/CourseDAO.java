@@ -11,7 +11,7 @@ public interface CourseDAO {
     ArrayList<Course> getActiveCourses() throws DAOException;
     Integer getStudentsOnCourseQuantity(Course course) throws DAOException;
     Course getCourseById(int id) throws DAOException;
-    boolean enterStudentOnCourse(int studentId, int courseId)
+    void enterStudentOnCourse(int studentId, int courseId)
             throws DAOException;
     ArrayList<Course> getStudentsCourses(int studentId, boolean passed)
             throws DAOException;

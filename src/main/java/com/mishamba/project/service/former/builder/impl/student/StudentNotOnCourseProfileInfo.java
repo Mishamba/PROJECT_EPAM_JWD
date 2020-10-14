@@ -11,7 +11,7 @@ public class StudentNotOnCourseProfileInfo implements Former {
     @Override
     public String form(Properties properties) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
-        int courseId = Integer.parseInt((String) properties.get("course_id"));
+        int courseId = Integer.parseInt(properties.getProperty("courseId"));
 
         builder.append(PartsBuilderFactory.getInstance().getPartsBuilder().
                 formStudentSignUpForCourseButton(courseId));

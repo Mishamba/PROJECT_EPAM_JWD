@@ -66,7 +66,6 @@ public class GetCoursesCatalogCommand implements Command {
         String role = (String) session.getAttribute("role");
         String firstName = (String) session.getAttribute("firstName");
         String lastName = (String) session.getAttribute("lastName");
-        String localization = (String) session.getAttribute("localization");
         if (role == null) {
             role = "anonym";
         }
@@ -76,7 +75,6 @@ public class GetCoursesCatalogCommand implements Command {
         if (firstName != null && lastName != null) {
             userProp.setProperty("firstName", firstName);
             userProp.setProperty("lastName", lastName);
-            userProp.setProperty("localization", localization);
         }
         userProp.setProperty("target", "user info");
 

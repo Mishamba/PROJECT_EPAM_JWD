@@ -27,18 +27,10 @@ public class StudentSignUpOnCourseCommand implements Command {
         int studentId = (Integer) session.getAttribute("id");
         int courseId = Integer.parseInt(request.getParameter("course_id"));
 
-        boolean result;
         try {
-            result = CustomServiceFactory.getInstance().getCustomService().
+            CustomServiceFactory.getInstance().getCustomService().
                     enterStudentOnCourse(studentId, courseId);
         } catch (CustomServiceException e) {
-            logger.error("can't enter student on course");
-            sendErrorPageWithMessage(request, response,
-                    "can't enter you on course");
-            return;
-        }
-
-        if (result) {
             logger.error("can't enter student on course");
             sendErrorPageWithMessage(request, response,
                     "can't enter you on course");

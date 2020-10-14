@@ -91,15 +91,17 @@ public class GetCourseProfileCommand implements Command {
     private void formPropertiesToButtonForm(Properties properties,
                                             String role, int userId,
                                             int courseId, boolean teacherLeads) {
+        properties.setProperty("target", "on course profile button");
+        properties.setProperty("courseId", String.valueOf(courseId));
+
         try {
             if ((role.equals("student") && CustomServiceFactory.getInstance().
                     getCustomService().isStudentOnCourse(userId, courseId)) ||
                     (role.equals("teacher") && teacherLeads)) {
-                properties.setProperty("target", "on course profile button");
-                properties.setProperty("courseId", String.valueOf(courseId));
                 properties.setProperty("userId", String.valueOf(userId));
             } else {
                 properties.setProperty("target", "not on course profile button");
+                properties.setProperty("courseId", String.valueOf(courseId));
             }
             logger.info("set properties");
         } catch (CustomServiceException e) {

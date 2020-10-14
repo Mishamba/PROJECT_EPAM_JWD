@@ -11,6 +11,23 @@
     <title>Hometask</title>
 </head>
 <body>
-    ${tasks_and_place_for_answer}
+<h3>Menu</h3>
+<br>
+${menu}
+<br>
+<h3>Hometask</h3>
+<br>
+${hometask}
+<br>
+<h3>Answer</h3>
+<br>
+<form action="/PROJECT_EPAM_JWD_war/hometask" method="get">
+    <label>
+        <input type="text" name="answer">
+    </label>
+    <input type="hidden" name="hometask_id" value="${hometask_id}">
+    <input type="hidden" name="command" value="enter_hometask_answer">
+    <input type="submit" value="Send answer">
+</form>
 </body>
 </html>

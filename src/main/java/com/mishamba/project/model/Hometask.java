@@ -3,20 +3,23 @@ package com.mishamba.project.model;
 import java.util.Date;
 
 public class Hometask {
-    int courseId;
-    Integer id;
-    String title;
-    String description;
-    Date beginDate;
-    Date deadline;
+    private int courseId;
+    private Integer id;
+    private String title;
+    private String description;
+    private Date beginDate;
+    private Date deadline;
+    private HometaskResponse response;
 
-    public Hometask(int courseId, Integer id, String title, String description, Date beginDate, Date deadline) {
+    public Hometask(int courseId, Integer id, String title, String description,
+                    Date beginDate, Date deadline, HometaskResponse response) {
         this.courseId = courseId;
         this.id = id;
         this.title = title;
         this.description = description;
         this.beginDate = beginDate;
         this.deadline = deadline;
+        this.response = response;
     }
 
     public int getCourseId() {
@@ -27,11 +30,11 @@ public class Hometask {
         this.courseId = courseId;
     }
 
-    public Integer getHometaskId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setHometaskId(Integer hometaskId) {
+    public void setId(Integer hometaskId) {
         this.id = hometaskId;
     }
 
@@ -67,12 +70,26 @@ public class Hometask {
         this.deadline = deadline;
     }
 
+    public HometaskResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(HometaskResponse response) {
+        this.response = response;
+    }
+
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Hometask hometask = (Hometask) o;
         return courseId == hometask.courseId &&
+                response.equals(hometask.getResponse()) &&
                 id.equals(hometask.id) &&
                 title.equals(hometask.title) &&
                 description.equals(hometask.description) &&
@@ -90,6 +107,7 @@ public class Hometask {
         hash *= description.hashCode() * prime;
         hash *= beginDate.hashCode() * prime;
         hash *= deadline.hashCode() * prime;
+        hash *= (response != null) ? response.hashCode() * prime : 1;
 
         return hash;
     }
