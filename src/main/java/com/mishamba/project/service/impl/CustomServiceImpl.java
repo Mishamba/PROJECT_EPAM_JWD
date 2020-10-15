@@ -219,7 +219,7 @@ public class CustomServiceImpl implements CustomService {
     @Override
     public int getUserIdByEmail(String email) throws CustomServiceException {
         try {
-            return DAOFactory.getInstance().getUserDAO().getUserIdByEmail(email);
+            return DAOFactory.getInstance().getUserDAO().getUserByEmail(email).getId();
         } catch (DAOException e) {
             logger.error("can't get user id");
             throw new CustomServiceException("can't get user id", e);
@@ -403,6 +403,50 @@ public class CustomServiceImpl implements CustomService {
         } catch (DAOException e) {
             logger.error("can't write hometask response");
         }
+    }
+
+    @Override
+    public User getUserById(int userId) throws CustomServiceException {
+        try {
+            return DAOFactory.getInstance().getUserDAO().getUserById(userId);
+        } catch (DAOException e) {
+            logger.error("can't get user");
+            throw new CustomServiceException("can't get user by id", e);
+        }
+    }
+
+    @Override
+    public String getUserInfoById(int userId) throws CustomServiceException {
+        try {
+            User user = DAOFactory.getInstance().getUserDAO().getUserById(userId);
+
+            return formUserForProgressPage(user);
+        } catch (DAOException e) {
+            logger.error("can't get user by id");
+            throw new CustomServiceException("can't get user by id", e);
+        }
+    }
+
+    private String formUserForProgressPage(User user) throws CustomServiceException {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append("<h3>First name</h3>");
+        builder.append("<br>");
+        builder.append(user.getFirstName());
+        builder.append("<br>");
+        builder.append("<h3>Last name</h3>");
+        builder.append("<br>");
+        builder.append(user.getLastName());
+        builder.append("<h3>Birthday</h3>");
+        builder.append("<br>");
+        builder.append(user.getBirthday());
+        builder.append("<br>");
+        builder.append("<h3>Email</h3>");
+        builder.append("<br>");
+        builder.append(user.getEmail());
+        builder.append("<br>");
+
+        return builder.toString();
     }
 
     private String formHometask(Hometask hometask) {

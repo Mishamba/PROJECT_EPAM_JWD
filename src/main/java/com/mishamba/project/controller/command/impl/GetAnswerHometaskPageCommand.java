@@ -75,7 +75,6 @@ public class GetAnswerHometaskPageCommand implements Command {
 
         Properties properties = new Properties();
         properties.setProperty("role", role);
-        properties.setProperty("hometaskId", hometaskId);
         properties.setProperty("target", "menu");
 
         return properties;

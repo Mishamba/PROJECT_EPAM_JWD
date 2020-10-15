@@ -1,10 +1,12 @@
 package com.mishamba.project.service;
 
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.exception.CustomServiceException;
 
 import java.util.Properties;
 
 public interface CustomService {
+    User getUserById(int userId) throws CustomServiceException;
     String getCourseHometaskForUser(int courseId, int studentId, String role)
             throws CustomServiceException;
     String getMainCourses() throws CustomServiceException;
@@ -27,4 +29,5 @@ public interface CustomService {
     void createHometask(Properties hometaskProperties) throws CustomServiceException;
     String getHometaskById(int hometaskId) throws CustomServiceException;
     void writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException;
+    String getUserInfoById(int userId) throws CustomServiceException;
 }

@@ -17,6 +17,10 @@ import java.util.Date;
 
 public class UserDAOImpl implements UserDAO {
     private final Logger logger = Logger.getRootLogger();
+    private final String GET_USER_BY_ID = "SELECT id, first_name, last_name, email " +
+            "birthday, role " +
+            "FROM users " +
+            "WHERE id = ?";
     private final String GET_TEACHER_SUBJECTS_BY_TEACHER_ID = "SELECT subject_name " +
             "FROM teacher_subjects " +
             "WHERE teacher_id = ?";
@@ -110,6 +114,24 @@ public class UserDAOImpl implements UserDAO {
             return new User(id, firstName, lastName, email, birthday,teacherSubjects, role);
         } catch (SQLException | UtilException e) {
             throw new DAOException("can't get result from result set", e);
+        }
+    }
+
+    @Override
+    public User getUserById(int userId) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            statement = connection.prepareStatement(GET_USER_BY_ID);
+            statement.setInt(1, userId);
+
+            resultSet = statement.executeQuery();
+            resultSet.next();
+            return formUser(resultSet);
+        } catch (SQLException | UtilException e) {
+            throw new DAOException("can't execute queue");
         }
     }
 
@@ -267,42 +289,6 @@ public class UserDAOImpl implements UserDAO {
         }
 
         return users;
-    }
-
-    @Override
-    public int getUserIdByEmail(String email) throws DAOException {
-        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-
-        try {
-            statement = connection.prepareStatement(STUDENT_ID_BY_EMAIL);
-            statement.setString(1, email);
-            resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt("id");
-        } catch (SQLException e) {
-            logger.error("can't execute queue");
-            throw new DAOException("can't execute queue", e);
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                logger.error("can't close statement");
-            }
-
-            try {
-                if (resultSet != null) {
-                    resultSet.close();
-                }
-            } catch (SQLException e) {
-                logger.error("can't close result set");
-            }
-
-            ConnectionPoolImpl.getInstance().returnConnection(connection);
-        }
     }
 
     @Override

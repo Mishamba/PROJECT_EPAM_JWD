@@ -66,7 +66,6 @@ public class SignUpProcessCommand implements Command {
                     session.setAttribute("role", signUpInfo.get("role"));
                     session.setAttribute("firstName", signUpInfo.get("firstName"));
                     session.setAttribute("lastName", signUpInfo.get("lastName"));
-                    session.setAttribute("email", signUpInfo.get("email"));
                     session.setAttribute("birthday", signUpInfo.get("birthday"));
                     session.setAttribute("id", Integer.parseInt((String) info.get("id")));
                 }

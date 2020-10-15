@@ -3,6 +3,7 @@ package com.mishamba.project.controller.command.impl;
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -22,10 +23,9 @@ public class GetUserProfilePageCommand implements Command {
         String firstName = (String) session.getAttribute("firstName");
         String lastName = (String) session.getAttribute("lastName");
         String birthday = (String) session.getAttribute("birthday");
-        String email = (String) session.getAttribute("email");
         int userId = (int) session.getAttribute("id");
         if (role == null || firstName == null || lastName == null ||
-                birthday == null || email == null) {
+                birthday == null) {
             logger.warn("user without role tries to get profile page");
             try {
                 request.getRequestDispatcher("error.html").forward(request, response);
@@ -33,6 +33,14 @@ public class GetUserProfilePageCommand implements Command {
                 logger.error("can't load error page");
             }
             return;
+        }
+
+        String email = null;
+        try {
+            email = CustomServiceFactory.getInstance().getCustomService().
+                    getUserById(userId).getEmail();
+        } catch (CustomServiceException e) {
+            email = "<p>can't get email</p>";
         }
 
         Properties properties = new Properties();

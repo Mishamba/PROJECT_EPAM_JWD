@@ -1,3 +1,5 @@
+<jsp:useBean id="hometask_data" scope="request" type="java.lang.String"/>
+<jsp:useBean id="menu" scope="request" type="java.lang.String"/>
 <%--
   Created by IntelliJ IDEA.
   User: mishamba
@@ -11,8 +13,15 @@
     <title>Check hometask</title>
 </head>
 <body>
-    ${hometask_data}
-<form>
+<h3>Menu</h3>
+<br>
+${menu}
+<br>
+<h3>Hometask data</h3>
+<br>
+${hometask_data}
+<br>
+<form action="\PROJECT_EPAM_JWD_war/hometask">
     <label>
         <input type="number" name="mark">
     </label>

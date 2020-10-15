@@ -1,6 +1,5 @@
 package com.mishamba.project.util.parser;
 
-import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
 
 import java.text.ParseException;

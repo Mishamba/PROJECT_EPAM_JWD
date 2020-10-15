@@ -36,8 +36,18 @@ public class GetStudentProgressCommand implements Command {
             menu = "<p>can't get menu</p>";
         }
 
-        int courseId = getCourseId(request);
         int studentId = getStudentId(request);
+
+        String studentInfo;
+        try {
+            studentInfo = CustomServiceFactory.getInstance().
+                    getCustomService().getUserInfoById(studentId);
+        } catch (CustomServiceException e) {
+            logger.error("can't get student info");
+            studentInfo = "<p> can't get student info</p>";
+        }
+
+        int courseId = getCourseId(request);
 
         String hometask;
         try {
@@ -49,6 +59,7 @@ public class GetStudentProgressCommand implements Command {
         }
 
         request.setAttribute("menu", menu);
+        request.setAttribute("student_info", studentInfo);
         request.setAttribute("hometask", hometask);
 
         try {

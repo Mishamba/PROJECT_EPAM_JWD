@@ -209,6 +209,7 @@ public class PartsBuilder {
                 append(hometaskId).append("\">");
         builder.append("<input type=\"hidden\" name=\"student_id\" value=\"").
                 append(studentId).append("\">");
+        builder.append("<input type=\"submit\" value=\"Check hometask\">");
         builder.append("</form><br>");
 
         return builder.toString();

@@ -1,3 +1,4 @@
+<%@ page import="com.mishamba.project.service.CustomServiceFactory" %>
 <jsp:useBean id="hometask" scope="request" type="java.lang.String"/>
 <jsp:useBean id="menu" scope="request" type="java.lang.String"/>
 <jsp:useBean id="student_info" scope="request" type="java.lang.String"/>
@@ -25,5 +26,13 @@ ${student_info}
 <h3>Hometasks</h3>
 <br>
 ${hometask}
+<br>
+<br>
+<form action="/PROJECT_EPAM_JWD_war">
+    <input type="hidden" name="command" value="deducate_student">
+    <input type="hidden" name="course_id" value=<%= request.getParameter("course_id")%>>
+    <input type="hidden" name="student_id" value=<%=request.getParameter("student_id")%>>
+    <input type="submit" value="Kick Out">
+</form>
 </body>
 </html>
