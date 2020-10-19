@@ -1,5 +1,3 @@
-<jsp:useBean id="hometask_data" scope="request" type="java.lang.String"/>
-<jsp:useBean id="menu" scope="request" type="java.lang.String"/>
 <%--
   Created by IntelliJ IDEA.
   User: mishamba
@@ -25,6 +23,10 @@ ${hometask_data}
     <label>
         <input type="number" name="mark">
     </label>
+    <br>
+    <input type="hidden" name="command" value="set_hometask_mark">
+    <input type="hidden" name="student_id" value=<%=request.getParameter("student_id")%>>
+    <input type="hidden" name="hometask_id" value=<%=request.getParameter("hometask_id")%>>
     <input type="submit" value="Set mark">
 </form>
 </body>

@@ -5,13 +5,13 @@ import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.*;
 import com.mishamba.project.service.CustomService;
 import com.mishamba.project.service.exception.CustomServiceException;
-import com.mishamba.project.service.former.builder.PartsBuilder;
 import com.mishamba.project.util.exception.UtilException;
 import com.mishamba.project.service.former.builder.Former;
 import com.mishamba.project.service.former.FormerProvider;
 import com.mishamba.project.service.former.factory.PartsBuilderFactory;
 import com.mishamba.project.util.parser.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
+import com.mishamba.project.util.validator.MarkValidator;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -425,6 +425,47 @@ public class CustomServiceImpl implements CustomService {
             logger.error("can't get user by id");
             throw new CustomServiceException("can't get user by id", e);
         }
+    }
+
+    @Override
+    public String getStudentHometaskWithResponce(int hometaskId, int studentId) throws CustomServiceException {
+        try {
+            Hometask hometask = DAOFactory.getInstance().getHometaskDAO().getHometaskById(hometaskId);
+            HometaskResponse response = DAOFactory.getInstance().getHometaskDAO().getHometaskResponse(hometaskId, studentId);
+            hometask.setResponse(response);
+
+            return formHometaskForCheck(hometask);
+        } catch (DAOException e) {
+            throw new CustomServiceException("can't get hometask");
+        }
+    }
+
+    @Override
+    public void setHometaskMark(int hometaskId, int studentId, int mark) throws CustomServiceException {
+        MarkValidator validator = new MarkValidator();
+        if (!validator.isCorrect(mark)) {
+            throw new CustomServiceException("mark incorrect");
+        }
+
+        try {
+            DAOFactory.getInstance().getHometaskDAO().setHometaskMark(hometaskId, studentId, mark);
+        } catch (DAOException e) {
+            logger.error("can't set mark");
+            throw new CustomServiceException("can't set mark", e);
+        }
+    }
+
+    private String formHometaskForCheck(Hometask hometask) {
+        StringBuilder builder = new StringBuilder();
+
+        builder.append(formHometask(hometask));
+        builder.append("<br>");
+        builder.append("<h3>Answer</h3>");
+        builder.append("<br>");
+        builder.append(hometask.getResponse().getAnswer());
+        builder.append("<br>");
+
+        return builder.toString();
     }
 
     private String formUserForProgressPage(User user) throws CustomServiceException {

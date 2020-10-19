@@ -18,6 +18,9 @@ import java.util.Date;
 public class HometaskDAOImpl implements HometaskDAO {
     private final Logger logger = Logger.getRootLogger();
 
+    private final String SET_HOMETASK_MARK = "UPDATE hometask_responce SET " +
+            "mark=? " +
+            "WHERE hometask_id = ? AND student_id = ?";
     private final String ENTER_HOMETASK_RESPONSE = "INSERT INTO hometask_responce " +
             "(hometask_id, student_id, answer)" +
             "VALUES (?, ?, ?)";
@@ -204,6 +207,23 @@ public class HometaskDAOImpl implements HometaskDAO {
             statement.executeUpdate();
         } catch (SQLException e) {
             logger.error("can't write hometask responce");
+        }
+    }
+
+    @Override
+    public void setHometaskMark(int hometaskId, int studentId, int mark) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement = null;
+
+        try {
+            statement = connection.prepareStatement(SET_HOMETASK_MARK);
+            statement.setInt(1, mark);
+            statement.setInt(2, studentId);
+            statement.setInt(3, hometaskId);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new DAOException("can't execute queue", e);
         }
     }
 

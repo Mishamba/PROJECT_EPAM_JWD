@@ -13,4 +13,5 @@ public interface HometaskDAO {
     HometaskResponse getHometaskResponse(int hometaskId, int studentId) throws DAOException;
     Hometask getHometaskById(int hometaskId) throws DAOException;
     void writeHometaskResponse(HometaskResponse response) throws DAOException;
+    void setHometaskMark(int hometaskId, int studentId, int mark) throws DAOException;
 }

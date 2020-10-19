@@ -17,14 +17,9 @@ public class GetCheckHometaskPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        if (checkForTeacher(request)) {
-            try {
-                request.getRequestDispatcher("error.html").forward(request ,response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't send upload");
-            }
-
-            return;
+        String answerPage = "check_hometask.jsp";
+        if (!checkForTeacher(request)) {
+            answerPage = "error.html";
         }
 
         Properties properties = formProperties(request);
@@ -38,8 +33,25 @@ public class GetCheckHometaskPageCommand implements Command {
             menu = "<p>can't get menu</p>";
         }
 
-        String hometask;
-        hometask =
+        int hometaskId = getHometaskId(request);
+        int studentId = getStudentId(request);
+
+        String hometaskData;
+        try {
+            hometaskData = CustomServiceFactory.getInstance().getCustomService().getStudentHometaskWithResponce(hometaskId, studentId);
+        } catch (CustomServiceException e) {
+            answerPage = "error.html";
+            hometaskData = "<p>can't get hometask data</p>";
+        }
+
+        request.setAttribute("menu", menu);
+        request.setAttribute("hometask_data", hometaskData);
+
+        try {
+            request.getRequestDispatcher(answerPage).forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error("can't send answer page");
+        }
     }
 
     private boolean checkForTeacher(HttpServletRequest request) {
@@ -48,15 +60,29 @@ public class GetCheckHometaskPageCommand implements Command {
         return role.equals("teacher");
     }
 
+    private int getHometaskId(HttpServletRequest request) {
+        String hometaskId = request.getParameter("hometask_id");
+        try {
+            return Integer.parseInt(hometaskId);
+        } catch (NullPointerException | NumberFormatException e) {
+            logger.error("can't parse hometask id. setting 0");
+            return 0;
+        }
+    }
+
+    private int getStudentId(HttpServletRequest request) {
+        String studentId = request.getParameter("student_id");
+        try {
+            return Integer.parseInt(studentId);
+        } catch (NumberFormatException | NullPointerException e) {
+            logger.error("can't parse student id. setting 0");
+            return 0;
+        }
+    }
+
     private Properties formProperties(HttpServletRequest request) {
         HttpSession session = request.getSession();
         String role = (String) session.getAttribute("role");
-        String hometaskId = (String) request.getParameter("hometask_id");
-
-        if (hometaskId == null) {
-            logger.warn("no hometask id given. setting fake id");
-            hometaskId = "0";
-        }
 
         Properties properties = new Properties();
         properties.setProperty("role", role);

@@ -21,13 +21,19 @@ public interface CustomService {
             throws CustomServiceException;
     int getUserIdByEmail(String email) throws CustomServiceException;
     String getUserCourses(Properties properties) throws CustomServiceException;
-    boolean isStudentOnCourse(int studentId, int courseId) throws CustomServiceException;
+    boolean isStudentOnCourse(int studentId, int courseId)
+            throws CustomServiceException;
     boolean isTeacherLeadsOrLeadedCourse(int teacherId, int courseId)
             throws CustomServiceException;
     Properties getCourseById(int courseId) throws CustomServiceException;
     String getStudentsOnCourse(int courseId) throws CustomServiceException;
     void createHometask(Properties hometaskProperties) throws CustomServiceException;
     String getHometaskById(int hometaskId) throws CustomServiceException;
-    void writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException;
+    void writeHometaskAnswer(String answer, int hometaskId, int studentId)
+            throws CustomServiceException;
     String getUserInfoById(int userId) throws CustomServiceException;
+    String getStudentHometaskWithResponce(int hometaskId, int studentId)
+            throws CustomServiceException;
+    void setHometaskMark(int hometaskId, int studentId, int mark)
+            throws  CustomServiceException;
 }
