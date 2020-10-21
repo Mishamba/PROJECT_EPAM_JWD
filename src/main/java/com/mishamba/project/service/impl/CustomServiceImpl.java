@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 import java.util.*;
 
 public class CustomServiceImpl implements CustomService {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(CustomServiceImpl.class);
     private final String NO_HOMETASK_SIGN = "<p>no hometask on this course</p>";
 
     @Override
@@ -395,13 +395,14 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public void writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException {
+    public boolean writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException {
         HometaskResponse response = new HometaskResponse(hometaskId, studentId, answer, null);
 
         try {
-            DAOFactory.getInstance().getHometaskDAO().writeHometaskResponse(response);
+            return DAOFactory.getInstance().getHometaskDAO().writeHometaskResponse(response);
         } catch (DAOException e) {
             logger.error("can't write hometask response");
+            throw new CustomServiceException("can't write hometask response", e);
         }
     }
 
@@ -412,6 +413,34 @@ public class CustomServiceImpl implements CustomService {
         } catch (DAOException e) {
             logger.error("can't get user");
             throw new CustomServiceException("can't get user by id", e);
+        }
+    }
+
+    @Override
+    public boolean setMarkReview(Course course, User student, User teacher,
+                                 int mark, String review,
+                                 boolean finishedParameter,
+                                 boolean gotCretificateParameter)
+            throws CustomServiceException {
+        if (teacher.getRole().equals("teacher") ||
+                student.getRole().equals("student")) {
+            throw new CustomServiceException("given users hash wrong roles");
+        }
+        if (course == null) {
+            throw new CustomServiceException("not course given");
+        }
+
+        MarkReview markReview = new MarkReview(student, teacher, course,
+                finishedParameter, mark, new Date(), review,
+                gotCretificateParameter);
+
+        try {
+            MarkReview checkMarkReview = DAOFactory.getInstance().
+                    getMarkReviewDAO().getMarkReview(course, student);
+            return !markReview.equals(checkMarkReview) && DAOFactory.getInstance().getMarkReviewDAO().createMarkReview(markReview);
+        } catch (DAOException e) {
+            logger.error("can't create mark review");
+            throw new CustomServiceException("can't create mark review");
         }
     }
 
@@ -441,14 +470,14 @@ public class CustomServiceImpl implements CustomService {
     }
 
     @Override
-    public void setHometaskMark(int hometaskId, int studentId, int mark) throws CustomServiceException {
+    public boolean setHometaskMark(int hometaskId, int studentId, int mark) throws CustomServiceException {
         MarkValidator validator = new MarkValidator();
         if (!validator.isCorrect(mark)) {
             throw new CustomServiceException("mark incorrect");
         }
 
         try {
-            DAOFactory.getInstance().getHometaskDAO().setHometaskMark(hometaskId, studentId, mark);
+            return DAOFactory.getInstance().getHometaskDAO().setHometaskMark(hometaskId, studentId, mark);
         } catch (DAOException e) {
             logger.error("can't set mark");
             throw new CustomServiceException("can't set mark", e);

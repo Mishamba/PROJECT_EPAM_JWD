@@ -16,8 +16,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class UserDAOImpl implements UserDAO {
-    private final Logger logger = Logger.getRootLogger();
-    private final String GET_USER_BY_ID = "SELECT id, first_name, last_name, email " +
+    private final Logger logger = Logger.getLogger(UserDAOImpl.class);
+    private final String GET_USER_BY_ID = "SELECT id, first_name, last_name, email, " +
             "birthday, role " +
             "FROM users " +
             "WHERE id = ?";
@@ -376,7 +376,8 @@ public class UserDAOImpl implements UserDAO {
         int id = resultSet.getInt("id");
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
-        Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+        String birthdayNotParsed = resultSet.getString("birthday");
+        Date birthday = dateParser.parseDate(birthdayNotParsed);
         String email = resultSet.getString("email");
         String role = resultSet.getString("role");
         ArrayList<String> teacherSubjects = getTeacherSubjects(id);

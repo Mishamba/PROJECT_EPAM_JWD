@@ -12,7 +12,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class GetStudentsOnCourseListCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(GetStudentsOnCourseListCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

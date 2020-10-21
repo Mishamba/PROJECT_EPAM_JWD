@@ -306,7 +306,7 @@ public class PartsBuilder {
 
         builder.append("<br>");
         builder.append("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-        builder.append("<input type=\"hidden\" name=\"command\" value=\"dedicate_student\">");
+        builder.append("<input type=\"hidden\" name=\"command\" value=\"kick_student_page\">");
         builder.append("<input type=\"hidden\" name=\"course_id\" value=\"").append(courseId).append("\">");
         builder.append("<input type=\"hidden\" name=\"student_id\" value=\"").append(studentId).append("\">");
         builder.append("<input type=\"submit\" value=\"Kick student out\">");

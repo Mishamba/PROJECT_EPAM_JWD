@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 public class GetAddSubjectToTeacherPageCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(
+            GetAddSubjectToTeacherPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

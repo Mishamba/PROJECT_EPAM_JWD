@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommandProvider {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(CommandProvider.class);
     private final Map<String, Command> repository = new HashMap<>();
 
     private static class CommandProviderHolder {
@@ -35,6 +35,8 @@ public class CommandProvider {
         repository.put("enter_hometask_answer", new AnswerHometaskProcessCommand());
         repository.put("student_progress", new GetStudentProgressCommand());
         repository.put("check_hometask", new GetCheckHometaskPageCommand());
+        repository.put("set_hometask_mark", new SetHometaskMarkProcessCommand());
+        repository.put("kick_student_page", new GetKickStudentOutPageCommand());
     }
 
     public static CommandProvider getInstance() {

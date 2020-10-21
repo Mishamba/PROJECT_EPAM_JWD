@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class GetUserCoursesCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(GetUserCoursesCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

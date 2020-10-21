@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class HometaskDAOImpl implements HometaskDAO {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(HometaskDAOImpl.class);
 
     private final String SET_HOMETASK_MARK = "UPDATE hometask_responce SET " +
             "mark=? " +
@@ -194,7 +194,7 @@ public class HometaskDAOImpl implements HometaskDAO {
     }
 
     @Override
-    public void writeHometaskResponse(HometaskResponse response) throws DAOException {
+    public boolean writeHometaskResponse(HometaskResponse response) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement = null;
 
@@ -204,24 +204,26 @@ public class HometaskDAOImpl implements HometaskDAO {
             statement.setInt(2, response.getStudentId());
             statement.setString(3, response.getAnswer());
 
-            statement.executeUpdate();
+            return (statement.executeUpdate() == 1);
         } catch (SQLException e) {
             logger.error("can't write hometask responce");
+            throw new DAOException("can't write hometask response");
         }
     }
 
     @Override
-    public void setHometaskMark(int hometaskId, int studentId, int mark) throws DAOException {
+    public boolean setHometaskMark(int hometaskId, int studentId, int mark) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement = null;
 
         try {
             statement = connection.prepareStatement(SET_HOMETASK_MARK);
             statement.setInt(1, mark);
-            statement.setInt(2, studentId);
-            statement.setInt(3, hometaskId);
+            statement.setInt(2, hometaskId);
+            statement.setInt(3, studentId);
 
-            statement.executeUpdate();
+            int rowsAffected = statement.executeUpdate();
+            return rowsAffected == 1;
         } catch (SQLException e) {
             throw new DAOException("can't execute queue", e);
         }

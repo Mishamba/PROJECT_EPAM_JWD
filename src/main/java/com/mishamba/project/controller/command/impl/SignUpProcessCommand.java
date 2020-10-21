@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class SignUpProcessCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(SignUpProcessCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

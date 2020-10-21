@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class GetUserProfilePageCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(GetUserProfilePageCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

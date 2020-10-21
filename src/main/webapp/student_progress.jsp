@@ -28,9 +28,9 @@ ${student_info}
 ${hometask}
 <br>
 <br>
-<form action="/PROJECT_EPAM_JWD_war">
-    <input type="hidden" name="command" value="deducate_student">
-    <input type="hidden" name="course_id" value=<%= request.getParameter("course_id")%>>
+<form action="/PROJECT_EPAM_JWD_war/university">
+    <input type="hidden" name="command" value="kick_student_page">
+    <input type="hidden" name="course_id" value=<%=request.getParameter("course_id")%>>
     <input type="hidden" name="student_id" value=<%=request.getParameter("student_id")%>>
     <input type="submit" value="Kick Out">
 </form>

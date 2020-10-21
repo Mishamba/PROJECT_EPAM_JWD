@@ -1,5 +1,6 @@
 package com.mishamba.project.service;
 
+import com.mishamba.project.model.Course;
 import com.mishamba.project.model.User;
 import com.mishamba.project.service.exception.CustomServiceException;
 
@@ -7,6 +8,10 @@ import java.util.Properties;
 
 public interface CustomService {
     User getUserById(int userId) throws CustomServiceException;
+    boolean setMarkReview(Course course, User student, User teacher, int mark, String review,
+                          boolean finishedParameter,
+                          boolean gotCretificateParameter)
+            throws CustomServiceException;
     String getCourseHometaskForUser(int courseId, int studentId, String role)
             throws CustomServiceException;
     String getMainCourses() throws CustomServiceException;
@@ -29,11 +34,11 @@ public interface CustomService {
     String getStudentsOnCourse(int courseId) throws CustomServiceException;
     void createHometask(Properties hometaskProperties) throws CustomServiceException;
     String getHometaskById(int hometaskId) throws CustomServiceException;
-    void writeHometaskAnswer(String answer, int hometaskId, int studentId)
+    boolean writeHometaskAnswer(String answer, int hometaskId, int studentId)
             throws CustomServiceException;
     String getUserInfoById(int userId) throws CustomServiceException;
     String getStudentHometaskWithResponce(int hometaskId, int studentId)
             throws CustomServiceException;
-    void setHometaskMark(int hometaskId, int studentId, int mark)
+    boolean setHometaskMark(int hometaskId, int studentId, int mark)
             throws  CustomServiceException;
 }

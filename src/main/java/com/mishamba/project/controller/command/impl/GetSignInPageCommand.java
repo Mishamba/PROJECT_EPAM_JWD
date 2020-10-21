@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class GetSignInPageCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(GetSignInPageCommand.class);
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

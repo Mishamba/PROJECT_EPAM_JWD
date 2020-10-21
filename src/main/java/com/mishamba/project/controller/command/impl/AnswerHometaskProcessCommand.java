@@ -12,7 +12,8 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class AnswerHometaskProcessCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final static Logger logger = Logger.getLogger(AnswerHometaskProcessCommand.class);
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         if (!checkForStudent(request)) {

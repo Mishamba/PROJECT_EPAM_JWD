@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.util.Properties;
 
 public class GetMainPageCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(GetMainPageCommand.class);
     private final String TARGET = "target";
     private final String MENU = "menu";
     private final String ROLE = "role";

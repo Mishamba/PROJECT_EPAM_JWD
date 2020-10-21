@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class ProgramStepDAOImpl implements ProgramStepDAO {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(ProgramStepDAOImpl.class);
     private final String COURSE_PROGRAM_QUEUE =
             "SELECT step, step_name, step_description, start_date, end_date " +
                     "FROM course_programs " +

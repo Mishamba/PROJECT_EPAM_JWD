@@ -8,6 +8,7 @@ import com.mishamba.project.model.User;
 import java.util.ArrayList;
 
 public interface MarkReviewDAO {
-    ArrayList<MarkReview> getMarkReview(Course course, User user)
+    MarkReview getMarkReview(Course course, User user)
             throws DAOException;
+    boolean createMarkReview(MarkReview markReview) throws DAOException;
 }

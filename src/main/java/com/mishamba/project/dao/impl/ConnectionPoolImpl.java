@@ -16,7 +16,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 public class ConnectionPoolImpl implements ConnectionPool {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(ConnectionPoolImpl.class);
     private final BlockingQueue<ProxyConnection> freeConnections;
     private final Queue<ProxyConnection> givenAwayConnections;
 

@@ -10,28 +10,37 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
 
 public class SetHometaskMarkProcessCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(SetHometaskMarkProcessCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        if (checkForTeacher(request)) {
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload error page");
-            }
+        String pageToUpload = "index.jsp";
 
-            return;
+        if (!checkForTeacher(request)) {
+            logger.warn("not teacher user tries to mark hometask");
+            pageToUpload = "error.html";
         }
 
         int hometaskId = getHometaskId(request);
         int mark = getMark(request);
         int studentId = getStudentId(request);
 
+        try {
+            if (!CustomServiceFactory.getInstance().getCustomService().setHometaskMark(hometaskId, studentId, mark)) {
+                logger.error("can't set hometask mark");
+                pageToUpload = "error.html";
+            }
+        } catch (CustomServiceException e) {
+            logger.error("can't set hometask mark");
+        }
 
+        try {
+            request.getRequestDispatcher(pageToUpload).forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error("can't upload page");
+        }
     }
 
     private boolean checkForTeacher(HttpServletRequest request) {

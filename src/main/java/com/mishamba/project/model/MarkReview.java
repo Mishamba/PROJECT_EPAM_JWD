@@ -8,7 +8,7 @@ public class MarkReview {
     private User teacher;
     private Course course;
     private Boolean finished;
-    private Integer mark;
+    private int mark;
     private Date finishDate;
     private String review;
     private Boolean gotCertificate;
@@ -105,8 +105,7 @@ public class MarkReview {
                 teacher.equals(that.teacher) &&
                 course.equals(that.course) &&
                 finished.equals(that.finished) &&
-                mark.equals(that.mark) &&
-                finishDate.equals(that.finishDate) &&
+                mark == that.mark &&
                 review.equals(that.review) &&
                 gotCertificate.equals(that.gotCertificate);
     }

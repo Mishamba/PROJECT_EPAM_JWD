@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(CourseDAOImpl.class);
     private final String GET_COURSE_BY_TEACHERS_ID = "SELECT courses.id, courses.course_name, " +
             "courses.begin_of_course, courses.end_of_course, courses.course_teacher, " +
             "courses.max_students_quantity, courses.finished, users.id as teacher_id, " +

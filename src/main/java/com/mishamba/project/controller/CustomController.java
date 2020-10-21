@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class CustomController extends HttpServlet {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(CustomController.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)

@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class SignOutProcessCommand implements Command {
-    private final Logger logger = Logger.getRootLogger();
+    private final Logger logger = Logger.getLogger(SignOutProcessCommand.class);
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
