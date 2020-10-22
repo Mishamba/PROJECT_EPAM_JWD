@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -13,50 +13,41 @@ import java.io.IOException;
 
 public class AnswerHometaskProcessCommand implements Command {
     private final static Logger logger = Logger.getLogger(AnswerHometaskProcessCommand.class);
+    private final String HOMETASK_ID = "hometask_id";
+    private final String ANSWER = "answer";
+    private final String ID = "id";
+    private final String STUDENT = "student";
+    private final String ROLE = "role";
+    private final String ERROR_PAGE = "error.html";
+    private final String INDEX_PAGE = "index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        if (!checkForStudent(request)) {
-            logger.warn("user with not student role tries to upload hometask answer");
-            try {
-                request.getRequestDispatcher("error.html").forward(request ,response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't send error page");
-            }
-
-            return;
-        }
+        String uploadPage = INDEX_PAGE;
 
         int hometaskId = getHometaskId(request);
-        String answer = request.getParameter("answer");
+        String answer = request.getParameter(ANSWER);
         int studentId = getUserId(request);
 
         try {
-            CustomServiceFactory.getInstance().getCustomService().writeHometaskAnswer(answer, hometaskId, studentId);
+            if (ServiceFactory.getInstance().getHometaskService().writeHometaskAnswer(answer, hometaskId, studentId)) {
+                logger.error("can't write answer");
+                uploadPage = ERROR_PAGE;
+            }
         } catch (CustomServiceException e) {
             logger.error("can't write answer");
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException servletException) {
-                logger.error("can't send error page");
-            }
+            uploadPage = ERROR_PAGE;
         }
 
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't send main page");
         }
     }
 
-    private boolean checkForStudent(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        return role.equals("student");
-    }
-
     private int getHometaskId(HttpServletRequest request) {
-        String hometaskId = request.getParameter("hometask_id");
+        String hometaskId = request.getParameter(HOMETASK_ID);
         try {
             return Integer.parseInt(hometaskId);
         } catch (NullPointerException | NumberFormatException e) {
@@ -67,7 +58,6 @@ public class AnswerHometaskProcessCommand implements Command {
 
     private int getUserId(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        int userId = (int) session.getAttribute("id");
-        return userId;
+        return (int) session.getAttribute(ID);
     }
 }

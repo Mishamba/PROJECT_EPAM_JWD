@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -33,7 +33,7 @@ public class GetCourseProfileCommand implements Command {
 
         String courseInfo;
         try {
-            courseInfo = CustomServiceFactory.getInstance().getCustomService().
+            courseInfo = ServiceFactory.getInstance().getCustomService().
                     getCourseProfile(courseId);
             logger.info("got course info");
         } catch (CustomServiceException e) {
@@ -44,7 +44,7 @@ public class GetCourseProfileCommand implements Command {
 
         boolean teacherLeads;
         try {
-            teacherLeads = (CustomServiceFactory.getInstance().
+            teacherLeads = (ServiceFactory.getInstance().
                     getCustomService().getCourseById(courseId).
                     getTeacher().getId() == userId);
         } catch (CustomServiceException e) {
@@ -77,7 +77,7 @@ public class GetCourseProfileCommand implements Command {
         String menu;
 
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().
+            menu = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
             logger.info("got menu buttons code");
         } catch (CustomServiceException e) {
@@ -95,7 +95,7 @@ public class GetCourseProfileCommand implements Command {
         properties.setProperty("courseId", String.valueOf(courseId));
 
         try {
-            if ((role.equals("student") && CustomServiceFactory.getInstance().
+            if ((role.equals("student") && ServiceFactory.getInstance().
                     getCustomService().isStudentOnCourse(userId, courseId)) ||
                     (role.equals("teacher") && teacherLeads)) {
                 properties.setProperty("userId", String.valueOf(userId));
@@ -113,7 +113,7 @@ public class GetCourseProfileCommand implements Command {
     private String formButtons(Properties properties) {
         String buttons;
         try {
-            buttons = CustomServiceFactory.getInstance().getCustomService().
+            buttons = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
             logger.info("got buttons for couse profile");
         } catch (CustomServiceException e) {

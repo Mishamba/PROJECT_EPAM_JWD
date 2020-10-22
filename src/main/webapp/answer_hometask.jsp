@@ -13,7 +13,7 @@
 <body>
 <h3>Menu</h3>
 <br>
-${menu}
+<%  %>
 <br>
 <h3>Hometask</h3>
 <br>

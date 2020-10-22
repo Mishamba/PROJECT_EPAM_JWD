@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Course;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -38,7 +38,7 @@ public class GetMainPageCommand implements Command {
 
         try {
             logger.info("getting user info");
-            userInfo = CustomServiceFactory.getInstance().getCustomService().
+            userInfo = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.error("can't get user info");
@@ -49,7 +49,7 @@ public class GetMainPageCommand implements Command {
         properties.setProperty(TARGET, MENU);
         try {
             logger.info("getting menu buttons");
-            menu = CustomServiceFactory.getInstance().getCustomService().formPageParameter(properties);
+            menu = ServiceFactory.getInstance().getCustomService().formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.error("can't get menu buttons");
             menu = MENU_ERROR_SIGN;
@@ -58,7 +58,7 @@ public class GetMainPageCommand implements Command {
         ArrayList<Course> coursesAdd;
         try {
             logger.info("getting courses add");
-            coursesAdd = CustomServiceFactory.getInstance().getCustomService().
+            coursesAdd = ServiceFactory.getInstance().getCustomService().
                     getMainCourses();
         } catch (CustomServiceException e) {
             logger.error("can't get courses add");

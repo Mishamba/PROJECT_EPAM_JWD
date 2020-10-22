@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -23,10 +23,10 @@ public class SignInProcessCommand implements Command {
         String pageToLoad = "error.html";
 
         try {
-            if (CustomServiceFactory.getInstance().getCustomService().
+            if (ServiceFactory.getInstance().getCustomService().
                     checkSignInData(email, password)) {
                 logger.info("user entered correct sign in data");
-                Properties info = CustomServiceFactory.getInstance().
+                Properties info = ServiceFactory.getInstance().
                         getCustomService().getUserByEmail(email);
                 HttpSession session = request.getSession();
                 session.setAttribute("firstName", info.get("firstName"));

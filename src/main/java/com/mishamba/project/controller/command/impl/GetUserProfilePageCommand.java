@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -37,7 +37,7 @@ public class GetUserProfilePageCommand implements Command {
 
         String email = null;
         try {
-            email = CustomServiceFactory.getInstance().getCustomService().
+            email = ServiceFactory.getInstance().getCustomService().
                     getUserById(userId).getEmail();
         } catch (CustomServiceException e) {
             email = "<p>can't get email</p>";
@@ -48,7 +48,7 @@ public class GetUserProfilePageCommand implements Command {
         properties.setProperty("target", "menu");
         String menu;
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().
+            menu = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.warn("can't get menu buttons");
@@ -69,7 +69,7 @@ public class GetUserProfilePageCommand implements Command {
 
         String courses_buttons;
         try {
-            courses_buttons = CustomServiceFactory.getInstance().
+            courses_buttons = ServiceFactory.getInstance().
                     getCustomService().formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.error("can't get course buttons for profile");

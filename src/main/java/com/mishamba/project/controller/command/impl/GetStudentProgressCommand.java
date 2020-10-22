@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -29,7 +29,7 @@ public class GetStudentProgressCommand implements Command {
 
         String menu;
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().
+            menu = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(formProperties(request));
         } catch (CustomServiceException e) {
             logger.error("can't get menu");
@@ -40,7 +40,7 @@ public class GetStudentProgressCommand implements Command {
 
         String studentInfo;
         try {
-            studentInfo = CustomServiceFactory.getInstance().
+            studentInfo = ServiceFactory.getInstance().
                     getCustomService().getUserInfoById(studentId);
         } catch (CustomServiceException e) {
             logger.error("can't get student info");
@@ -51,7 +51,7 @@ public class GetStudentProgressCommand implements Command {
 
         String hometask;
         try {
-            hometask = CustomServiceFactory.getInstance().getCustomService().
+            hometask = ServiceFactory.getInstance().getCustomService().
                     getCourseHometaskForUser(courseId, studentId, "teacher");
         } catch (CustomServiceException e) {
             logger.error("can't get hometask list");

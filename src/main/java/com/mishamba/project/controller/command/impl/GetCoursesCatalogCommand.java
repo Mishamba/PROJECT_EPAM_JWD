@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Course;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -23,7 +23,7 @@ public class GetCoursesCatalogCommand implements Command {
 
         String userInfo;
         try {
-            userInfo = CustomServiceFactory.getInstance().getCustomService().
+            userInfo = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(userProp);
         } catch (CustomServiceException e) {
             logger.error("can't upload user info");
@@ -33,7 +33,7 @@ public class GetCoursesCatalogCommand implements Command {
         userProp.setProperty("target", "menu");
         String menu;
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().
+            menu = ServiceFactory.getInstance().getCustomService().
                     formPageParameter(userProp);
         } catch (CustomServiceException e) {
             logger.error("can't upload some menu functionality");
@@ -44,7 +44,7 @@ public class GetCoursesCatalogCommand implements Command {
         ArrayList<Course> courses;
         try {
             logger.info("getting courses");
-            courses = CustomServiceFactory.getInstance().getCustomService().
+            courses = ServiceFactory.getInstance().getCustomService().
                     getCoursesCatalog();
         } catch (CustomServiceException e) {
             courses = new ArrayList<>();

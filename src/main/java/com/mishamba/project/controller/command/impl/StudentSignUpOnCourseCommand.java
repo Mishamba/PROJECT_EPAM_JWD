@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -28,7 +28,7 @@ public class StudentSignUpOnCourseCommand implements Command {
         int courseId = Integer.parseInt(request.getParameter("course_id"));
 
         try {
-            CustomServiceFactory.getInstance().getCustomService().
+            ServiceFactory.getInstance().getCustomService().
                     enterStudentOnCourse(studentId, courseId);
         } catch (CustomServiceException e) {
             logger.error("can't enter student on course");

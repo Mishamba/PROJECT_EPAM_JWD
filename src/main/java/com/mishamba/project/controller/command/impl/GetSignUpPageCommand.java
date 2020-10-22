@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -21,7 +21,7 @@ public class GetSignUpPageCommand implements Command {
         Properties properties = formProperties(req);
         String roleDefiner;
         try {
-            roleDefiner = CustomServiceFactory.getInstance().
+            roleDefiner = ServiceFactory.getInstance().
                     getCustomService().formPageParameter(properties);
         } catch (CustomServiceException e) {
             logger.error("can't form role definer");

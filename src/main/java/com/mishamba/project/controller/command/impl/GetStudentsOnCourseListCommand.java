@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -37,7 +37,7 @@ public class GetStudentsOnCourseListCommand implements Command {
 
         String courseName;
         try {
-            courseName = CustomServiceFactory.getInstance().getCustomService().
+            courseName = ServiceFactory.getInstance().getCustomService().
                     getCourseById(courseId).getProperty("courseName");
         } catch (CustomServiceException e) {
             logger.warn("can't get course name");
@@ -46,7 +46,7 @@ public class GetStudentsOnCourseListCommand implements Command {
 
         String students;
         try {
-            students = CustomServiceFactory.getInstance().getCustomService().
+            students = ServiceFactory.getInstance().getCustomService().
                     getStudentsOnCourse(courseId);
         } catch (CustomServiceException e) {
             logger.error("can't get students");

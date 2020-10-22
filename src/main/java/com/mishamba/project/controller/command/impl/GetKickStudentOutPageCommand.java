@@ -1,8 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.dao.ProgramStepDAO;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
@@ -24,7 +23,7 @@ public class GetKickStudentOutPageCommand implements Command {
         Properties menuProperties = formProperties(request);
         String menu;
         try {
-            menu = CustomServiceFactory.getInstance().getCustomService().formPageParameter(menuProperties);
+            menu = ServiceFactory.getInstance().getCustomService().formPageParameter(menuProperties);
         } catch (CustomServiceException e) {
             logger.error("can't get menu");
             menu = "<p>can't get menu</p>";
@@ -34,7 +33,7 @@ public class GetKickStudentOutPageCommand implements Command {
 
         String studentInfo;
         try {
-            studentInfo = CustomServiceFactory.getInstance().getCustomService().getUserInfoById(studentId);
+            studentInfo = ServiceFactory.getInstance().getCustomService().getUserInfoById(studentId);
         } catch (CustomServiceException e) {
             logger.error("can't get user info");
             studentInfo = "<p>can't get user info<p>";

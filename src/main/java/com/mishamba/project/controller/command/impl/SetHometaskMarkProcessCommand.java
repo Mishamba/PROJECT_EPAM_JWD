@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -28,7 +28,7 @@ public class SetHometaskMarkProcessCommand implements Command {
         int studentId = getStudentId(request);
 
         try {
-            if (!CustomServiceFactory.getInstance().getCustomService().setHometaskMark(hometaskId, studentId, mark)) {
+            if (!ServiceFactory.getInstance().getCustomService().setHometaskMark(hometaskId, studentId, mark)) {
                 logger.error("can't set hometask mark");
                 pageToUpload = "error.html";
             }

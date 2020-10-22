@@ -1,4 +1,4 @@
-<%@ page import="com.mishamba.project.service.CustomServiceFactory" %>
+<%@ page import="com.mishamba.project.service.ServiceFactory" %>
 <jsp:useBean id="hometask" scope="request" type="java.lang.String"/>
 <jsp:useBean id="menu" scope="request" type="java.lang.String"/>
 <jsp:useBean id="student_info" scope="request" type="java.lang.String"/>

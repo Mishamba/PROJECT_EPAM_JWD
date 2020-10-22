@@ -1,7 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -14,49 +14,49 @@ import java.util.Properties;
 
 public class CreateHometaskProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(CreateHometaskProcessCommand.class);
+    private final String INDEX_PAGE = "index.jsp";
+    private final String ERROR_PAGE = "error.html";
+    private final String ROLE = "role";
+    private final String TEACHER = "teacher";
+    private final String COURSE_ID = "course_id";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        if (!userIsTeacher(request)) {
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("anonym tries to upload task");
-            }
+        String uploadPage = INDEX_PAGE;
 
-            return;
+        if (!userIsTeacher(request)) {
+            uploadPage = ERROR_PAGE;
         }
 
         Properties properties = formPropertiesToCreateHometask(request);
 
         try {
-            CustomServiceFactory.getInstance().getCustomService().createHometask(properties);
+            if (ServiceFactory.getInstance().getHometaskService().createHometask(properties)) {
+                logger.error("can't create hometask");
+                uploadPage = ERROR_PAGE;
+            }
         } catch (CustomServiceException e) {
             logger.error("can't create hometask");
-            try {
-                response.sendRedirect("error.html");
-            } catch (IOException ioException) {
-                logger.error("can't sent error page");
-            }
+            uploadPage = ERROR_PAGE;
         }
 
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.error("can't upload main page");
+            logger.error("can't upload answer page");
         }
     }
 
     private boolean userIsTeacher(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        return role.equals("teacher");
+        String role = (String) session.getAttribute(ROLE);
+        return role.equals(TEACHER);
     }
 
     private Properties formPropertiesToCreateHometask(HttpServletRequest request) {
         int courseId;
         try {
-            courseId = Integer.parseInt(request.getParameter("course_id"));
+            courseId = Integer.parseInt(request.getParameter(COURSE_ID));
         } catch (NumberFormatException | NullPointerException e) {
             logger.error("can't parse course id");
             courseId = 0;

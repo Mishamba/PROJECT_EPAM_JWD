@@ -2,7 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Hometask;
-import com.mishamba.project.service.CustomServiceFactory;
+import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Properties;
 
 public class GetAnswerHometaskPageCommand implements Command {
@@ -31,9 +33,9 @@ public class GetAnswerHometaskPageCommand implements Command {
 
         Hometask hometask;
         try {
-            hometask = CustomServiceFactory.getInstance().getCustomService().
-                    getHometaskById(hometaskId);
-        } catch (CustomServiceException e) {
+            hometask = ServiceFactory.getInstance().getHometaskService().
+                    getHometaskById(hometaskId).get();
+        } catch (CustomServiceException | NoSuchElementException e) {
             logger.error("can't get hometask info");
             try {
                 request.getRequestDispatcher("error.html").forward(request, response);
@@ -51,23 +53,6 @@ public class GetAnswerHometaskPageCommand implements Command {
         } catch (ServletException | IOException e) {
             logger.error("can't upload answer hometask page");
         }
-    }
-
-    private Properties formProperties(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        String hometaskId = (String) request.getParameter("hometask_id");
-
-        if (hometaskId == null) {
-            logger.warn("no hometask id given. setting fake id");
-            hometaskId = "0";
-        }
-
-        Properties properties = new Properties();
-        properties.setProperty("role", role);
-        properties.setProperty("target", "menu");
-
-        return properties;
     }
 
     private boolean checkForStudent(HttpServletRequest request) {
