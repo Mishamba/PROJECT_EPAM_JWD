@@ -7,7 +7,7 @@ import com.mishamba.project.model.HometaskResponse;
 import java.util.ArrayList;
 
 public interface HometaskDAO {
-    void createHometask(Hometask hometask) throws DAOException;
+    boolean createHometask(Hometask hometask) throws DAOException;
     ArrayList<Hometask> getHometasksOnCourseForUser(int courseId, int studentId) throws DAOException;
     HometaskResponse getHometaskResponse(int hometaskId, int studentId) throws DAOException;
     Hometask getHometaskById(int hometaskId) throws DAOException;

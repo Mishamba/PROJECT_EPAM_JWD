@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Course;
 import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class GetCoursesCatalogCommand implements Command {
@@ -39,13 +41,13 @@ public class GetCoursesCatalogCommand implements Command {
         }
 
 
-        String courses;
+        ArrayList<Course> courses;
         try {
             logger.info("getting courses");
             courses = CustomServiceFactory.getInstance().getCustomService().
                     getCoursesCatalog();
         } catch (CustomServiceException e) {
-            courses = "can't upload courses";
+            courses = new ArrayList<>();
         }
 
         logger.info("setting page attributes");

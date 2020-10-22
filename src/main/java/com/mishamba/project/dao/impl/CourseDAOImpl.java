@@ -95,8 +95,12 @@ public class CourseDAOImpl implements CourseDAO {
                 Date beginOfCourse = dateParser.parseDate(resultSet.getString("begin_of_course"));
                 Date endOfCourse = dateParser.parseDate(resultSet.getString("end_of_course"));
                 Integer maxStudentQuantity = resultSet.getInt("max_students_quantity");
-                courses.add(new Course(id, courseName, beginOfCourse, endOfCourse,
-                        null, maxStudentQuantity, null, false));
+                Course currentCourse = new Course(id, courseName, beginOfCourse, endOfCourse,
+                        null, maxStudentQuantity, null, false);
+                ArrayList<ProgramStep> courseProgramm = DAOFactory.getInstance().
+                        getProgramStepDAO().getCourseProgram(currentCourse);
+                currentCourse.setCourseProgram(courseProgramm);
+                courses.add(currentCourse);
             }
         } catch (SQLException | UtilException throwable) {
             throw new DAOException("can't get courses", throwable);
@@ -231,7 +235,7 @@ public class CourseDAOImpl implements CourseDAO {
     }
 
     @Override
-    public void enterStudentOnCourse(int studentId, int courseId) throws DAOException {
+    public boolean enterStudentOnCourse(int studentId, int courseId) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
         ResultSet resultSet;
@@ -243,7 +247,7 @@ public class CourseDAOImpl implements CourseDAO {
             resultSet = statement.executeQuery();
             resultSet.next();
             if (resultSet.getInt("exists_value") == 1) {
-                throw new DAOException("user is already on course");
+                return false;
             }
         } catch (SQLException e) {
             logger.error("can't check is there any such a student");
@@ -255,7 +259,7 @@ public class CourseDAOImpl implements CourseDAO {
             statement = connection.prepareStatement(ENTER_STUDENT_ON_COURSE);
             statement.setInt(1, studentId);
             statement.setInt(2, courseId);
-            statement.execute();
+            return statement.executeUpdate() == 1;
         } catch (SQLException e) {
             logger.error("can't enter student on course");
             throw new DAOException("can't enter student on course", e);

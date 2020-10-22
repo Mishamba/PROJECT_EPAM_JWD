@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Hometask;
 import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
@@ -26,19 +27,9 @@ public class GetAnswerHometaskPageCommand implements Command {
             return;
         }
 
-        Properties properties = formProperties(request);
-
-        String menu;
-        try {
-            menu = CustomServiceFactory.getInstance().getCustomService().formPageParameter(properties);
-        } catch (CustomServiceException e) {
-            logger.error("can't get menu");
-            menu = "<p>can't get menu</p>";
-        }
-
         int hometaskId = getHometaskId(request);
 
-        String hometask;
+        Hometask hometask;
         try {
             hometask = CustomServiceFactory.getInstance().getCustomService().
                     getHometaskById(hometaskId);
@@ -53,7 +44,6 @@ public class GetAnswerHometaskPageCommand implements Command {
             return;
         }
 
-        request.setAttribute("menu", menu);
         request.setAttribute("hometask", hometask);
 
         try {

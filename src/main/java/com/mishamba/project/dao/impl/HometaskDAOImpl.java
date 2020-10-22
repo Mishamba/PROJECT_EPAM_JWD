@@ -42,7 +42,7 @@ public class HometaskDAOImpl implements HometaskDAO {
             "WHERE hometask_id = ? AND student_id = ?";
 
     @Override
-    public void createHometask(Hometask hometask) throws DAOException {
+    public boolean createHometask(Hometask hometask) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
 
@@ -61,7 +61,7 @@ public class HometaskDAOImpl implements HometaskDAO {
         }
 
         try {
-            statement.execute();
+            return statement.executeUpdate() == 1;
         } catch (SQLException e) {
             logger.error("can't execute queue");
             throw new DAOException("can't execute queue", e);

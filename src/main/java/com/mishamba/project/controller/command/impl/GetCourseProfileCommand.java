@@ -44,9 +44,9 @@ public class GetCourseProfileCommand implements Command {
 
         boolean teacherLeads;
         try {
-            teacherLeads = (Integer.parseInt(CustomServiceFactory.getInstance().
+            teacherLeads = (CustomServiceFactory.getInstance().
                     getCustomService().getCourseById(courseId).
-                    getProperty("teacherId")) == userId);
+                    getTeacher().getId() == userId);
         } catch (CustomServiceException e) {
             logger.warn("can't check is teacher leads the course right now");
             teacherLeads = false;

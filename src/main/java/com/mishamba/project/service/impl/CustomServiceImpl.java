@@ -18,75 +18,8 @@ import java.util.*;
 
 public class CustomServiceImpl implements CustomService {
     private final Logger logger = Logger.getLogger(CustomServiceImpl.class);
-    private final String NO_HOMETASK_SIGN = "<p>no hometask on this course</p>";
 
-    @Override
-    public String getCourseHometaskForUser(int courseId, int userId, String role) throws CustomServiceException {
-        ArrayList<Hometask> hometasks;
-        try {
-            logger.info("getting hometask on course");
-            hometasks = DAOFactory.getInstance().getHometaskDAO().
-                    getHometasksOnCourseForUser(courseId, userId);
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get course hometask", e);
-        }
-
-        if (hometasks.isEmpty()) {
-            return NO_HOMETASK_SIGN;
-        }
-
-        StringBuilder hometasksList = new StringBuilder();
-
-        for (Hometask hometask : hometasks) {
-            hometasksList.append(formHometaskForList(hometask, role));
-        }
-
-        return hometasksList.toString();
-    }
-
-    @Override
-    public String getMainCourses() throws CustomServiceException {
-        ArrayList<Course> courses;
-        try {
-            courses = DAOFactory.getInstance().getCourseDAO().getCoursesWithoutTeacher();
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get courses without teacher");
-        }
-        for (Course course : courses) {
-            try {
-                course.setCourseProgram(DAOFactory.getInstance().
-                        getProgramStepDAO().getCourseProgram(course));
-            } catch (DAOException e) {
-                throw new CustomServiceException("can't find course program", e);
-            }
-        }
-
-        StringBuilder answer = new StringBuilder();
-        for (Course course : courses) {
-            answer.append(getCourseAdd(course));
-        }
-        answer.append("<br>");
-
-        return answer.toString();
-    }
-
-    @Override
-    public String getCoursesCatalog() throws CustomServiceException {
-        ArrayList<Course> courses;
-        try {
-            courses = DAOFactory.getInstance().getCourseDAO().getActiveCourses();
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get active courses", e);
-        }
-
-        StringBuilder answer = new StringBuilder();
-        for (Course course : courses) {
-            answer.append(getCourseAdd(course));
-        }
-
-        return answer.toString();
-    }
-
+    // TODO: 10/22/20 remove this redundant method
     private String getCourseAdd(Course course) {
         if (course == null) {
             return "no course to form given";
@@ -106,6 +39,7 @@ public class CustomServiceImpl implements CustomService {
         return builder.toString();
     }
 
+    // TODO: 10/22/20 remove this redundant method
     @Override
     public String formPageParameter(Properties properties) throws CustomServiceException {
         Former former;
@@ -115,167 +49,6 @@ public class CustomServiceImpl implements CustomService {
         }
 
         return former.form(properties);
-    }
-
-    @Override
-    public boolean checkSignInData(String email, String password) throws CustomServiceException {
-        int passwordHash = password.hashCode();
-        passwordHash = Integer.valueOf(passwordHash).hashCode();
-
-        try {
-            return DAOFactory.getInstance().getUserDAO().
-                    checkSignInData(email, passwordHash);
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't check sign in data", e);
-        }
-    }
-
-    @Override
-    public Properties getUserByEmail(String email) throws CustomServiceException {
-        Properties userInfo = new Properties();
-        DateParser dateParser = new DateParser();
-
-        try {
-            User user = DAOFactory.getInstance().getUserDAO().
-                    getUserByEmail(email);
-            userInfo.setProperty("id", user.getId().toString());
-            userInfo.setProperty("firstName", user.getFirstName());
-            userInfo.setProperty("lastName", user.getLastName());
-            userInfo.setProperty("email", user.getEmail());
-            userInfo.setProperty("birthday", dateParser.parseDateToString(
-                    user.getBirthday()));
-            userInfo.setProperty("role", user.getRole());
-            return userInfo;
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get first name", e);
-        }
-    }
-
-    @Override
-    public boolean createUser(Properties userInfo) throws CustomServiceException {
-        String firstName = userInfo.getProperty("firstName");
-        String lastName = userInfo.getProperty("lastName");
-        String email = userInfo.getProperty("email");
-        String birthdayDate = userInfo.getProperty("birthday");
-        String password = userInfo.getProperty("password");
-        int passwordHash = password.hashCode();
-        passwordHash = Integer.valueOf(passwordHash).hashCode();
-        Date birthday;
-        try {
-            birthday = new DateParser().parseDate(birthdayDate);
-        } catch (UtilException e) {
-            throw new CustomServiceException("date entered incorrect", e);
-        }
-        String role = userInfo.getProperty("role");
-
-        DateValidator dateValidator = new DateValidator();
-        if (dateValidator.checkForFuture(birthday)) {
-            User newUser = new User(null, firstName, lastName, email, birthday, null,
-                    role);
-            try {
-                return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
-            } catch (DAOException e) {
-                throw new CustomServiceException("can't sign up new user", e);
-            }
-        } else {
-            return false;
-        }
-    }
-
-    @Override
-    public String getCourseProfile(int courseId) throws CustomServiceException {
-        Course course;
-        try {
-            course = DAOFactory.getInstance().getCourseDAO().
-                    getCourseById(courseId);
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get course info", e);
-        }
-
-        StringBuilder builder = new StringBuilder();
-        builder.append(formHtmlCourse(course));
-
-        if (course.getFinished()) {
-            builder.append("<h3>Course is active</h3><br>");
-        } else {
-            builder.append("<h3>Course is finished</h3><br>");
-        }
-
-        return builder.toString();
-    }
-
-    @Override
-    public void enterStudentOnCourse(int studentId, int courseId)
-            throws CustomServiceException {
-        try {
-            DAOFactory.getInstance().getCourseDAO().
-                    enterStudentOnCourse(studentId, courseId);
-        } catch (DAOException e) {
-            logger.error("can't enter student on course");
-            throw new CustomServiceException("can't enter student on course", e);
-        }
-    }
-
-    @Override
-    public int getUserIdByEmail(String email) throws CustomServiceException {
-        try {
-            return DAOFactory.getInstance().getUserDAO().getUserByEmail(email).getId();
-        } catch (DAOException e) {
-            logger.error("can't get user id");
-            throw new CustomServiceException("can't get user id", e);
-        }
-    }
-
-    @Override
-    public String getUserCourses(Properties properties) throws CustomServiceException {
-        boolean finished = Boolean.parseBoolean((String) properties.get("finished"));
-        int userId = Integer.parseInt((String) properties.get("userId"));
-        String role = properties.getProperty("role");
-
-        List<Course> courses;
-        try {
-            courses = (role.equals("student")) ? DAOFactory.getInstance().
-                    getCourseDAO().getStudentsCourses(userId, finished) :
-                    (finished) ? DAOFactory.getInstance().getCourseDAO().
-                            getTeacherManagedCourses(userId) :
-                            Collections.singletonList(DAOFactory.getInstance().
-                                    getCourseDAO().getTeacherManageCourse(userId));
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get courses", e);
-        }
-
-        StringBuilder builder = new StringBuilder();
-
-        for (Course course : courses) {
-            if (course != null) {
-                builder.append(formUserCourseList(course));
-            } else {
-                builder.append("<p>U not managing any courses now</p>");
-            }
-        }
-
-        return builder.toString();
-    }
-
-    @Override
-    public boolean isStudentOnCourse(int studentId, int courseId)
-            throws CustomServiceException {
-        try {
-            ArrayList<Course> usersCourses = DAOFactory.getInstance().
-                    getCourseDAO().getStudentsCourses(studentId, false);
-            ArrayList<Course> usersPassedCourse = DAOFactory.getInstance().
-                    getCourseDAO().getStudentsCourses(studentId, true);
-            usersCourses.addAll(usersPassedCourse);
-            for (Course course : usersCourses) {
-                if (course.getId() == courseId) {
-                    return true;
-                }
-            }
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't check is student on course", e);
-        }
-
-        return false;
     }
 
     @Override
@@ -299,191 +72,7 @@ public class CustomServiceImpl implements CustomService {
         return false;
     }
 
-    @Override
-    public Properties getCourseById(int courseId) throws CustomServiceException {
-        try {
-            Course course = DAOFactory.getInstance().getCourseDAO().getCourseById(courseId);
-            DateParser dateParser = new DateParser();
-
-            Properties courseInfo = new Properties();
-            courseInfo.setProperty("id", String.valueOf(course.getId()));
-            courseInfo.setProperty("courseName", course.getCourseName());
-            courseInfo.setProperty("beginOfCourse", dateParser.
-                    parseDateToString(course.getBeginOfCourse()));
-            courseInfo.setProperty("endOfCourse", dateParser.
-                    parseDateToString(course.getEndOfCourse()));
-            courseInfo.setProperty("teacherId", String.valueOf(course.getTeacher().getId()));
-            courseInfo.setProperty("teacherFirstName", course.getTeacher().getFirstName());
-            courseInfo.setProperty("teacherLastName", course.getTeacher().getLastName());
-            courseInfo.setProperty("teacherEmail", course.getTeacher().getEmail());
-            courseInfo.setProperty("maxStudentsQuantity", String.valueOf(course.getMaxStudentQuantity()));
-            courseInfo.setProperty("finished", String.valueOf(course.getFinished()));
-
-            return courseInfo;
-        } catch (DAOException e) {
-            logger.error("can't get course");
-            throw new CustomServiceException("can't get course", e);
-        }
-    }
-
-    @Override
-    public String getStudentsOnCourse(int courseId) throws CustomServiceException {
-        StringBuilder builder = new StringBuilder();
-
-        try {
-            ArrayList<User> students = DAOFactory.getInstance().getUserDAO().
-                    getStudentsOnCourse(courseId);
-            for (User student : students) {
-                builder.append(formStudentForList(student, courseId));
-            }
-        } catch (DAOException e) {
-            logger.error("can't get students on course");
-        }
-
-        return builder.toString();
-    }
-
-    @Override
-    public void createHometask(Properties hometaskProperties) throws CustomServiceException {
-        int courseId = Integer.parseInt(hometaskProperties.getProperty("courseId"));
-        String title = hometaskProperties.getProperty("title");
-        String description = hometaskProperties.getProperty("description");
-        String deadlineNotParsed = hometaskProperties.getProperty("deadline");
-
-        DateParser dateParser = new DateParser();
-        DateValidator dateValidator = new DateValidator();
-
-        try {
-            if (DAOFactory.getInstance().getCourseDAO().getCourseById(courseId).getFinished()) {
-                throw new CustomServiceException("can't create hometask. course is finished");
-            }
-        } catch (DAOException e) {
-            logger.error("can't check is course finished");
-            return;
-        }
-
-        Date deadline;
-        try {
-            deadline = dateParser.parseDate(deadlineNotParsed);
-            if (dateValidator.checkForFuture(deadline)) {
-                throw new CustomServiceException("deadline is not in future");
-            }
-        } catch (UtilException e) {
-            throw new CustomServiceException("can't parse date", e);
-        }
-        Date beginDate = new Date();
-
-        Hometask hometask = new Hometask(courseId, null, title, description,
-                beginDate, deadline, null);
-        try {
-            DAOFactory.getInstance().getHometaskDAO().createHometask(hometask);
-        } catch (DAOException e) {
-            logger.error("can't create hometask");
-            throw new CustomServiceException("can't create hometask", e);
-        }
-    }
-
-    @Override
-    public String getHometaskById(int hometaskId) throws CustomServiceException {
-        try {
-            Hometask hometask = DAOFactory.getInstance().getHometaskDAO().getHometaskById(hometaskId);
-
-            return formHometask(hometask);
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get hometask", e);
-        }
-    }
-
-    @Override
-    public boolean writeHometaskAnswer(String answer, int hometaskId, int studentId) throws CustomServiceException {
-        HometaskResponse response = new HometaskResponse(hometaskId, studentId, answer, null);
-
-        try {
-            return DAOFactory.getInstance().getHometaskDAO().writeHometaskResponse(response);
-        } catch (DAOException e) {
-            logger.error("can't write hometask response");
-            throw new CustomServiceException("can't write hometask response", e);
-        }
-    }
-
-    @Override
-    public User getUserById(int userId) throws CustomServiceException {
-        try {
-            return DAOFactory.getInstance().getUserDAO().getUserById(userId);
-        } catch (DAOException e) {
-            logger.error("can't get user");
-            throw new CustomServiceException("can't get user by id", e);
-        }
-    }
-
-    @Override
-    public boolean setMarkReview(Course course, User student, User teacher,
-                                 int mark, String review,
-                                 boolean finishedParameter,
-                                 boolean gotCretificateParameter)
-            throws CustomServiceException {
-        if (teacher.getRole().equals("teacher") ||
-                student.getRole().equals("student")) {
-            throw new CustomServiceException("given users hash wrong roles");
-        }
-        if (course == null) {
-            throw new CustomServiceException("not course given");
-        }
-
-        MarkReview markReview = new MarkReview(student, teacher, course,
-                finishedParameter, mark, new Date(), review,
-                gotCretificateParameter);
-
-        try {
-            MarkReview checkMarkReview = DAOFactory.getInstance().
-                    getMarkReviewDAO().getMarkReview(course, student);
-            return !markReview.equals(checkMarkReview) && DAOFactory.getInstance().getMarkReviewDAO().createMarkReview(markReview);
-        } catch (DAOException e) {
-            logger.error("can't create mark review");
-            throw new CustomServiceException("can't create mark review");
-        }
-    }
-
-    @Override
-    public String getUserInfoById(int userId) throws CustomServiceException {
-        try {
-            User user = DAOFactory.getInstance().getUserDAO().getUserById(userId);
-
-            return formUserForProgressPage(user);
-        } catch (DAOException e) {
-            logger.error("can't get user by id");
-            throw new CustomServiceException("can't get user by id", e);
-        }
-    }
-
-    @Override
-    public String getStudentHometaskWithResponce(int hometaskId, int studentId) throws CustomServiceException {
-        try {
-            Hometask hometask = DAOFactory.getInstance().getHometaskDAO().getHometaskById(hometaskId);
-            HometaskResponse response = DAOFactory.getInstance().getHometaskDAO().getHometaskResponse(hometaskId, studentId);
-            hometask.setResponse(response);
-
-            return formHometaskForCheck(hometask);
-        } catch (DAOException e) {
-            throw new CustomServiceException("can't get hometask");
-        }
-    }
-
-    @Override
-    public boolean setHometaskMark(int hometaskId, int studentId, int mark) throws CustomServiceException {
-        MarkValidator validator = new MarkValidator();
-        if (!validator.isCorrect(mark)) {
-            throw new CustomServiceException("mark incorrect");
-        }
-
-        try {
-            return DAOFactory.getInstance().getHometaskDAO().setHometaskMark(hometaskId, studentId, mark);
-        } catch (DAOException e) {
-            logger.error("can't set mark");
-            throw new CustomServiceException("can't set mark", e);
-        }
-    }
-
+    // TODO: 10/22/20 redundant
     private String formHometaskForCheck(Hometask hometask) {
         StringBuilder builder = new StringBuilder();
 
@@ -497,6 +86,7 @@ public class CustomServiceImpl implements CustomService {
         return builder.toString();
     }
 
+    // TODO: 10/22/20 redundant 
     private String formUserForProgressPage(User user) throws CustomServiceException {
         StringBuilder builder = new StringBuilder();
 
@@ -519,6 +109,7 @@ public class CustomServiceImpl implements CustomService {
         return builder.toString();
     }
 
+    // TODO: 10/22/20 redundant 
     private String formHometask(Hometask hometask) {
         StringBuilder builder = new StringBuilder();
 

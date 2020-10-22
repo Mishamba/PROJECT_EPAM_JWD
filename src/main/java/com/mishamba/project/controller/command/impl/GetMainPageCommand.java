@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Course;
 import com.mishamba.project.service.CustomServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Properties;
 
 public class GetMainPageCommand implements Command {
@@ -53,13 +55,14 @@ public class GetMainPageCommand implements Command {
             menu = MENU_ERROR_SIGN;
         }
 
-        String coursesAdd;
+        ArrayList<Course> coursesAdd;
         try {
             logger.info("getting courses add");
             coursesAdd = CustomServiceFactory.getInstance().getCustomService().
                     getMainCourses();
         } catch (CustomServiceException e) {
-            coursesAdd = COURSES_ADD_ERROR_SIGN;
+            logger.error("can't get courses add");
+            coursesAdd = new ArrayList<>();
         }
 
         logger.info("setting jsp page attributes");
