@@ -1,35 +1,35 @@
-package com.mishamba.project.tag.button;
+package com.mishamba.project.tag.former;
 
-import org.apache.log4j.Logger;
+import com.mishamba.project.model.Course;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
-public class ViewCourseInfoButtonTag extends TagSupport {
-    private static final Logger logger = Logger.getLogger(ViewCourseInfoButtonTag.class);
+public class UserCourseListFormerTag extends TagSupport {
+    private Course course;
 
-    private int courseId;
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setCourse(Course course) {
+        this.course = course;
     }
 
     public int doStartTag() throws JspException {
         try {
             JspWriter out = pageContext.getOut();
+
+            out.write("<br>");
+            out.write("<h3>" + course.getCourseName() + "</h3>");
             out.write("<br>");
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/course_info\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"course_profile\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
-            out.write(courseId);
+            out.write(course.getId());
             out.write("\">");
             out.write("<input type=\"submit\" value=\"View\">");
             out.write("</form><br>");
         } catch (IOException e) {
-            logger.error("can't form button");
-            throw new JspException("can't form button", e);
+            throw new JspException("can't form course", e);
         }
 
         return SKIP_BODY;
