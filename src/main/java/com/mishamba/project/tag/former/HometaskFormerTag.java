@@ -36,6 +36,7 @@ public class HometaskFormerTag extends TagSupport {
             out.write(dateParser.parseDateToString(hometask.getDeadline()));
             out.write("<br>");
         } catch (IOException e) {
+            logger.error("can't form hometask");
             throw new JspException("can't form hometask", e);
         }
 
