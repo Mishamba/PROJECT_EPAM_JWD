@@ -13,10 +13,5 @@ public class GetAddSubjectToTeacherPageCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        if (!role.equals("teacher")) {
-            // TODO: 10/12/20 finish method
-        }
     }
 }

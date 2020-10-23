@@ -1,6 +1,5 @@
 package com.mishamba.project.dao.impl;
 
-import com.mishamba.project.dao.ConnectionPool;
 import com.mishamba.project.dao.DAOFactory;
 import com.mishamba.project.dao.MarkReviewDAO;
 import com.mishamba.project.dao.ProxyConnection;
@@ -9,7 +8,7 @@ import com.mishamba.project.model.Course;
 import com.mishamba.project.model.MarkReview;
 import com.mishamba.project.model.User;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -57,7 +56,7 @@ public class MarkReviewDAOImpl implements MarkReviewDAO {
             int teacherId = resultSet.getInt("teacher_id");
             String teacherFirstName = resultSet.getString("teacher_first_name");
             String teacherLastName = resultSet.getString("teacher_last_name");
-            Date teacherBirthday = dateParser.parseDate(resultSet.getString("teacher_birthday"));
+            Date teacherBirthday = dateParser.parse(resultSet.getString("teacher_birthday"));
             String teacherEmail = resultSet.getString("teacher_email");
             ArrayList<String> teacherSubjects = DAOFactory.getInstance().
                     getUserDAO().getTeacherSubjects(teacherId);
@@ -66,7 +65,7 @@ public class MarkReviewDAOImpl implements MarkReviewDAO {
                     teacherSubjects, "teacher");
             Boolean finished = resultSet.getBoolean("finished");
             Integer mark = resultSet.getInt("mark");
-            Date finishDate = dateParser.parseDate(resultSet.getString("finish_date"));
+            Date finishDate = dateParser.parse(resultSet.getString("finish_date"));
             String review = resultSet.getString("review");
             Boolean gotCertificate = resultSet.getBoolean("got_certificate");
             return new MarkReview(student, teacher, course,

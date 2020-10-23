@@ -46,11 +46,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public List<Course> getUserCourses(Properties properties) throws CustomServiceException {
-        boolean finished = Boolean.parseBoolean((String) properties.get("finished"));
-        int userId = Integer.parseInt((String) properties.get("userId"));
-        String role = properties.getProperty("role");
-
+    public List<Course> getUserCourses(int userId, String role, boolean finished) throws CustomServiceException {
         List<Course> courses;
         try {
             courses = (role.equals("student")) ? DAOFactory.getInstance().

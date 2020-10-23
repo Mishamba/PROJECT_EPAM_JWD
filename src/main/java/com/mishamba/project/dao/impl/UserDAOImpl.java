@@ -5,10 +5,9 @@ import com.mishamba.project.dao.UserDAO;
 import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.User;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 
-import javax.security.auth.login.AccountLockedException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -108,7 +107,7 @@ public class UserDAOImpl implements UserDAO {
             Integer id = resultSet.getInt("id");
             String firstName = resultSet.getString("first_name");
             String lastName = resultSet.getString("last_name");
-            Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+            Date birthday = dateParser.parse(resultSet.getString("birthday"));
             String role = resultSet.getString("role");
             ArrayList<String> teacherSubjects = getTeacherSubjects(id);
             return new User(id, firstName, lastName, email, birthday,teacherSubjects, role);
@@ -212,7 +211,7 @@ public class UserDAOImpl implements UserDAO {
             while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
                 String email = resultSet.getString("email");
-                Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+                Date birthday = dateParser.parse(resultSet.getString("birthday"));
                 ArrayList<String> teacherSubjects = getTeacherSubjects(id);
                 teachers.add(new User(id, firstName, lastName, email, birthday,
                         teacherSubjects, "teacher"));
@@ -259,7 +258,7 @@ public class UserDAOImpl implements UserDAO {
             while(resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String email = resultSet.getString("email");
-                Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+                Date birthday = dateParser.parse(resultSet.getString("birthday"));
                 users.add(new User(id, firstName, lastName, email, birthday, null,
                         "student"));
             }
@@ -377,7 +376,7 @@ public class UserDAOImpl implements UserDAO {
         String firstName = resultSet.getString("first_name");
         String lastName = resultSet.getString("last_name");
         String birthdayNotParsed = resultSet.getString("birthday");
-        Date birthday = dateParser.parseDate(birthdayNotParsed);
+        Date birthday = dateParser.parse(birthdayNotParsed);
         String email = resultSet.getString("email");
         String role = resultSet.getString("role");
         ArrayList<String> teacherSubjects = getTeacherSubjects(id);

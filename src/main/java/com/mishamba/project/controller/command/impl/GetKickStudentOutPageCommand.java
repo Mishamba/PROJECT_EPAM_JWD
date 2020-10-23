@@ -3,7 +3,6 @@ package com.mishamba.project.controller.command.impl;
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
-import com.mishamba.project.service.impl.CustomServiceImpl;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;

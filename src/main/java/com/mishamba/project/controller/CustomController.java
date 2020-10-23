@@ -2,6 +2,7 @@ package com.mishamba.project.controller;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.controller.command.provider.CommandProvider;
+import com.mishamba.project.filter.right.RightsHolder;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -33,8 +34,10 @@ public class CustomController extends HttpServlet {
             throws ServletException, IOException {
         String commandType = req.getParameter("command");
         logger.info("got commandType");
+        String role = (String) req.getSession().getAttribute("role");
         Command command = CommandProvider.getInstance().getCommand(commandType);
-        if (command != null) {
+        if (command != null && RightsHolder.getInstance().rightsCorrect(
+                commandType, role)) {
             command.execute(req, resp);
             logger.info("command executed");
         } else {

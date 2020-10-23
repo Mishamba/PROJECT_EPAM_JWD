@@ -7,7 +7,7 @@ import com.mishamba.project.model.HometaskResponse;
 import com.mishamba.project.service.HometaskService;
 import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
 import com.mishamba.project.util.validator.MarkValidator;
 import org.apache.log4j.Logger;
@@ -59,7 +59,7 @@ public class HometaskServiceImpl implements HometaskService {
 
         Date deadline;
         try {
-            deadline = dateParser.parseDate(deadlineNotParsed);
+            deadline = dateParser.parse(deadlineNotParsed);
             if (dateValidator.checkForFuture(deadline)) {
                 throw new CustomServiceException("deadline is not in future");
             }

@@ -1,18 +1,17 @@
 package com.mishamba.project.filter;
 
-import com.mishamba.project.filter.chain.FilterChainImpl;
-
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import java.io.IOException;
 
 public class FilterManager {
-    public static void process(HttpServletRequest request,
-                               HttpServletResponse response)
+    public static void process(ServletRequest request,
+                               ServletResponse response)
             throws IOException, ServletException {
-        FilterChain filterChain = new FilterChainImpl();
+        FilterChain filterChain = new FilterChainImpl(new RightsFilter(),
+                new ParseFilter());
         filterChain.doFilter(request, response);
     }
 }

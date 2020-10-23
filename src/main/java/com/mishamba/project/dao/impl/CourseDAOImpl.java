@@ -8,7 +8,7 @@ import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
 import com.mishamba.project.model.User;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -92,8 +92,8 @@ public class CourseDAOImpl implements CourseDAO {
             while (resultSet.next()) {
                 Integer id = resultSet.getInt("id");
                 String courseName = resultSet.getString("course_name");
-                Date beginOfCourse = dateParser.parseDate(resultSet.getString("begin_of_course"));
-                Date endOfCourse = dateParser.parseDate(resultSet.getString("end_of_course"));
+                Date beginOfCourse = dateParser.parse(resultSet.getString("begin_of_course"));
+                Date endOfCourse = dateParser.parse(resultSet.getString("end_of_course"));
                 Integer maxStudentQuantity = resultSet.getInt("max_students_quantity");
                 Course currentCourse = new Course(id, courseName, beginOfCourse, endOfCourse,
                         null, maxStudentQuantity, null, false);
@@ -185,13 +185,13 @@ public class CourseDAOImpl implements CourseDAO {
 
         Integer courseId = resultSet.getInt("id");
         String courseName = resultSet.getString("course_name");
-        Date beginOfCourse = dateParser.parseDate(resultSet.getString("begin_of_course"));
-        Date endOfCourse = dateParser.parseDate(resultSet.getString("end_of_course"));
+        Date beginOfCourse = dateParser.parse(resultSet.getString("begin_of_course"));
+        Date endOfCourse = dateParser.parse(resultSet.getString("end_of_course"));
         int teacherId = resultSet.getInt("teacher_id");
         String teacherFirstName = resultSet.getString("first_name");
         String teacherLastName = resultSet.getString("last_name");
         String teacherEmail = resultSet.getString("email");
-        Date teacherBirthday = dateParser.parseDate(resultSet.getString("birthday"));
+        Date teacherBirthday = dateParser.parse(resultSet.getString("birthday"));
         ArrayList<String> teacherSubjects = DAOFactory.getInstance().
                 getUserDAO().getTeacherSubjects(teacherId);
         User teacher = null;
@@ -325,14 +325,14 @@ public class CourseDAOImpl implements CourseDAO {
             if (resultSet.next()) {
                 int courseId = resultSet.getInt("id");
                 String courseName = resultSet.getString("course_name");
-                Date beginOfCourse = dateParser.parseDate(resultSet.
+                Date beginOfCourse = dateParser.parse(resultSet.
                         getString("begin_of_course"));
-                Date endOfCourse = dateParser.parseDate(resultSet.
+                Date endOfCourse = dateParser.parse(resultSet.
                         getString("end_of_course"));
                 int maxStudentsQuantity = resultSet.getInt("max_students_quantity");
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
-                Date birthday = dateParser.parseDate(resultSet.getString("birthday"));
+                Date birthday = dateParser.parse(resultSet.getString("birthday"));
                 String email = resultSet.getString("email");
                 ArrayList<String> teacherSubjects = DAOFactory.getInstance().
                         getUserDAO().getTeacherSubjects(teacherId);

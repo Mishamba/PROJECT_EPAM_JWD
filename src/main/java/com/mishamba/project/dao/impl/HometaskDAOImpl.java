@@ -6,7 +6,7 @@ import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.Hometask;
 import com.mishamba.project.model.HometaskResponse;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -245,8 +245,8 @@ public class HometaskDAOImpl implements HometaskDAO {
         int id = resultSet.getInt("id");
         String title = resultSet.getString("title");
         String description = resultSet.getString("description");
-        Date beginDate = dateParser.parseDate(resultSet.getString("begin_date"));
-        Date deadline = dateParser.parseDate(resultSet.getString("deadline"));
+        Date beginDate = dateParser.parse(resultSet.getString("begin_date"));
+        Date deadline = dateParser.parse(resultSet.getString("deadline"));
 
         return new Hometask(courseId, id, title, description, beginDate, deadline, null);
     }

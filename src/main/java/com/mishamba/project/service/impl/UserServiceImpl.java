@@ -6,7 +6,7 @@ import com.mishamba.project.model.User;
 import com.mishamba.project.service.UserService;
 import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import com.mishamba.project.util.validator.DateValidator;
 import org.apache.log4j.Logger;
 
@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         passwordHash = Integer.valueOf(passwordHash).hashCode();
         Date birthday;
         try {
-            birthday = new DateParser().parseDate(birthdayDate);
+            birthday = new DateParser().parse(birthdayDate);
         } catch (UtilException e) {
             throw new CustomServiceException("date entered incorrect", e);
         }

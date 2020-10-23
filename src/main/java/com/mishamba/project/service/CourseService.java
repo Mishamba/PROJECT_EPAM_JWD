@@ -12,7 +12,7 @@ import java.util.Properties;
 public interface CourseService {
     ArrayList<Course> getCoursesWithoutTeacher() throws CustomServiceException;
     ArrayList<Course> getCoursesCatalog() throws CustomServiceException;
-    List<Course> getUserCourses(Properties properties) throws CustomServiceException;
+    List<Course> getUserCourses(int userId, String role, boolean finished) throws CustomServiceException;
     boolean isStudentOnCourse(int studentId, int courseId)
             throws CustomServiceException;
     boolean enterStudentOnCourse(int studentId, int courseId)

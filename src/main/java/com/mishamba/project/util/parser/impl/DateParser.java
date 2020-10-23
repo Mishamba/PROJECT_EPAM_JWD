@@ -1,14 +1,15 @@
-package com.mishamba.project.util.parser;
+package com.mishamba.project.util.parser.impl;
 
 import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.util.parser.Parser;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class DateParser {
-    public Date parseDate(String date) throws UtilException {
+public class DateParser implements Parser<Date> {
+    public Date parse(String date) throws UtilException {
         if (date == null) {
             return null;
         }

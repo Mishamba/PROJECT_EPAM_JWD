@@ -6,7 +6,7 @@ import com.mishamba.project.dao.exception.DAOException;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.ProgramStep;
 import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.DateParser;
+import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 
 import java.sql.PreparedStatement;
@@ -41,8 +41,8 @@ public class ProgramStepDAOImpl implements ProgramStepDAO {
                 int step = resultSet.getInt("step");
                 String stepName = resultSet.getString("step_name");
                 String description = resultSet.getString("step_description");
-                Date startDate = dateParser.parseDate(resultSet.getString("start_date"));
-                Date endDate =dateParser.parseDate(resultSet.getString("end_date"));
+                Date startDate = dateParser.parse(resultSet.getString("start_date"));
+                Date endDate =dateParser.parse(resultSet.getString("end_date"));
                 coursePrograms.add(new ProgramStep(course.getId(),
                         step, stepName, description, startDate, endDate));
             }

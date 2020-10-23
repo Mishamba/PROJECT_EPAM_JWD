@@ -1,6 +1,7 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.service.exception.CustomServiceException;
 import com.mishamba.project.service.impl.CustomServiceImpl;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.NoSuchElementException;
 import java.util.Properties;
 
 public class GetUserProfilePageCommand implements Command {
@@ -19,13 +21,11 @@ public class GetUserProfilePageCommand implements Command {
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        String firstName = (String) session.getAttribute("firstName");
-        String lastName = (String) session.getAttribute("lastName");
-        String birthday = (String) session.getAttribute("birthday");
         int userId = (int) session.getAttribute("id");
-        if (role == null || firstName == null || lastName == null ||
-                birthday == null) {
+        User user;
+        try {
+            user = ServiceFactory.getInstance().getUserService().getUserById(userId).get();
+        } catch (CustomServiceException | NoSuchElementException e) {
             logger.warn("user without role tries to get profile page");
             try {
                 request.getRequestDispatcher("error.html").forward(request, response);
@@ -44,7 +44,7 @@ public class GetUserProfilePageCommand implements Command {
         }
 
         Properties properties = new Properties();
-        properties.setProperty("role", role);
+        properties.setProperty("role", User.);
         properties.setProperty("target", "menu");
         String menu;
         try {

@@ -32,7 +32,6 @@ public class SignInProcessCommand implements Command {
                 session.setAttribute("firstName", info.get("firstName"));
                 session.setAttribute("lastName", info.get("lastName"));
                 session.setAttribute("role", info.get("role"));
-                session.setAttribute("birthday", info.get("birthday"));
                 session.setAttribute("id", Integer.parseInt((String) info.get("id")));
                 pageToLoad = "index.jsp";
             }
