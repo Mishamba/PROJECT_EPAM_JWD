@@ -1,6 +1,6 @@
 package com.mishamba.project.util.parser.impl;
 
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.exception.UtilException;
 import com.mishamba.project.util.parser.Parser;
 
 import java.text.ParseException;

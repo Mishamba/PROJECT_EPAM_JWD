@@ -1,8 +1,7 @@
 package com.mishamba.project.util.parser.impl;
 
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.exception.UtilException;
 import com.mishamba.project.util.parser.Parser;
-import org.apache.log4j.Logger;
 
 public class IntegerParser implements Parser<Integer> {
     @Override

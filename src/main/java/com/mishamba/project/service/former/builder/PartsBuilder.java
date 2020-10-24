@@ -1,6 +1,6 @@
 package com.mishamba.project.service.former.builder;
 
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 
 import java.util.Properties;
 

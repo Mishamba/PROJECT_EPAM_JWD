@@ -1,12 +1,12 @@
 package com.mishamba.project.service.impl;
 
 import com.mishamba.project.dao.DAOFactory;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.MarkReview;
 import com.mishamba.project.model.User;
 import com.mishamba.project.service.MarkReviewService;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.Date;

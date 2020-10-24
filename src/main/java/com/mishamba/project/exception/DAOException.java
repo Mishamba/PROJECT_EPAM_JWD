@@ -1,4 +1,4 @@
-package com.mishamba.project.dao.exception;
+package com.mishamba.project.exception;
 
 public class DAOException extends Exception {
     public DAOException(String message) {

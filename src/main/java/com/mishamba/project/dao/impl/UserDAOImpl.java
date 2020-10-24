@@ -2,9 +2,9 @@ package com.mishamba.project.dao.impl;
 
 import com.mishamba.project.dao.ProxyConnection;
 import com.mishamba.project.dao.UserDAO;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import com.mishamba.project.model.User;
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.exception.UtilException;
 import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 

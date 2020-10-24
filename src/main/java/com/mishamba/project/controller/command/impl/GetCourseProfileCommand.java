@@ -1,153 +1,69 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Course;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Optional;
 
 public class GetCourseProfileCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseProfileCommand.class);
+    private final String COURSE_ID = "course_id";
+    private final String COURSE_PROFILE_PAGE = "course_profile.jsp";
+    private final String ERROR_PAGE = "error.html";
+    private final String ID = "id";
+    private final String COURSE_PARAMETER = "course";
+    private final String TEACHER_LEADS = "teacher_leads";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse response) { // TODO: 10/12/20 refactor
-        HttpSession session = req.getSession();
-        String role = (String) session.getAttribute("role");
-        if (role == null) {
-            role = "anonym";
-        }
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
+        String uploadPage = COURSE_PROFILE_PAGE;
+        int courseId = (int) request.getAttribute(COURSE_ID);
 
-        Properties properties = new Properties();
-        properties.setProperty("role", role);
-        properties.setProperty("target", "menu");
-
-        String menu = formMenu(properties);
-
-        int courseId = getCourseId(req);
-
-        String courseInfo;
+        Course course = null;
         try {
-            courseInfo = ServiceFactory.getInstance().getCustomService().
-                    getCourseProfile(courseId);
-            logger.info("got course info");
+            Optional<Course> optionalCourse;
+            optionalCourse = ServiceFactory.getInstance().getCourseService().
+                    getCourseById(courseId);
+            if (optionalCourse.isPresent()) {
+                course = optionalCourse.get();
+            }
         } catch (CustomServiceException e) {
-            courseInfo = "<p>Can't get course info</p>";
+            uploadPage = ERROR_PAGE;
         }
 
-        int userId = getUserId(req);
+        int userId = (int) request.getSession().getAttribute(ID);
 
-        boolean teacherLeads;
+        boolean teacherLeads = false;
         try {
-            teacherLeads = (ServiceFactory.getInstance().
-                    getCustomService().getCourseById(courseId).
-                    getTeacher().getId() == userId);
+            Optional<Course> optionalCourse = ServiceFactory.getInstance().
+                    getCourseService().getCourseById(courseId);
+            if (optionalCourse.isPresent()) {
+                teacherLeads = optionalCourse.get().getTeacher().getId() == userId;
+            }
         } catch (CustomServiceException e) {
-            logger.warn("can't check is teacher leads the course right now");
-            teacherLeads = false;
+            logger.error("can't check is teacher leads the course right now");
         }
 
-        formPropertiesToButtonForm(properties, role, userId, courseId, teacherLeads);
-
-        String buttons = formButtons(properties);
-
-        req.setAttribute("menu", menu);
-        req.setAttribute("course_info", courseInfo);
-        req.setAttribute("buttons", buttons);
+        request.setAttribute(COURSE_PARAMETER, course);
+        request.setAttribute(TEACHER_LEADS, teacherLeads);
 
         try {
-            req.getRequestDispatcher("course_profile.jsp").
-                    forward(req, response);
+            request.getRequestDispatcher(uploadPage).
+                    forward(request, response);
         } catch (ServletException | IOException e) {
-            logger.error("can't upload course profile page");
+            logger.error("can't upload page");
             try {
-                req.getRequestDispatcher("error.html").forward(req, response);
+                request.getRequestDispatcher("error.html").forward(request, response);
             } catch (ServletException | IOException exception) {
                 logger.error("can't upload error page");
             }
         }
-    }
-
-    private String formMenu(Properties properties) {
-        String menu;
-
-        try {
-            menu = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(properties);
-            logger.info("got menu buttons code");
-        } catch (CustomServiceException e) {
-            logger.error("cant' get menu buttons for course profile");
-            menu = "can't get menu buttons";
-        }
-
-        return menu;
-    }
-
-    private void formPropertiesToButtonForm(Properties properties,
-                                            String role, int userId,
-                                            int courseId, boolean teacherLeads) {
-        properties.setProperty("target", "on course profile button");
-        properties.setProperty("courseId", String.valueOf(courseId));
-
-        try {
-            if ((role.equals("student") && ServiceFactory.getInstance().
-                    getCustomService().isStudentOnCourse(userId, courseId)) ||
-                    (role.equals("teacher") && teacherLeads)) {
-                properties.setProperty("userId", String.valueOf(userId));
-            } else {
-                properties.setProperty("target", "not on course profile button");
-                properties.setProperty("courseId", String.valueOf(courseId));
-            }
-            logger.info("set properties");
-        } catch (CustomServiceException e) {
-            logger.error("can't set properties");
-            properties.setProperty("target", "not on course profile button");
-        }
-    }
-
-    private String formButtons(Properties properties) {
-        String buttons;
-        try {
-            buttons = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(properties);
-            logger.info("got buttons for couse profile");
-        } catch (CustomServiceException e) {
-            logger.error("can't get course action buttons");
-            buttons = "can't get buttons";
-        }
-
-        return buttons;
-    }
-
-    private int getCourseId(HttpServletRequest req) {
-        int courseId;
-
-        try {
-            courseId = Integer.parseInt(req.getParameter("course_id"));
-        } catch (NumberFormatException | NullPointerException exception) {
-            logger.warn("can't find course id for course profile");
-            courseId = 0;
-        }
-
-        return courseId;
-    }
-
-    private int getUserId(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        int userId;
-
-        try {
-            userId = (int) session.getAttribute("id");
-        } catch (NullPointerException | NumberFormatException e) {
-            logger.warn("can't get user id");
-            userId = 0;
-        }
-
-        return userId;
     }
 }

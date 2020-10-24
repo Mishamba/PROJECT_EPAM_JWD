@@ -2,66 +2,38 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class StudentSignUpOnCourseCommand implements Command {
     private final Logger logger = Logger.getLogger(StudentSignUpOnCourseCommand.class);
+    private final String INDEX_PAGE = "index.jsp";
+    private final String ERROR_PAGE = "error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        if (role == null || !role.equals("student")) {
-            sendErrorPageWithMessage(request, response,
-                    "your role isn't student");
-            return;
-        }
+        int studentId = (int) request.getAttribute("id");
+        int courseId = (int) request.getAttribute("course_id");
 
-        int studentId = (Integer) session.getAttribute("id");
-        int courseId = Integer.parseInt(request.getParameter("course_id"));
+        String uploadPage = INDEX_PAGE;
 
         try {
-            ServiceFactory.getInstance().getCustomService().
+            ServiceFactory.getInstance().getCourseService().
                     enterStudentOnCourse(studentId, courseId);
         } catch (CustomServiceException e) {
             logger.error("can't enter student on course");
-            sendErrorPageWithMessage(request, response,
-                    "can't enter you on course");
-            return;
+            uploadPage = ERROR_PAGE;
         }
 
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload index.jsp");
-        }
-    }
-
-    private void sendErrorPageWithMessage(HttpServletRequest request,
-                                          HttpServletResponse response,
-                                          String message) {
-        if (message == null) {
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload error page");
-            }
-        } else {
-            StringBuilder builder = new StringBuilder();
-            builder.append("<p>").append(message).append("</p>");
-            request.setAttribute("info", builder.toString());
-            try {
-                request.getRequestDispatcher("info_page_with_parameter.jsp").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload page with error info");
-            }
         }
     }
 }

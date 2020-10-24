@@ -1,63 +1,58 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Course;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class GetStudentsOnCourseListCommand implements Command {
     private final Logger logger = Logger.getLogger(GetStudentsOnCourseListCommand.class);
+    private final String COURSE_ID = "course_id";
+    private final String STUDENTS_LIST_PAGE = "students_list.jsp";
+    private final String ERROR_PAGE = "error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        if (role == null || role.equals("admin") || role.equals("student")) {
-            logger.error("user with role \"" + role +
-                    "\" tries to get students on course list");
-            try {
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload index.jsp");
-            }
+        String uploadPage = STUDENTS_LIST_PAGE;
 
-            return;
-        }
+        int courseId = (int) request.getAttribute(COURSE_ID);
 
-
-        int courseId;
-        String courseIdParameter = request.getParameter("course_id");
-        courseId = (courseIdParameter != null) ? Integer.parseInt(courseIdParameter) : 0;
-
-        String courseName;
+        Course course = null;
         try {
-            courseName = ServiceFactory.getInstance().getCustomService().
-                    getCourseById(courseId).getProperty("courseName");
+            Optional<Course> optionalCourse;
+            optionalCourse = ServiceFactory.getInstance().getCourseService().
+                    getCourseById(courseId);
+            if (optionalCourse.isPresent()) {
+                course = optionalCourse.get();
+            }
         } catch (CustomServiceException e) {
             logger.warn("can't get course name");
-            courseName = "<p>can't get course name";
+            uploadPage = ERROR_PAGE;
         }
 
-        String students;
+        ArrayList<User> students = new ArrayList<>();
         try {
-            students = ServiceFactory.getInstance().getCustomService().
+            students = ServiceFactory.getInstance().getCourseService().
                     getStudentsOnCourse(courseId);
         } catch (CustomServiceException e) {
             logger.error("can't get students");
-            students = "<p>can't get info</p>";
+            uploadPage = ERROR_PAGE;
         }
 
-        request.setAttribute("course_name", courseName);
+        request.setAttribute("course", course);
         request.setAttribute("students", students);
 
         try {
-            request.getRequestDispatcher("students_list.jsp").forward(request, response);
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload students_list.jsp");
         }

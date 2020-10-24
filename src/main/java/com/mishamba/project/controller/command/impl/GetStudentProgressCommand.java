@@ -1,108 +1,66 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Hometask;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.Optional;
 
 public class GetStudentProgressCommand implements Command {
     private final Logger logger = Logger.getLogger(GetStudentProgressCommand.class);
+    private final String STUDENT_ID = "student_id";
+    private final String COURSE_ID = "course_id";
+    private final String TEACHER_ROLE = "teacher";
+    private final String STUDENT_PARAMETER = "student";
+    private final String HOMETASK_PARAMETER = "hometask";
+    private final String STUDENT_PROGRESS_PAGE = "student_progress.jsp";
+    private final String ERROR_PAGE = "error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        if (!checkForTeacher(request)) {
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload error page");
+        String uploadPage = STUDENT_PROGRESS_PAGE;
+
+        int studentId = (int) request.getAttribute(STUDENT_ID);
+
+        User student = null;
+        try {
+            Optional<User> optionalStudent;
+            optionalStudent = ServiceFactory.getInstance().
+                    getUserService().getUserById(studentId);
+            if (optionalStudent.isPresent()) {
+                student = optionalStudent.get();
             }
-
-            return;
-        }
-
-        String menu;
-        try {
-            menu = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(formProperties(request));
-        } catch (CustomServiceException e) {
-            logger.error("can't get menu");
-            menu = "<p>can't get menu</p>";
-        }
-
-        int studentId = getStudentId(request);
-
-        String studentInfo;
-        try {
-            studentInfo = ServiceFactory.getInstance().
-                    getCustomService().getUserInfoById(studentId);
         } catch (CustomServiceException e) {
             logger.error("can't get student info");
-            studentInfo = "<p> can't get student info</p>";
+            uploadPage = ERROR_PAGE;
         }
 
-        int courseId = getCourseId(request);
+        int courseId = (int) request.getAttribute(COURSE_ID);
 
-        String hometask;
+        ArrayList<Hometask> hometask = new ArrayList<>();
         try {
-            hometask = ServiceFactory.getInstance().getCustomService().
-                    getCourseHometaskForUser(courseId, studentId, "teacher");
+            hometask = ServiceFactory.getInstance().getHometaskService().
+                    getCourseHometaskForUser(courseId, studentId, TEACHER_ROLE);
         } catch (CustomServiceException e) {
             logger.error("can't get hometask list");
-            hometask = "<p>can't get hometasks</p>";
+            uploadPage = ERROR_PAGE;
         }
 
-        request.setAttribute("menu", menu);
-        request.setAttribute("student_info", studentInfo);
-        request.setAttribute("hometask", hometask);
+        request.setAttribute(STUDENT_PARAMETER, student);
+        request.setAttribute(HOMETASK_PARAMETER, hometask);
 
         try {
-            request.getRequestDispatcher("student_progress.jsp").forward(request, response);
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload student progress page");
         }
-    }
-
-    private boolean checkForTeacher(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String role = (String) session.getAttribute("role");
-        return role.equals("teacher");
-    }
-
-    private int getCourseId(HttpServletRequest request) {
-        String courseId = request.getParameter("course_id");
-        try {
-            return Integer.parseInt(courseId);
-        } catch (NullPointerException | NumberFormatException e) {
-            logger.error("can't parse course id. set 0");
-            return 0;
-        }
-    }
-
-    private int getStudentId(HttpServletRequest request) {
-        String studentId = request.getParameter("student_id");
-        try {
-            return Integer.parseInt(studentId);
-        } catch (NumberFormatException | NullPointerException e) {
-            logger.error("can't parse student id. set 0");
-            return 0;
-        }
-    }
-
-    private Properties formProperties(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-
-        String role = (String) session.getAttribute("role");
-        Properties properties = new Properties();
-        properties.setProperty("role", role);
-        properties.setProperty("target", "menu");
-
-        return properties;
     }
 }

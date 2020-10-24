@@ -10,13 +10,14 @@ import java.io.IOException;
 
 public class SignOutProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SignOutProcessCommand.class);
+    private final String INDEX_PAGE = "index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().invalidate();
 
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(INDEX_PAGE).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload index.jsp");
         }

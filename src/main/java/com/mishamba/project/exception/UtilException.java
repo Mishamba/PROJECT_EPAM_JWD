@@ -1,4 +1,4 @@
-package com.mishamba.project.util.exception;
+package com.mishamba.project.exception;
 
 public class UtilException extends Exception {
     public UtilException(String message) {

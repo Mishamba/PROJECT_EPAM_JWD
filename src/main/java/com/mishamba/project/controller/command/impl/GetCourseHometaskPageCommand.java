@@ -1,101 +1,49 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Hometask;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.ArrayList;
 
 public class GetCourseHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseHometaskPageCommand.class);
+    private final String COURSE_HOMETASK_PAGE = "course_hometask_page.jsp";
+    private final String ERROR_PAGE = "error.html";
     private final String ROLE = "role";
-    private final String TARGET = "target";
-    private final String MENU = "menu";
     private final String COURSE_ID = "courseId";
-    private final String MENU_ERROR_SIGN = "<p>can't get menu</p>";
-    private final String HOMETASK_ERROR_SIGN = "<p>can't get hometasks list</p>";
+    private final String ID = "id";
+    private final String HOMETASK_PARAMETER = "hometask";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        String pageToUpload = "course_hometask_page.jsp";
-        if (checkForAnonym(req)) {
-            logger.warn("anonym tries to get course hometask");
-            pageToUpload = "error.html";
-        }
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
+        String pageToUpload = COURSE_HOMETASK_PAGE;
 
-        Properties properties = formProperties(req);
+        int courseId = (int) request.getAttribute(COURSE_ID);
+        int userId = (int) request.getSession().getAttribute(ID);
+        String role = (String) request.getSession().getAttribute(ROLE);
 
-        String menu;
+        ArrayList<Hometask> hometasks = new ArrayList<>();
         try {
-            menu = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(properties);
-        } catch (CustomServiceException e) {
-            logger.error("can't get menu buttons");
-            menu = MENU_ERROR_SIGN;
-        }
-
-        int courseId = getCourseId(req);
-        int userId = getUserId(req);
-        String role = properties.getProperty("role");
-
-        String hometasks;
-        try {
-            hometasks = ServiceFactory.getInstance().getCustomService().
+            hometasks = ServiceFactory.getInstance().getHometaskService().
                     getCourseHometaskForUser(courseId, userId, role);
         } catch (CustomServiceException e) {
-            hometasks = HOMETASK_ERROR_SIGN;
+            logger.error("can't get hometask list. setting error page");
+            pageToUpload = ERROR_PAGE;
         }
 
-        req.setAttribute("menu", menu);
-        req.setAttribute("hometasks", hometasks);
+        request.setAttribute(HOMETASK_PARAMETER, hometasks);
 
         try {
-            req.getRequestDispatcher("course_hometask_page.jsp").forward(req, resp);
+            request.getRequestDispatcher(pageToUpload).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't send answer page");
         }
-    }
-
-    private boolean checkForAnonym(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        String role = (String) session.getAttribute(ROLE);
-
-        return (role == null);
-    }
-
-    private Properties formProperties(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        String role = (String) session.getAttribute(ROLE);
-        String courseId = req.getParameter("course_id");
-
-        Properties properties = new Properties();
-        properties.setProperty(ROLE, role);
-        properties.setProperty(TARGET, MENU);
-        properties.setProperty(COURSE_ID, courseId);
-
-        return properties;
-    }
-
-    private int getCourseId(HttpServletRequest req) {
-        int courseId;
-        try {
-            courseId = Integer.parseInt(req.getParameter("course_id"));
-        } catch (NullPointerException | NumberFormatException e) {
-            logger.warn("can't get course id from request");
-            courseId = 0;
-        }
-
-        return courseId;
-    }
-
-    private int getUserId(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        return (int) session.getAttribute("id");
     }
 }

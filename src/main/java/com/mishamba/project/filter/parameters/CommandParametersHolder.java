@@ -1,7 +1,5 @@
 package com.mishamba.project.filter.parameters;
 
-import com.mishamba.project.controller.command.impl.*;
-
 import java.util.*;
 
 public class CommandParametersHolder {
@@ -13,7 +11,7 @@ public class CommandParametersHolder {
     private final String HOMETASK_ID = "hometask_id";
     private final String STUDENT_ID = "student_id";
     private final String MARK = "mark";
-    private final String PASSED = "passed";
+    private final String FINISHED = "finished";
 
     private CommandParametersHolder() {
         commandParameters = new HashMap<>(11, 0.75F);
@@ -29,7 +27,7 @@ public class CommandParametersHolder {
         commandParameters.put("check_hometask", Arrays.asList(HOMETASK_ID, STUDENT_ID));
         commandParameters.put("set_hometask_mark", Arrays.asList(STUDENT_ID, HOMETASK_ID, MARK));
         commandParameters.put("kick_student_page", Collections.singletonList(STUDENT_ID));
-        commandParameters.put("user_courses", Collections.singletonList(PASSED));
+        commandParameters.put("user_courses", Collections.singletonList(FINISHED));
     }
 
     private static class CommandParametersHolderHolder {

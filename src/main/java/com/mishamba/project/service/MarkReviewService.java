@@ -3,7 +3,7 @@ package com.mishamba.project.service;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.MarkReview;
 import com.mishamba.project.model.User;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 
 import java.util.Optional;
 

@@ -7,8 +7,8 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
-public class UserPassedCoursesButtonTag extends TagSupport {
-    private static final Logger logger = Logger.getLogger(UserPassedCoursesButtonTag.class);
+public class UserFinishedCoursesButtonTag extends TagSupport {
+    private static final Logger logger = Logger.getLogger(UserFinishedCoursesButtonTag.class);
 
     private int buttonSign;
 
@@ -23,7 +23,7 @@ public class UserPassedCoursesButtonTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/passed_courses\">");
             out.write("<input type=\"hidden\" name=\"command\" " +
                     "value=\"user_courses\">");
-            out.write("<input type=\"hidden\" name=\"passed\" value=\"true\">");
+            out.write("<input type=\"hidden\" name=\"finished\" value=\"true\">");
             out.write("<input type=\"submit\" value=\"");
             out.write(buttonSign);
             out.write("\">");

@@ -1,4 +1,4 @@
-package com.mishamba.project.service.exception;
+package com.mishamba.project.exception;
 
 public class CustomServiceException extends Exception {
     public CustomServiceException(String message) {

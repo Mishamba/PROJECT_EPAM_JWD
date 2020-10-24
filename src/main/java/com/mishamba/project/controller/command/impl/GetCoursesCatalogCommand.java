@@ -2,84 +2,54 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Course;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Properties;
+import java.util.Optional;
 
 public class GetCoursesCatalogCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCoursesCatalogCommand.class);
+    private final String COURSES_CATALOG_PAGE = "courses_catalog.jsp";
+    private final String ERROR_PAGE = "error.html";
+    private final String ID = "id";
 
     @Override
-    public void execute(HttpServletRequest req, HttpServletResponse resp) {
-        Properties userProp = formProperties(req);
+    public void execute(HttpServletRequest request, HttpServletResponse resp) {
+        String uploadPage = COURSES_CATALOG_PAGE;
 
-        String userInfo;
+        User user = null;
         try {
-            userInfo = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(userProp);
+            Optional<User> optionalUser;
+            optionalUser = ServiceFactory.getInstance().getUserService().getUserById((int) request.getSession().getAttribute(ID));
+            if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+            }
         } catch (CustomServiceException e) {
-            logger.error("can't upload user info");
-            userInfo = "<br><p>can't upload user info</p><br>";
+            uploadPage = ERROR_PAGE;
         }
-
-        userProp.setProperty("target", "menu");
-        String menu;
-        try {
-            menu = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(userProp);
-        } catch (CustomServiceException e) {
-            logger.error("can't upload some menu functionality");
-            menu = "<br><p>can't upload some menu buttons";
-        }
-
 
         ArrayList<Course> courses;
         try {
-            logger.info("getting courses");
-            courses = ServiceFactory.getInstance().getCustomService().
-                    getCoursesCatalog();
+            courses = ServiceFactory.getInstance().getCourseService().
+                    getActiveCourses();
         } catch (CustomServiceException e) {
             courses = new ArrayList<>();
         }
 
-        logger.info("setting page attributes");
-        req.setAttribute("user_info", userInfo);
-        req.setAttribute("menu", menu);
-        req.setAttribute("courses", courses);
+        request.setAttribute("user_info", user);
+        request.setAttribute("courses", courses);
 
         try {
-            logger.info("uploading courses catalog page");
-            req.getRequestDispatcher("courses_catalog.jsp").forward(req, resp);
+            request.getRequestDispatcher(uploadPage).forward(request, resp);
         } catch (ServletException | IOException e) {
             logger.error("can't send courses catalog for user");
         }
-    }
-
-    private Properties formProperties(HttpServletRequest req) {
-        HttpSession session = req.getSession();
-        String role = (String) session.getAttribute("role");
-        String firstName = (String) session.getAttribute("firstName");
-        String lastName = (String) session.getAttribute("lastName");
-        if (role == null) {
-            role = "anonym";
-        }
-
-        Properties userProp = new Properties();
-        userProp.setProperty("role", role);
-        if (firstName != null && lastName != null) {
-            userProp.setProperty("firstName", firstName);
-            userProp.setProperty("lastName", lastName);
-        }
-        userProp.setProperty("target", "user info");
-
-        return userProp;
     }
 }

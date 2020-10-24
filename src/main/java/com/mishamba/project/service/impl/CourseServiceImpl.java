@@ -1,11 +1,11 @@
 package com.mishamba.project.service.impl;
 
 import com.mishamba.project.dao.DAOFactory;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import com.mishamba.project.model.Course;
 import com.mishamba.project.model.User;
 import com.mishamba.project.service.CourseService;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import java.util.*;
@@ -30,7 +30,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public ArrayList<Course> getCoursesCatalog() throws CustomServiceException {
+    public ArrayList<Course> getActiveCourses() throws CustomServiceException {
         ArrayList<Course> courses;
         try {
             courses = DAOFactory.getInstance().getCourseDAO().getActiveCourses();
@@ -87,6 +87,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public boolean enterStudentOnCourse(int studentId, int courseId) throws CustomServiceException {
+        // TODO: 10/24/20 check student for being kicked out from this course
         try {
             return DAOFactory.getInstance().getCourseDAO().
                     enterStudentOnCourse(studentId, courseId);

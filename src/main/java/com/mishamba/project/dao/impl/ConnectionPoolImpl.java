@@ -2,7 +2,7 @@ package com.mishamba.project.dao.impl;
 
 import com.mishamba.project.dao.ConnectionPool;
 import com.mishamba.project.dao.ProxyConnection;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;

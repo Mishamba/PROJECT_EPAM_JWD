@@ -1,6 +1,6 @@
 package com.mishamba.project.service.former.builder.impl.admin;
 
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import com.mishamba.project.service.former.builder.Former;
 import com.mishamba.project.service.former.factory.PartsBuilderFactory;
 

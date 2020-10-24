@@ -1,15 +1,13 @@
 package com.mishamba.project.filter;
 
-import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.filter.parameters.CommandParametersHolder;
 import com.mishamba.project.filter.parameters.ParametersParserHolder;
-import com.mishamba.project.util.exception.UtilException;
+import com.mishamba.project.exception.UtilException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 

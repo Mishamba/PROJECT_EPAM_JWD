@@ -1,76 +1,48 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.Course;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GetUserCoursesCommand implements Command {
     private final Logger logger = Logger.getLogger(GetUserCoursesCommand.class);
+    private final String ID = "id";
+    private final String ROLE = "role";
+    private final String FINISHED = "finished";
+    private final String USER_COURSES_PAGE = "user_courses_page.jsp";
+    private final String COURSES_PARAMETER = "courses";
+    private final String ERROR_PAGE = "error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        logger.info("getting and checking info sent by user");
-        HttpSession session = request.getSession();
-        int id = (int) session.getAttribute("id");
-        String role = (String) session.getAttribute("role");
-        String finished = request.getParameter("passed");
+        String uploadPage = USER_COURSES_PAGE;
 
-        if (role == null || role.equals("admin") || finished == null) {
-            logger.warn("anonym user or admin or someone who didn't send " +
-                    "finish parameter tries to get active courses");
+        int userId = (int) request.getSession().getAttribute(ID);
+        String role = (String) request.getSession().getAttribute(ROLE);
+        boolean finished = (boolean) request.getAttribute(FINISHED);
 
-            try {
-                request.getRequestDispatcher("error.html").
-                        forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't send error page");
-            }
-
-            return;
-        }
-
-        Properties properties = new Properties();
-        properties.setProperty("role", role);
-        properties.setProperty("target", "menu");
-        String menu;
+        List<Course> courses = new ArrayList<>();
         try {
-            menu = ServiceFactory.getInstance().getCustomService().
-                    formPageParameter(properties);
-        } catch (CustomServiceException e) {
-            logger.error("can't get menu buttons");
-            menu = "<p>can't get menu buttons</p>";
-        }
-
-        logger.info("got menu buttons");
-
-        properties.setProperty("userId", String.valueOf(id));
-        properties.setProperty("finished", finished);
-
-        String courses;
-        try {
-            courses = ServiceFactory.getInstance().getCustomService().
-                    getUserCourses(properties);
+            courses = ServiceFactory.getInstance().getCourseService().
+                    getUserCourses(userId, role, finished);
         } catch (CustomServiceException e) {
             logger.error("can't get user courses list");
-            courses = "<p>can't get your courses list</p>";
+            uploadPage = ERROR_PAGE;
         }
 
-        logger.info("got courses content");
-
-        request.setAttribute("menu", menu);
-        request.setAttribute("courses", courses);
+        request.setAttribute(COURSES_PARAMETER, courses);
 
         try {
-            request.getRequestDispatcher("user_courses_page.jsp").forward(request, response);
-            logger.info("set responce");
+            request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload courses list page");
         }

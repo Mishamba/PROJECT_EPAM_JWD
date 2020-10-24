@@ -1,13 +1,11 @@
 package com.mishamba.project.service.impl;
 
 import com.mishamba.project.dao.DAOFactory;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import com.mishamba.project.model.Hometask;
 import com.mishamba.project.model.HometaskResponse;
 import com.mishamba.project.service.HometaskService;
-import com.mishamba.project.service.exception.CustomServiceException;
-import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.impl.DateParser;
+import com.mishamba.project.exception.CustomServiceException;
 import com.mishamba.project.util.validator.DateValidator;
 import com.mishamba.project.util.validator.MarkValidator;
 import org.apache.log4j.Logger;
@@ -15,7 +13,6 @@ import org.apache.log4j.Logger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
-import java.util.Properties;
 
 public class HometaskServiceImpl implements HometaskService {
     private static final Logger logger = Logger.getLogger(HometaskServiceImpl.class);
@@ -39,13 +36,9 @@ public class HometaskServiceImpl implements HometaskService {
     }
 
     @Override
-    public boolean createHometask(Properties hometaskProperties) throws CustomServiceException {
-        int courseId = Integer.parseInt(hometaskProperties.getProperty("courseId"));
-        String title = hometaskProperties.getProperty("title");
-        String description = hometaskProperties.getProperty("description");
-        String deadlineNotParsed = hometaskProperties.getProperty("deadline");
-
-        DateParser dateParser = new DateParser();
+    public boolean createHometask(int courseId, String title,
+                                  String description, Date deadline)
+            throws CustomServiceException {
         DateValidator dateValidator = new DateValidator();
 
         try {
@@ -57,15 +50,10 @@ public class HometaskServiceImpl implements HometaskService {
             return false;
         }
 
-        Date deadline;
-        try {
-            deadline = dateParser.parse(deadlineNotParsed);
-            if (dateValidator.checkForFuture(deadline)) {
-                throw new CustomServiceException("deadline is not in future");
-            }
-        } catch (UtilException e) {
-            throw new CustomServiceException("can't parse date", e);
+        if (dateValidator.checkForFuture(deadline)) {
+            throw new CustomServiceException("deadline is not in future");
         }
+
         Date beginDate = new Date();
 
         Hometask hometask = new Hometask(courseId, null, title, description,
@@ -119,6 +107,8 @@ public class HometaskServiceImpl implements HometaskService {
     @Override
     public boolean setHometaskMark(int hometaskId, int studentId, int mark) throws CustomServiceException {
         MarkValidator validator = new MarkValidator();
+        // TODO: 10/24/20 check that teacher manages course with this hometask
+
         if (!validator.isCorrect(mark)) {
             throw new CustomServiceException("mark incorrect");
         }

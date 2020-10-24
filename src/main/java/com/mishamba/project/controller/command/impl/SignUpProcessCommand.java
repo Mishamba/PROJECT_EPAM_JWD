@@ -1,112 +1,81 @@
 package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Date;
+import java.util.Optional;
 
 public class SignUpProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SignUpProcessCommand.class);
+    private final String FIRST_NAME_PARAMETER = "first_name";
+    private final String LAST_NAME_PARAMETER = "last_name";
+    private final String EMAIL_PARAMETER = "email";
+    private final String ROLE_PARAMETER = "role";
+    private final String BIRTHDAY_PARAMETER = "birthday";
+    private final String PASSWORD_PARAMETER = "password";
+    private final String USER_PARAMETER = "user";
+    private final String ADMIN = "admin";
+    private final String STUDENT = "student";
+    private final String ANONYM = "anonym";
+    private final String INDEX_PAGE = "index.jsp";
+    private final String ERROR_PAGE = "error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        Properties signUpInfo = formSignUpInfo(request);
-        HttpSession session = request.getSession();
-        String userRole = (String) session.getAttribute("role");
-        if (signUpInfo == null || !(userRole == null ||
-                ((signUpInfo.get("role").equals("admin") ||
-                        signUpInfo.get("role").equals("teacher")) &&
-                        userRole.equals("admin")))) {
-            logger.warn("someone is with role \"" + userRole +
-                    "\" tries to create user with role \"" +
-                    signUpInfo.get("role"));
-            try {
-                request.getRequestDispatcher("index.jsp").forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload index.jsp");
-            }
-        } else {
-
-            boolean result;
-            try {
-                result = ServiceFactory.getInstance().getCustomService().
-                        createUser(signUpInfo);
-            } catch (CustomServiceException e) {
-                logger.error("can't create user");
-                result = false;
-            }
-
-            Properties info;
-            try {
-                info = ServiceFactory.getInstance().
-                        getCustomService().getUserByEmail(signUpInfo.getProperty("email"));
-            } catch (CustomServiceException e) {
-                logger.error("can't get user info");
-                request.setAttribute("info", "u signed up. now go and sign in");
-                try {
-                    request.getRequestDispatcher("info_page_with_parameter.jsp").
-                            forward(request, response);
-                } catch (ServletException | IOException servletException) {
-                    logger.error("can't upload info page with answer");
-                }
-
-                return;
-            }
-
-            String pageToLoad;
-            if (result) {
-                if (userRole == null) {
-                    session.setAttribute("role", signUpInfo.get("role"));
-                    session.setAttribute("firstName", signUpInfo.get("firstName"));
-                    session.setAttribute("lastName", signUpInfo.get("lastName"));
-                    session.setAttribute("birthday", signUpInfo.get("birthday"));
-                    session.setAttribute("id", Integer.parseInt((String) info.get("id")));
-                }
-                pageToLoad = "index.jsp";
-            } else {
-                pageToLoad = "error.html";
-            }
-
-            try {
-                request.getRequestDispatcher(pageToLoad).forward(request, response);
-            } catch (ServletException | IOException e) {
-                logger.error("can't upload page");
-            }
-        }
-    }
-
-    private Properties formSignUpInfo(HttpServletRequest request) {
-        String firstName = request.getParameter("first_name");
-        String lastName = request.getParameter("last_name");
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
-        String birthday = request.getParameter("birthday");
-        String role = request.getParameter("role");
-        if (role == null) {
-            role = "student";
+        String firstName = (String) request.getAttribute(FIRST_NAME_PARAMETER);
+        String lastName = (String) request.getAttribute(LAST_NAME_PARAMETER);
+        String email = (String) request.getAttribute(EMAIL_PARAMETER);
+        // admin can create user with any role,
+        // but anonym can sign up only as student
+        String sessionRole = (String) request.getSession().getAttribute(ROLE_PARAMETER);
+        if (sessionRole == null) {
+            sessionRole = ANONYM;
         }
 
-        Properties signUpInfo;
-        if (firstName != null || lastName != null || email != null ||
-                password != null || birthday != null) {
-            signUpInfo = new Properties();
-            signUpInfo.setProperty("firstName", firstName);
-            signUpInfo.setProperty("lastName", lastName);
-            signUpInfo.setProperty("email", email);
-            signUpInfo.setProperty("password", password);
-            signUpInfo.setProperty("birthday", birthday);
-            signUpInfo.setProperty("role", role);
-        } else {
-            signUpInfo = null;
+        String role = (sessionRole.equals(ADMIN)) ?
+                (String) request.getAttribute(ROLE_PARAMETER) : STUDENT;
+        Date birthday = (Date) request.getAttribute(BIRTHDAY_PARAMETER);
+        String password = (String) request.getAttribute(PASSWORD_PARAMETER);
+
+        String uploadPage = INDEX_PAGE;
+
+        try {
+            if (ServiceFactory.getInstance().getUserService().
+                    createUser(firstName, lastName, email, role,
+                            birthday, password)) {
+                uploadPage = ERROR_PAGE;
+            }
+        } catch (CustomServiceException e) {
+            logger.error("can't create user");
+            uploadPage = ERROR_PAGE;
         }
 
-        return signUpInfo;
+        User user = null;
+        try {
+            Optional<User> optionalUser;
+            optionalUser = ServiceFactory.getInstance().getUserService().getUserByEmail(email);
+            if (optionalUser.isPresent()) {
+                user = optionalUser.get();
+            }
+        } catch (CustomServiceException e) {
+            logger.error("can't get user info");
+            uploadPage = ERROR_PAGE;
+        }
+
+        request.setAttribute(USER_PARAMETER, user);
+
+        try {
+            request.getRequestDispatcher(uploadPage).forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error("can't upload page");
+        }
     }
 }

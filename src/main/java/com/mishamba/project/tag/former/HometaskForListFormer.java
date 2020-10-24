@@ -12,6 +12,8 @@ public class HometaskForListFormer extends TagSupport {
     public void setHometask(Hometask hometask) {
         this.hometask = hometask;
     }
+
+    // maybe this is redundant method
     @Override
     public int doStartTag() throws JspException {
         HometaskFormerTag hometaskFormerTag = new HometaskFormerTag();

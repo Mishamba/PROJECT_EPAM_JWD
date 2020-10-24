@@ -1,18 +1,15 @@
 package com.mishamba.project.service.impl;
 
 import com.mishamba.project.dao.DAOFactory;
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 import com.mishamba.project.model.User;
 import com.mishamba.project.service.UserService;
-import com.mishamba.project.service.exception.CustomServiceException;
-import com.mishamba.project.util.exception.UtilException;
-import com.mishamba.project.util.parser.impl.DateParser;
+import com.mishamba.project.exception.CustomServiceException;
 import com.mishamba.project.util.validator.DateValidator;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.Optional;
-import java.util.Properties;
 
 public class UserServiceImpl implements UserService {
     private static final Logger logger = Logger.getLogger(UserServiceImpl.class);
@@ -39,21 +36,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean createUser(Properties userInfo) throws CustomServiceException {
-        String firstName = userInfo.getProperty("firstName");
-        String lastName = userInfo.getProperty("lastName");
-        String email = userInfo.getProperty("email");
-        String birthdayDate = userInfo.getProperty("birthday");
-        String password = userInfo.getProperty("password");
+    public boolean createUser(String firstName, String lastName, String email,
+                              String role, Date birthday, String password)
+            throws CustomServiceException {
+        // TODO: 10/24/20 add email validation
         int passwordHash = password.hashCode();
         passwordHash = Integer.valueOf(passwordHash).hashCode();
-        Date birthday;
-        try {
-            birthday = new DateParser().parse(birthdayDate);
-        } catch (UtilException e) {
-            throw new CustomServiceException("date entered incorrect", e);
-        }
-        String role = userInfo.getProperty("role");
 
         DateValidator dateValidator = new DateValidator();
         if (dateValidator.checkForFuture(birthday)) {

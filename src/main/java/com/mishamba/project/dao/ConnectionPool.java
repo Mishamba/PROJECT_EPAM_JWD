@@ -1,6 +1,6 @@
 package com.mishamba.project.dao;
 
-import com.mishamba.project.dao.exception.DAOException;
+import com.mishamba.project.exception.DAOException;
 
 public interface ConnectionPool {
     ProxyConnection getConnection() throws DAOException;

@@ -3,7 +3,7 @@ package com.mishamba.project.controller.command.impl;
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Hometask;
 import com.mishamba.project.service.ServiceFactory;
-import com.mishamba.project.service.exception.CustomServiceException;
+import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletException;
@@ -11,18 +11,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class GetAnswerHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetAnswerHometaskPageCommand.class);
+    private final String HOMETASK_ID = "hometask_id";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        int hometaskId = getHometaskId(request);
+        int hometaskId = (int) request.getAttribute(HOMETASK_ID);
 
-        Hometask hometask;
+        Hometask hometask = null;
         try {
-            hometask = ServiceFactory.getInstance().getHometaskService().
-                    getHometaskById(hometaskId).get();
+            Optional<Hometask> optionalHometask;
+            optionalHometask = ServiceFactory.getInstance().getHometaskService().
+                    getHometaskById(hometaskId);
+            if (optionalHometask.isPresent()) {
+                hometask = optionalHometask.get();
+            }
         } catch (CustomServiceException | NoSuchElementException e) {
             logger.error("can't get hometask info");
             try {
@@ -40,16 +46,6 @@ public class GetAnswerHometaskPageCommand implements Command {
             request.getRequestDispatcher("answer_hometask.jsp").forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload answer hometask page");
-        }
-    }
-
-    private int getHometaskId(HttpServletRequest request) {
-        String courseId = request.getParameter("hometask_id");
-        try {
-            return Integer.parseInt(courseId);
-        } catch (NumberFormatException | NullPointerException e) {
-            logger.error("can't parse course id. course id set with 0");
-            return 0;
         }
     }
 }
