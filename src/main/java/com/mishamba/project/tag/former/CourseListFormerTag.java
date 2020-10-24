@@ -7,7 +7,7 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
-public class UserCourseListFormerTag extends TagSupport {
+public class CourseListFormerTag extends TagSupport {
     private Course course;
 
     public void setCourse(Course course) {
@@ -27,7 +27,8 @@ public class UserCourseListFormerTag extends TagSupport {
             out.write(course.getId());
             out.write("\">");
             out.write("<input type=\"submit\" value=\"View\">");
-            out.write("</form><br>");
+            out.write("</form>");
+            out.write("<br>");
         } catch (IOException e) {
             throw new JspException("can't form course", e);
         }

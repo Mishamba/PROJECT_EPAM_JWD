@@ -45,8 +45,12 @@ public class RightsHolder {
     }
 
     public boolean rightsCorrect(String commandName, String givenRole) {
-        if (commandName == null || givenRole == null) {
+        if (commandName == null) {
             return false;
+        }
+
+        if (givenRole == null) {
+            givenRole = ANONYM;
         }
 
         List<String> roles = requestsRights.get(commandName);

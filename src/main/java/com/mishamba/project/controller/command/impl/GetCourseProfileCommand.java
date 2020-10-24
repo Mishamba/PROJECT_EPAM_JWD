@@ -2,6 +2,7 @@ package com.mishamba.project.controller.command.impl;
 
 import com.mishamba.project.controller.command.Command;
 import com.mishamba.project.model.Course;
+import com.mishamba.project.model.User;
 import com.mishamba.project.service.ServiceFactory;
 import com.mishamba.project.exception.CustomServiceException;
 import org.apache.log4j.Logger;
@@ -10,6 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class GetCourseProfileCommand implements Command {
@@ -19,7 +21,7 @@ public class GetCourseProfileCommand implements Command {
     private final String ERROR_PAGE = "error.html";
     private final String ID = "id";
     private final String COURSE_PARAMETER = "course";
-    private final String TEACHER_LEADS = "teacher_leads";
+    private final String USER_PARTICIPATION = "participation";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -40,19 +42,27 @@ public class GetCourseProfileCommand implements Command {
 
         int userId = (int) request.getSession().getAttribute(ID);
 
-        boolean teacherLeads = false;
+        boolean userParticipaion = false;
         try {
             Optional<Course> optionalCourse = ServiceFactory.getInstance().
                     getCourseService().getCourseById(courseId);
-            if (optionalCourse.isPresent()) {
-                teacherLeads = optionalCourse.get().getTeacher().getId() == userId;
+            ArrayList<User> courseStudents = ServiceFactory.getInstance().
+                    getCourseService().getStudentsOnCourse(courseId);
+            for (User student : courseStudents) {
+                if (student.getId() == userId) {
+                    userParticipaion = true;
+                    break;
+                }
+            }
+            if (optionalCourse.isPresent() && !userParticipaion) {
+                userParticipaion = optionalCourse.get().getTeacher().getId() == userId;
             }
         } catch (CustomServiceException e) {
             logger.error("can't check is teacher leads the course right now");
         }
 
         request.setAttribute(COURSE_PARAMETER, course);
-        request.setAttribute(TEACHER_LEADS, teacherLeads);
+        request.setAttribute(USER_PARTICIPATION, userParticipaion);
 
         try {
             request.getRequestDispatcher(uploadPage).

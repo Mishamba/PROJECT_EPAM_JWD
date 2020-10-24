@@ -1,16 +1,15 @@
-<%@ page import="com.mishamba.project.model.Hometask" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: mishamba
-  Date: 3.10.20
-  Time: 23:24
+  Date: 10/24/20
+  Time: 8:45 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="ft" uri="former-tags"%>
-<%@ taglib prefix="bt" uri="button-tags"%>
+<%@taglib prefix="bt" uri="button-tags"%>
 <html>
 <head>
-    <title>Hometask</title>
+    <title>Sign in</title>
 </head>
 <body>
 <h3>Menu</h3>
@@ -46,22 +45,20 @@
             break;
     }
 %>
+<br>
 
-<br>
-<h3>Hometask</h3>
-<br>
-<jsp:useBean id="hometask" scope="request" type="com.mishamba.project.model.Hometask"/>
-<ft:hometask-former hometask="${hometask}"/>
-<br>
-<h3>Answer</h3>
-<br>
-<form action="${pageContext.request.contextPath}/hometask" method="get">
+<form action="/PROJECT_EPAM_JWD_war/university">
     <label>
-        <input type="text" name="answer">
+        <input type="email" name="email">
     </label>
-    <input type="hidden" name="hometask_id" value=<%= request.getParameter("hometask_id")%>>
-    <input type="hidden" name="command" value="enter_hometask_answer">
-    <input type="submit" value="Send answer">
+    <br>
+    <label>
+        <input type="password" name="password">
+    </label>
+    <br>
+    <input type="hidden" name="command" value="sign_in_check">
+    <br>
+    <input type="submit" value="Sign in">
 </form>
 </body>
 </html>

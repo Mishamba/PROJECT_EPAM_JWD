@@ -13,32 +13,38 @@
 <body>
 <p>Course name</p>
 <form>
-    <input type="text", name="course_name">
+    <label>
+        <input type="text", name="course_name">
+    </label>
 </form>
 <br>
 <p>Begin of course (enter like yyyy-mm-dd)</p>
 <form>
-    <input type="text" name="begin_of_course">
+    <label>
+        <input type="text" name="begin_of_course">
+    </label>
 </form>
 <br>
 <p>End of course (enter like yyyy-mm-dd)</p>
 <form>
-    <input type="text" name="end_of_course">
+    <label>
+        <input type="text" name="end_of_course">
+    </label>
 </form>
 <br>
 <p>Enter teacher id</p>
 <form>
-    <input type="number" name="teacher_id">
+    <label>
+        <input type="number" name="teacher_id">
+    </label>
 </form>
 <br>
 <p>Max students quantity</p>
 <form>
-    <input type="number" name="max_students_quantity">
+    <label>
+        <input type="number" name="max_students_quantity">
+    </label>
 </form>
 <br>
-<p>Enter quantity of course program steps</p>
-<form>
-    <input type = "number" name="course_program_steps_quantity">
-</form>
 </body>
 </html>

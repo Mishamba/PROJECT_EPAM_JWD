@@ -24,6 +24,13 @@
         <url-pattern>/passed_courses</url-pattern>
         <url-pattern>/course_info</url-pattern>
     </servlet-mapping>
+    
+    <jsp-config>
+        <taglib>
+            <taglib-uri>button-tags</taglib-uri>
+            <taglib-location>/WEB-INF/tld/button.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 
     <filter>
         <filter-name>BaseFilter</filter-name>

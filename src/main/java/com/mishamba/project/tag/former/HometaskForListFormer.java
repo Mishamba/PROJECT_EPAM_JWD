@@ -1,7 +1,6 @@
 package com.mishamba.project.tag.former;
 
 import com.mishamba.project.model.Hometask;
-import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.TagSupport;

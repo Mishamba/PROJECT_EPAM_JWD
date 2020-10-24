@@ -7,8 +7,8 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 
-public class FinishCourserButtonTag extends TagSupport {
-    private static final Logger logger = Logger.getLogger(FinishCourserButtonTag.class);
+public class FinishCourseButtonTag extends TagSupport {
+    private static final Logger logger = Logger.getLogger(FinishCourseButtonTag.class);
 
     private int courseId;
 

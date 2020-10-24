@@ -1,4 +1,6 @@
 <%@ page import="com.mishamba.project.service.ServiceFactory" %>
+<%@taglib prefix="bt" uri="button-tags"%>
+<%@taglib prefix="ft" uri="former-tags"%>
 <jsp:useBean id="hometask" scope="request" type="java.lang.String"/>
 <jsp:useBean id="menu" scope="request" type="java.lang.String"/>
 <jsp:useBean id="student_info" scope="request" type="java.lang.String"/>
@@ -17,15 +19,46 @@
 <body>
 <h3>Menu</h3>
 <br>
-${menu}
+
+<%-- forming menu --%>
+<% String role = (String) request.getSession().getAttribute("role"); %>
+<% if (role == null)
+    role = "anonym";
+%>
+<% switch (role) {
+    case "anonym": %>
+<bt:course-catalog/>
+<bt:main-page/>
+<%
+        break;
+    case "teacher":
+    case "student":
+%>
+<bt:main-page/>
+<bt:course-catalog/>
+<bt:user-profile/>
+<bt:sign-out/>
+<%
+        break;
+    case "admin":
+%>
+<bt:main-page/>
+<bt:sign-out/>
+<bt:user-profile/>
+<bt:create-user/>
+<%
+            break;
+    }
+%>
 <br>
 <h3>Student info</h3>
 <br>
-${student_info}
+<jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
+<ft:user-info user="${user}"/>
 <br>
 <h3>Hometasks</h3>
 <br>
-${hometask}
+<ft:hometask hometask="${hometask}"/>
 <br>
 <br>
 <form action="/PROJECT_EPAM_JWD_war/university">

@@ -1,4 +1,4 @@
-package com.mishamba.project.tag.button;
+package com.mishamba.project.tag.former;
 
 import com.mishamba.project.model.User;
 import org.apache.log4j.Logger;

@@ -1,18 +1,22 @@
-<%--
+<jsp:useBean id="teachers" scope="request" type="com.mishamba.project.model.User"/>
+<%@ page import="com.mishamba.project.model.User" %>
+<%@ page import="java.util.ArrayList" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
-  Date: 2.10.20
-  Time: 18:25
+  Date: 10/7/20
+  Time: 10:17 PM
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
+<%@taglib prefix="bt" uri="button-tags"%>
 <html>
 <head>
-    <title>My_hometasks</title>
+    <title>Appoint page</title>
 </head>
 <body>
+<br>
+
 <h3>Menu</h3>
 <br>
 
@@ -46,13 +50,18 @@
             break;
     }
 %>
+
+<h3>Teachers list</h3>
 <br>
-<h2>Hometasks on course</h2>
-<br>
-<jsp:useBean id="hometasks" scope="request" type="com.mishamba.project.model.Hometask"/>
-<c:forEach var="hometask" item="${hometasks}">
-    <ft:hometask-for-list hometask="${hometask}"/>
-    <br>
+<c:forEach var="teacher" items="${teachers}">
+    <ft:teacher-for-list teacher="${teacher}"/>
 </c:forEach>
+    <form action="${pageContext.request.contextPath}/appoint" method="get">
+        <label>
+            <input type="number" name="teacher_id">
+        </label>
+        <input type="hidden" name="command" value="appoint_teacher">
+        <input type="submit" value="Appoint">
+    </form>
 </body>
 </html>

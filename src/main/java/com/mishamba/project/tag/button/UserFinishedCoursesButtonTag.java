@@ -10,9 +10,9 @@ import java.io.IOException;
 public class UserFinishedCoursesButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(UserFinishedCoursesButtonTag.class);
 
-    private int buttonSign;
+    private String buttonSign;
 
-    public void setButtonSign(int buttonSign) {
+    public void setButtonSign(String buttonSign) {
         this.buttonSign = buttonSign;
     }
 

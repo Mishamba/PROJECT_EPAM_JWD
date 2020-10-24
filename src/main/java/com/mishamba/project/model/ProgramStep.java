@@ -3,7 +3,7 @@ package com.mishamba.project.model;
 import java.util.Date;
 
 public class ProgramStep {
-    private Integer courseId;
+    private final Integer courseId;
     private int step;
     private String stepName;
     private String description;

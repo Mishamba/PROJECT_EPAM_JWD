@@ -6,11 +6,46 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="bt" uri="button-tags"%>
 <html>
 <head>
     <title>Sign Up</title>
 </head>
 <body>
+<h3>Menu</h3>
+<br>
+
+<%-- forming menu --%>
+<% String role = (String) request.getSession().getAttribute("role"); %>
+<% if (role == null)
+    role = "anonym";
+%>
+<% switch (role) {
+    case "anonym": %>
+<bt:course-catalog/>
+<bt:main-page/>
+<%
+        break;
+    case "teacher":
+    case "student":
+%>
+<bt:main-page/>
+<bt:course-catalog/>
+<bt:user-profile/>
+<bt:sign-out/>
+<%
+        break;
+    case "admin":
+%>
+<bt:main-page/>
+<bt:sign-out/>
+<bt:user-profile/>
+<bt:create-user/>
+<%
+            break;
+    }
+%>
+<br>
 <form action="/PROJECT_EPAM_JWD_war/university" method="post">
 <p>first name</p>
     <label>
@@ -36,7 +71,17 @@
     <input type="text" name="birthday">
 </label>
 <br>
-${role_definer}
+    <% if (request.getSession().getAttribute("role").equals("admin")) {%>
+        <p>Role definer</p>
+        <br>
+        <label>
+            <input type="text" name="role">
+        </label>
+        <br>
+    <%} else {%>
+        <input type="hidden" name="role" value="student">
+        <br>
+    <%}%>
 <br>
     <input type="hidden" name="command" value="sign_up_check">
     <input type="submit" value="Sign Up">
