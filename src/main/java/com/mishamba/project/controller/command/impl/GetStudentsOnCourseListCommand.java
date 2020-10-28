@@ -17,8 +17,8 @@ import java.util.Optional;
 public class GetStudentsOnCourseListCommand implements Command {
     private final Logger logger = Logger.getLogger(GetStudentsOnCourseListCommand.class);
     private final String COURSE_ID = "course_id";
-    private final String STUDENTS_LIST_PAGE = "students_list.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String STUDENTS_LIST_PAGE = "pages/students_list.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

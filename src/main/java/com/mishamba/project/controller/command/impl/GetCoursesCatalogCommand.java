@@ -16,8 +16,8 @@ import java.util.Optional;
 
 public class GetCoursesCatalogCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCoursesCatalogCommand.class);
-    private final String COURSES_CATALOG_PAGE = "courses_catalog.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String COURSES_CATALOG_PAGE = "pages/courses_catalog.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String ID = "id";
 
     @Override

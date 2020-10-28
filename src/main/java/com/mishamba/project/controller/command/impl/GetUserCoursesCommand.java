@@ -18,9 +18,9 @@ public class GetUserCoursesCommand implements Command {
     private final String ID = "id";
     private final String ROLE = "role";
     private final String FINISHED = "finished";
-    private final String USER_COURSES_PAGE = "user_courses_page.jsp";
+    private final String USER_COURSES_PAGE = "pages/user_courses_page.jsp";
     private final String COURSES_PARAMETER = "courses";
-    private final String ERROR_PAGE = "error.html";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

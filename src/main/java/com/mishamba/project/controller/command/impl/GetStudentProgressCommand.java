@@ -21,8 +21,8 @@ public class GetStudentProgressCommand implements Command {
     private final String TEACHER_ROLE = "teacher";
     private final String STUDENT_PARAMETER = "student";
     private final String HOMETASK_PARAMETER = "hometask";
-    private final String STUDENT_PROGRESS_PAGE = "student_progress.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String STUDENT_PROGRESS_PAGE = "pages/student_progress.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

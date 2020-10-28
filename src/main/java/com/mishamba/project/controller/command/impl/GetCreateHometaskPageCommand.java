@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GetCreateHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCreateHometaskPageCommand.class);
-    private final String CREATE_HOMETASK_PAGE = "create_hometask.jsp";
+    private final String CREATE_HOMETASK_PAGE = "pages/create_hometask.jsp";
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

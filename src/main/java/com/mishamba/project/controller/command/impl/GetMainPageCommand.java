@@ -18,9 +18,9 @@ public class GetMainPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetMainPageCommand.class);
     private final String USER_INFO_PARAMETER = "user";
     private final String COURSES_ADD_PARAMETER = "courses_add";
-    private final String MAIN_PAGE = "main.jsp";
+    private final String MAIN_PAGE = "pages/main.jsp";
     private final String ID = "id";
-    private final String ERROR_PAGE = "error.html";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse resp) {

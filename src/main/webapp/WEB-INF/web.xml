@@ -39,13 +39,51 @@
 
     <filter-mapping>
         <filter-name>BaseFilter</filter-name>
-        <url-pattern>/*</url-pattern>
+        <url-pattern>/course_info</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/passed_courses</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/active_courses</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/hometask</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/user_profile</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/sign_out</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/sign_in</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/course_profile</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/authorization</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/university</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>BaseFilter</filter-name>
+        <url-pattern>/courses_catalog</url-pattern>
     </filter-mapping>
 
     <error-page>
-        <error-code>500</error-code>
-        <location>/error.html</location>
+        <location>/pages/error.html</location>
     </error-page>
-
 
 </web-app>

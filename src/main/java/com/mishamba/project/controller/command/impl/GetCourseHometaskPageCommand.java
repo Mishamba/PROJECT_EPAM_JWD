@@ -14,8 +14,8 @@ import java.util.ArrayList;
 
 public class GetCourseHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseHometaskPageCommand.class);
-    private final String COURSE_HOMETASK_PAGE = "course_hometask_page.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String COURSE_HOMETASK_PAGE = "pages/course_hometask_page.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String ROLE = "role";
     private final String COURSE_ID = "courseId";
     private final String ID = "id";

@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public class GetKickStudentOutPageCommand implements Command {
     private static final Logger logger = Logger.getLogger(GetKickStudentOutPageCommand.class);
-    private final String KICK_OUT_PAGE = "kick_out_page.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String KICK_OUT_PAGE = "pages/kick_out_page.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String STUDENT_ID = "student_id";
     private final String STUDENT_PARAMETER = "student";
 

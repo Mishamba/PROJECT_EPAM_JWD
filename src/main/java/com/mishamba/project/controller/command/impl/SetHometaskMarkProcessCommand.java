@@ -12,11 +12,11 @@ import java.io.IOException;
 
 public class SetHometaskMarkProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SetHometaskMarkProcessCommand.class);
-    private final String INDEX_PAGE = "index.jsp";
+    private final String INDEX_PAGE = "pages/index.jsp";
     private final String HOMETASK_ID = "hometask_id";
     private final String MARK = "mark";
     private final String STUDENT_ID = "student_id";
-    private final String ERROR_PAGE = "error.html";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

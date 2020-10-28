@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GetSignUpPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetSignUpPageCommand.class);
-    private final String SIGN_UP_PAGE = "sign_up.jsp";
+    private final String SIGN_UP_PAGE = "pages/sign_up.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

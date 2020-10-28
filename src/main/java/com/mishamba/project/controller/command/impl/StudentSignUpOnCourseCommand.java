@@ -12,8 +12,8 @@ import java.io.IOException;
 
 public class StudentSignUpOnCourseCommand implements Command {
     private final Logger logger = Logger.getLogger(StudentSignUpOnCourseCommand.class);
-    private final String INDEX_PAGE = "index.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

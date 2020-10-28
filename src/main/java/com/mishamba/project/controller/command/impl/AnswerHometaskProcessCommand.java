@@ -15,8 +15,8 @@ public class AnswerHometaskProcessCommand implements Command {
     private final String HOMETASK_ID = "hometask_id";
     private final String ANSWER = "answer";
     private final String ID = "id";
-    private final String ERROR_PAGE = "error.html";
-    private final String INDEX_PAGE = "index.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
+    private final String INDEX_PAGE = "pages/index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

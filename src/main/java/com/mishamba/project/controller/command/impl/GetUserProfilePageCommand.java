@@ -15,8 +15,8 @@ import java.util.Optional;
 
 public class GetUserProfilePageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetUserProfilePageCommand.class);
-    private final String USER_PROFILE_PAGE = "user_profile.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String USER_PROFILE_PAGE = "pages/user_profile.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String ID = "id";
     private final String USER_PARAMETER = "user";
 

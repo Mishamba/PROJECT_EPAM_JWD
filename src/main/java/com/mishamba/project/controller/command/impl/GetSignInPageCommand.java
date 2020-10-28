@@ -10,7 +10,7 @@ import java.io.IOException;
 
 public class GetSignInPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetSignInPageCommand.class);
-    private final String SIGN_IN_PAGE = "sign_in.html";
+    private final String SIGN_IN_PAGE = "pages/sign_in.html";
 
     @Override
     public void execute(HttpServletRequest req, HttpServletResponse resp) {

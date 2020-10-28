@@ -14,8 +14,8 @@ import java.util.Optional;
 
 public class GetCheckHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCheckHometaskPageCommand.class);
-    private final String CHECK_HOMETASK_PAGE = "check_hometask.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String CHECK_HOMETASK_PAGE = "pages/check_hometask.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String HOMETASK_ID = "hometask_id";
     private final String STUDENT_ID = "student_id";
     private final String HOMETASK_DATA = "hometask_data";

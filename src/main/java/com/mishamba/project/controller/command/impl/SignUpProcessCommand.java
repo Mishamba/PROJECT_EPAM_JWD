@@ -25,8 +25,8 @@ public class SignUpProcessCommand implements Command {
     private final String ADMIN = "admin";
     private final String STUDENT = "student";
     private final String ANONYM = "anonym";
-    private final String INDEX_PAGE = "index.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {

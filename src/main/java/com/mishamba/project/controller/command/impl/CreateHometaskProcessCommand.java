@@ -13,8 +13,8 @@ import java.util.Date;
 
 public class CreateHometaskProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(CreateHometaskProcessCommand.class);
-    private final String INDEX_PAGE = "index.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String COURSE_ID = "course_id";
     private final String TITLE = "title";
     private final String DESCRIPTION = "description";

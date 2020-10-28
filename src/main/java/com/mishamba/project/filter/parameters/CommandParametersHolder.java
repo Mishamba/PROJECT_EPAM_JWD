@@ -40,6 +40,7 @@ public class CommandParametersHolder {
     }
 
     public List<String> getParametersList(String commandName) {
-        return commandParameters.get(commandName);
+        List<String> parameters = commandParameters.get(commandName);
+        return (parameters == null) ? new ArrayList<>() : parameters;
     }
 }

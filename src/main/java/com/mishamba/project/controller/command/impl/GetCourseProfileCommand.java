@@ -17,8 +17,8 @@ import java.util.Optional;
 public class GetCourseProfileCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseProfileCommand.class);
     private final String COURSE_ID = "course_id";
-    private final String COURSE_PROFILE_PAGE = "course_profile.jsp";
-    private final String ERROR_PAGE = "error.html";
+    private final String COURSE_PROFILE_PAGE = "pages/course_profile.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
     private final String ID = "id";
     private final String COURSE_PARAMETER = "course";
     private final String USER_PARTICIPATION = "participation";
