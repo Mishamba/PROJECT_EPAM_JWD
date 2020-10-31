@@ -11,7 +11,7 @@ public class FilterManager {
                                ServletResponse response)
             throws IOException, ServletException {
         FilterChain filterChain = new FilterChainImpl(new RightsFilter(),
-                new ParseFilter());
+                new LocalizationFilter(), new ParseFilter());
         filterChain.doFilter(request, response);
     }
 }
