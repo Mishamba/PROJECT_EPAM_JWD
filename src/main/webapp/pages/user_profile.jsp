@@ -1,3 +1,5 @@
+<%@ page import="java.util.ResourceBundle" %>
+<%@ page import="java.util.Locale" %>
 <jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
 <%--
   Created by IntelliJ IDEA.
@@ -8,24 +10,28 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
+<%
+    Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Profile</title>
+    <title><%=resourceBundle.getString("profile_sign")%></title>
 </head>
 <body>
-<h3>Role</h3>
+<h3><%=resourceBundle.getString("role_sign")%></h3>
 <br>
 ${user.role}
 <br>
-<h3>First Name</h3>
+<h3><%=resourceBundle.getString("first_name_sign")%></h3>
 <br>
 ${user.firstName}
 <br>
-<h3>Last Name</h3>
+<h3><%=resourceBundle.getString("last_name_sign")%></h3>
 <br>
 ${user.lastName}
 <br>
-<h3>Birthday</h3>
+<h3><%=resourceBundle.getString("birthday_sign")%></h3>
 <br>
 ${user.birthday}
 <br>
@@ -33,37 +39,37 @@ ${user.birthday}
 <br>
 ${user.email}
 <br>
-<h3>Courses you participated</h3>
+<h3><%=resourceBundle.getString("courses_you_participated_sign")%></h3>
 <br>
 <% if (request.getSession().getAttribute("role").equals("teacher")) {%>
 <form action="/PROJECT_EPAM_JWD_war/active_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="false">
-    <input type="submit" value="Managing courses">
+    <input type="submit" value=<%=resourceBundle.getString("managing_courses_sign")%>>
 </form>
 <br>
 <form action="/PROJECT_EPAM_JWD_war/passed_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="true">
-    <input type="submit" value="Managed courses">
+    <input type="submit" value=<%=resourceBundle.getString("managed_courses_sign")%>>
 </form>
 <br>
 <%} else if (request.getSession().getAttribute("role").equals("student")) {%>
 <form action="/PROJECT_EPAM_JWD_war/active_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="false">
-    <input type="submit" value="Active courses">
+    <input type="submit" value=<%=resourceBundle.getString("active_courses_sign")%>>
 </form>
 <br>
 <form action="/PROJECT_EPAM_JWD_war/passed_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="true">
-    <input type="submit" value="Passed courses">
+    <input type="submit" value=<%=resourceBundle.getString("passed_courses_sign")%>>
 </form>
 <br>
 <%}%>
 <br>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>

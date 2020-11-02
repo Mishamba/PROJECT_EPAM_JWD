@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/7/20
@@ -8,12 +9,16 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="ft" uri="former-tags"%>
 <%@taglib prefix="bt" uri="button-tags"%>
+<%
+    Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Courses</title>
+    <title><%=resourceBundle.getString("courses_sign")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -47,7 +52,7 @@
     }
 %>
 <br>
-<h1>Courses</h1>
+<h1><%=resourceBundle.getString("courses_sign")%></h1>
 <br>
 <jsp:useBean id="courses" scope="request" type="java.util.List"/>
 <c:forEach var="course" items="${courses}">

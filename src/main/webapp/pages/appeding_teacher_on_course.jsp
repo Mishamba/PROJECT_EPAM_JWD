@@ -1,6 +1,8 @@
 <jsp:useBean id="teachers" scope="request" type="com.mishamba.project.model.User"/>
 <%@ page import="com.mishamba.project.model.User" %>
-<%@ page import="java.util.ArrayList" %><%--
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/7/20
@@ -10,14 +12,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="ft" uri="former-tags"%>
 <%@taglib prefix="bt" uri="button-tags"%>
+<%Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Appoint page</title>
+    <title><%=resourceBundle.getString("appoint_page_sign")%></title>
 </head>
 <body>
 <br>
 
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -51,7 +56,7 @@
     }
 %>
 
-<h3>Teachers list</h3>
+<h3><%=resourceBundle.getString("teachers_list_sign")%></h3>
 <br>
 <c:forEach var="teacher" items="${teachers}">
     <ft:teacher-for-list teacher="${teacher}"/>
@@ -61,7 +66,7 @@
             <input type="number" name="teacher_id">
         </label>
         <input type="hidden" name="command" value="appoint_teacher">
-        <input type="submit" value="Appoint">
+        <input type="submit" value=<%=resourceBundle.getString("appoint_sign")%>>
     </form>
 </body>
 </html>

@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/24/20
@@ -7,12 +8,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
+<%
+    Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Sign in</title>
+    <title><%=resourceBundle.getString("sign_in_sign")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -58,7 +63,7 @@
     <br>
     <input type="hidden" name="command" value="sign_in_check">
     <br>
-    <input type="submit" value="Sign in">
+    <input type="submit" value=<%=resourceBundle.getString("sign_in_sign")%>>
 </form>
 </body>
 </html>

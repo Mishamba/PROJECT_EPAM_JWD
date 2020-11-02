@@ -1,3 +1,5 @@
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <jsp:useBean id="hometasks" scope="request" type="java.util.ArrayList"/>
 <%--
   Created by IntelliJ IDEA.
@@ -9,12 +11,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
+<%Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Hometasks</title>
+    <title><%=resourceBundle.getString("hometasks_sign")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -48,10 +53,10 @@
     }
 %>
 <br>
-<h2>Hometask</h2>
+<h2><%=resourceBundle.getString("hometasks_sign")%></h2>
 <br>
 <c:forEach var="hometask" items="${hometasks}">
-    <ft:hometask-former hometask="${hometask}"/>
+    <ft:hometask hometask="${hometask}"/>
 </c:forEach>
 <br>
 </body>

@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/19/20
@@ -8,12 +9,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
+<%Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Kick out</title>
+    <title><%=resourceBundle.getString("kick_out_sign")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -48,36 +52,36 @@
 %>
 <br>
 <br>
-<h3>Student info</h3>
+<h3><%=resourceBundle.getString("student_info_sign")%></h3>
 <br>
 <ft:user-info user="user"/>
 <br>
 <br>
-<h2>Review</h2>
+<h2><%=resourceBundle.getString("review_sign")%></h2>
 <br>
 <form action="/PROJECT_EPAM_JWD_war/university">
     <input type="hidden" name="command" value="kick_student_process">
     <input type="hidden" name="student_id" value=<%= request.getParameter("student_id")%>>
     <input type="hidden" name="course_id" value=<%=request.getParameter("course_id")%>>
     <input type="hidden" name="teacher_id" value=<%= request.getSession().getAttribute("teacher_id")%>>
-    <p>Student finished course fully</p>
+    <p><%=resourceBundle.getString("student_finished_course_successfully_sign")%></p>
     <br>
     <label>
         <input type="checkbox" checked name="finished">
     </label>
     <br>
-    <p>Mark</p>
+    <p><%=resourceBundle.getString("mark_sign")%></p>
     <br>
     <label>
         <input type="number" name="mark">
     </label>
-    <p>Review</p>
+    <p><%=resourceBundle.getString("review_sign")%></p>
     <br>
     <label>
         <input type="text" name="review">
     </label>
     <br>
-    <p>Got certificate</p>
+    <p><%=resourceBundle.getString("got_certificate_sign")%></p>
     <br>
     <label>
         <input type="checkbox" checked name="get_certificate">

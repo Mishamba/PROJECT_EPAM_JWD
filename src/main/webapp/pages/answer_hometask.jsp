@@ -1,19 +1,18 @@
-<%@ page import="com.mishamba.project.model.Hometask" %><%--
-  Created by IntelliJ IDEA.
-  User: mishamba
-  Date: 3.10.20
-  Time: 23:24
-  To change this template use File | Settings | File Templates.
---%>
+<%@ page import="com.mishamba.project.model.Hometask" %>
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="ft" uri="former-tags"%>
 <%@ taglib prefix="bt" uri="button-tags"%>
+<% Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Hometask</title>
+    <title><%=resourceBundle.getString("hometask")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%>></h3>
 <br>
 
 <%-- forming menu --%>
@@ -48,12 +47,12 @@
 %>
 
 <br>
-<h3>Hometask</h3>
+<h3><%=resourceBundle.getString("hometask_sign")%></h3>
 <br>
 <jsp:useBean id="hometask" scope="request" type="com.mishamba.project.model.Hometask"/>
-<ft:hometask-former hometask="${hometask}"/>
+<ft:hometask hometask="${hometask}"/>
 <br>
-<h3>Answer</h3>
+<h3><%=resourceBundle.getString("answer_sign")%></h3>
 <br>
 <form action="${pageContext.request.contextPath}/hometask" method="get">
     <label>
@@ -61,7 +60,7 @@
     </label>
     <input type="hidden" name="hometask_id" value=<%= request.getParameter("hometask_id")%>>
     <input type="hidden" name="command" value="enter_hometask_answer">
-    <input type="submit" value="Send answer">
+    <input type="submit" value=<%=resourceBundle.getString("send_answer_sign")%>>
 </form>
 </body>
 </html>

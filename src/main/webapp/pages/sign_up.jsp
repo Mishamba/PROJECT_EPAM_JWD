@@ -1,4 +1,5 @@
-<%--
+<%@ page import="java.util.Locale" %>
+<%@ page import="java.util.ResourceBundle" %><%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/4/20
@@ -7,12 +8,16 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
+<%
+    Locale locale = (Locale) request.getSession().getAttribute("locale");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
+%>
 <html>
 <head>
-    <title>Sign Up</title>
+    <title><%=resourceBundle.getString("sign_up_sign")%></title>
 </head>
 <body>
-<h3>Menu</h3>
+<h3><%=resourceBundle.getString("menu_sign")%></h3>
 <br>
 
 <%-- forming menu --%>
@@ -47,32 +52,32 @@
 %>
 <br>
 <form action="/PROJECT_EPAM_JWD_war/university" method="post">
-<p>first name</p>
+<p><%=resourceBundle.getString("first_name_sign")%></p>
     <label>
         <input type="text" name="first_name">
     </label>
     <br>
-<p>last name</p>
+<p><%=resourceBundle.getString("last_name_sign")%></p>
     <label>
         <input type="text" name="last_name">
     </label>
-<p>email</p>
+<p><%=resourceBundle.getString("email_sign")%></p>
 <label>
     <input type="email" name="email">
 </label>
 <br>
-<p>password</p>
+<p><%=resourceBundle.getString("password_sign")%></p>
 <label>
     <input type="password" name="password">
 </label>
 <br>
-<p>birthday (enter like YYYY-MM-DD)</p>
+<p><%=resourceBundle.getString("birthday_sign") + "(enter like YYYY-MM-DD)"%></p>
 <label>
     <input type="text" name="birthday">
 </label>
 <br>
     <% if (request.getSession().getAttribute("role").equals("admin")) {%>
-        <p>Role definer</p>
+        <p><%=resourceBundle.getString("role_definer_sign")%></p>
         <br>
         <label>
             <input type="text" name="role">
@@ -84,7 +89,7 @@
     <%}%>
 <br>
     <input type="hidden" name="command" value="sign_up_check">
-    <input type="submit" value="Sign Up">
+    <input type="submit" value=<%=resourceBundle.getString("sign_up_sign")%>>
 </form>
 </body>
 </html>
