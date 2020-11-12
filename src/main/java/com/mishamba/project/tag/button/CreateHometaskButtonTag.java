@@ -6,11 +6,17 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class CreateHometaskButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(CreateUserButtonTag.class);
 
     private int courseId;
+    private ResourceBundle resourceBundle;
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
+    }
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
@@ -26,7 +32,9 @@ public class CreateHometaskButtonTag extends TagSupport {
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
             out.write(courseId);
             out.write("\">");
-            out.write("<input type=\"submit\" value=\"Create hometask\">");
+            out.write("<input type=\"submit\" value=\"");
+            out.write(resourceBundle.getString("view_hometask_sign"));
+            out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {
             logger.error("can't form button");

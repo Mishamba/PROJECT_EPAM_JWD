@@ -8,6 +8,7 @@ import com.mishamba.project.exception.UtilException;
 import com.mishamba.project.util.parser.impl.DateParser;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -104,13 +105,7 @@ public class UserDAOImpl implements UserDAO {
 
         try {
             resultSet.next();
-            Integer id = resultSet.getInt("id");
-            String firstName = resultSet.getString("first_name");
-            String lastName = resultSet.getString("last_name");
-            Date birthday = dateParser.parse(resultSet.getString("birthday"));
-            String role = resultSet.getString("role");
-            ArrayList<String> teacherSubjects = getTeacherSubjects(id);
-            return new User(id, firstName, lastName, email, birthday,teacherSubjects, role);
+            return formUser(resultSet);
         } catch (SQLException | UtilException e) {
             throw new DAOException("can't get result from result set", e);
         }
@@ -131,6 +126,22 @@ public class UserDAOImpl implements UserDAO {
             return formUser(resultSet);
         } catch (SQLException | UtilException e) {
             throw new DAOException("can't execute queue");
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch(SQLException e) {
+                logger.warn("can't close resultset");
+            }
+
+            try {
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                logger.warn("can't close statement");
+            }
         }
     }
 
@@ -155,7 +166,9 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException("can't check email unique", e);
         } finally {
             try {
-                resultSet.close();
+                if (resultSet != null) {
+                    resultSet.close();
+                }
             } catch (SQLException throwables) {
                 logger.warn("result set is null");
             }

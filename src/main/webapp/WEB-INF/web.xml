@@ -33,53 +33,29 @@
     </jsp-config>
 
     <filter>
-        <filter-name>BaseFilter</filter-name>
-        <filter-class>com.mishamba.project.filter.BaseFilter</filter-class>
+        <filter-name>LocalizationFilter</filter-name>
+        <filter-class>com.mishamba.project.filter.LocalizationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>RightsFilter</filter-name>
+        <filter-class>com.mishamba.project.filter.RightsFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>ParseFilter</filter-name>
+        <filter-class>com.mishamba.project.filter.ParseFilter</filter-class>
     </filter>
 
     <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/course_info</url-pattern>
+        <filter-name>LocalizationFilter</filter-name>
+        <servlet-name>CustomController</servlet-name>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/passed_courses</url-pattern>
+        <filter-name>RightsFilter</filter-name>
+        <servlet-name>CustomController</servlet-name>
     </filter-mapping>
     <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/active_courses</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/hometask</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/user_profile</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/sign_out</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/sign_in</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/course_profile</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/authorization</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/university</url-pattern>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>BaseFilter</filter-name>
-        <url-pattern>/courses_catalog</url-pattern>
+        <filter-name>ParseFilter</filter-name>
+        <servlet-name>CustomController</servlet-name>
     </filter-mapping>
 
     <error-page>

@@ -26,14 +26,16 @@ public class GetMainPageCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse resp) {
         String uploadPage = MAIN_PAGE;
 
-        int userId = (int) request.getSession().getAttribute(ID);
+        Integer userId = (Integer) request.getSession().getAttribute(ID);
 
         User user = null;
         try {
-            Optional<User> optionalUser;
-            optionalUser = ServiceFactory.getInstance().getUserService().getUserById(userId);
-            if (optionalUser.isPresent()) {
-                user = optionalUser.get();
+            if (userId != null) {
+                Optional<User> optionalUser;
+                optionalUser = ServiceFactory.getInstance().getUserService().getUserById(userId);
+                if (optionalUser.isPresent()) {
+                    user = optionalUser.get();
+                }
             }
         } catch (CustomServiceException e) {
             uploadPage = ERROR_PAGE;

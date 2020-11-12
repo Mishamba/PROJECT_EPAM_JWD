@@ -6,14 +6,20 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 public class AppendTeacherOnCourseButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(AppendTeacherOnCourseButtonTag.class);
 
     private int courseId;
+    private ResourceBundle resourceBundle;
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+
+    public void setResourceBundle(ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
     }
 
     public int doStartTag() throws JspException {
@@ -25,7 +31,9 @@ public class AppendTeacherOnCourseButtonTag extends TagSupport {
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
             out.write(courseId);
             out.write("\">");
-            out.write("<input type=\"submit\" value=\"Append teacher on course\">");
+            out.write("<input type=\"submit\" value=\"");
+            out.write(resourceBundle.getString("append_teacher_on_course_sign"));
+            out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {
             logger.error("can't form button");
