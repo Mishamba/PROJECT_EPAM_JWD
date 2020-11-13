@@ -6,18 +6,17 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class CreateUserButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(CreateUserButtonTag.class);
 
-    private ResourceBundle resourceBundle;
-
-    public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-    }
-
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sing",
+                locale);
+
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");

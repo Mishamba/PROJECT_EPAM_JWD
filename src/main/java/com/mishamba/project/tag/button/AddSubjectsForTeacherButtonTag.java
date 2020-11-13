@@ -1,5 +1,6 @@
 package com.mishamba.project.tag.button;
 
+import com.mishamba.project.filter.LocalizationFilter;
 import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
@@ -13,17 +14,13 @@ public class AddSubjectsForTeacherButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(AddSubjectsForTeacherButtonTag.class);
 
     private int teacherId;
-    private ResourceBundle resourceBundle;
-
     public void setTeacherId(int teacherId) {
         this.teacherId = teacherId;
     }
 
-    public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-    }
-
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");

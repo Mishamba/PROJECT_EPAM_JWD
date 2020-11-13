@@ -16,6 +16,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<User> getUserById(int userId) throws CustomServiceException {
+        if (userId == 0) {
+            return Optional.empty();
+        }
+
         try {
             return Optional.ofNullable(DAOFactory.getInstance().getUserDAO().getUserById(userId));
         } catch (DAOException e) {

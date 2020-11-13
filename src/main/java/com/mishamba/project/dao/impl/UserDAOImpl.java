@@ -101,8 +101,6 @@ public class UserDAOImpl implements UserDAO {
             throw new DAOException("can't execute queue", e);
         }
 
-        DateParser dateParser = new DateParser();
-
         try {
             resultSet.next();
             return formUser(resultSet);

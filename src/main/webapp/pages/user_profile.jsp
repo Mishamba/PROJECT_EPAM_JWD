@@ -1,5 +1,3 @@
-<%@ page import="java.util.ResourceBundle" %>
-<%@ page import="java.util.Locale" %>
 <jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
 <%--
   Created by IntelliJ IDEA.
@@ -10,28 +8,25 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
-<%
-    Locale locale = (Locale) request.getSession().getAttribute("locale");
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
-%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title><%=resourceBundle.getString("profile_sign")%></title>
+    <title><fmt:message key="profile_sign"/></title>
 </head>
 <body>
-<h3><%=resourceBundle.getString("role_sign")%></h3>
+<h3><fmt:message key="role_sign"/></h3>
 <br>
 ${user.role}
 <br>
-<h3><%=resourceBundle.getString("first_name_sign")%></h3>
+<h3><fmt:message key="first_name_sign"/></h3>
 <br>
 ${user.firstName}
 <br>
-<h3><%=resourceBundle.getString("last_name_sign")%></h3>
+<h3><fmt:message key="last_name_sign"/></h3>
 <br>
 ${user.lastName}
 <br>
-<h3><%=resourceBundle.getString("birthday_sign")%></h3>
+<h3><fmt:message key="birthday_sign"/></h3>
 <br>
 ${user.birthday}
 <br>
@@ -39,37 +34,37 @@ ${user.birthday}
 <br>
 ${user.email}
 <br>
-<h3><%=resourceBundle.getString("courses_you_participated_sign")%></h3>
+<h3><fmt:message key="courses_you_participated_sign"/></h3>
 <br>
 <% if (request.getSession().getAttribute("role").equals("teacher")) {%>
-<form action="/PROJECT_EPAM_JWD_war/active_courses">
+<form action="${pageContext.request.contextPath}/active_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="false">
-    <input type="submit" value=<%=resourceBundle.getString("managing_courses_sign")%>>
+    <input type="submit" value=<fmt:message key="managing_courses_sign"/>>
 </form>
 <br>
-<form action="/PROJECT_EPAM_JWD_war/passed_courses">
+<form action="${pageContext.request.contextPath}/passed_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="true">
-    <input type="submit" value=<%=resourceBundle.getString("managed_courses_sign")%>>
+    <input type="submit" value=<fmt:message key="managed_courses_sign"/>>
 </form>
 <br>
 <%} else if (request.getSession().getAttribute("role").equals("student")) {%>
-<form action="/PROJECT_EPAM_JWD_war/active_courses">
+<form action="${pageContext.request.contextPath}/active_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="false">
-    <input type="submit" value=<%=resourceBundle.getString("active_courses_sign")%>>
+    <input type="submit" value=<fmt:message key="active_courses_sign"/>>
 </form>
 <br>
-<form action="/PROJECT_EPAM_JWD_war/passed_courses">
+<form action="${pageContext.request.contextPath}/passed_courses">
     <input type="hidden" name="command" value="user_courses">
     <input type="hidden" name="finished" value="true">
-    <input type="submit" value=<%=resourceBundle.getString("passed_courses_sign")%>>
+    <input type="submit" value=<fmt:message key="passed_courses_sign"/>>
 </form>
 <br>
 <%}%>
 <br>
-<h3><%=resourceBundle.getString("menu_sign")%></h3>
+<h3><fmt:message key="menu_sign"/></h3>
 <br>
 
 <%-- forming menu --%>

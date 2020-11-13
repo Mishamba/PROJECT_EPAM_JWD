@@ -1,5 +1,4 @@
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/24/20
@@ -8,16 +7,15 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
-<%
-    Locale locale = (Locale) request.getSession().getAttribute("locale");
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
-%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="signs.sign"/>
 <html>
 <head>
-    <title><%=resourceBundle.getString("sign_in_sign")%></title>
+    <title><fmt:message key="sign_in_sign"/></title>
 </head>
 <body>
-<h3><%=resourceBundle.getString("menu_sign")%></h3>
+<h3><fmt:message key="menu_sign"/></h3>
 <br>
 
 <%-- forming menu --%>
@@ -52,7 +50,7 @@
 %>
 <br>
 
-<form action="/PROJECT_EPAM_JWD_war/university">
+<form action="${pageContext.request.contextPath}/university">
     <label>
         <input type="email" name="email">
     </label>
@@ -63,7 +61,7 @@
     <br>
     <input type="hidden" name="command" value="sign_in_check">
     <br>
-    <input type="submit" value=<%=resourceBundle.getString("sign_in_sign")%>>
+    <input type="submit" value=<fmt:message key="sign_in_sign"/>>
 </form>
 </body>
 </html>

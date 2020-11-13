@@ -1,3 +1,4 @@
+<jsp:useBean id="info" scope="request" type="java.lang.String"/>
 <%--
   Created by IntelliJ IDEA.
   User: mishamba
@@ -12,7 +13,7 @@
 </head>
 <body>
 ${info}
-<form action="/PROJECT_EPAM_JWD_war/info">
+<form action="${pageContext.request.contextPath}/info">
     <input type="hidden" name="command" value="main_page">
     <input type="submit" value="Go to main page">
 </form>

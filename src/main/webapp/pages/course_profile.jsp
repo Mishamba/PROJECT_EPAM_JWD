@@ -9,15 +9,15 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
-<%Locale locale = (Locale) request.getSession().getAttribute("locale");
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
-%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="signs.sign"/>
 <html>
 <head>
-    <title><%=resourceBundle.getString("course_sign")%></title>
+    <title><fmt:message key="course_sign"/></title>
 </head>
 <body>
-<h3><%=resourceBundle.getString("menu_sign")%></h3>
+<h3><fmt:message key="menu_sign"></h3>
 <br>
 
 <%-- forming menu --%>
@@ -51,7 +51,7 @@
     }
 %>
 <br>
-<h3><%=resourceBundle.getString("course_info_sign")%></h3>
+<h3><fmt:message key="course_info_sign"/></h3>
 <br>
 <jsp:useBean id="course" scope="request" type="com.mishamba.project.model.Course"/>
 <jsp:useBean id="students_on_course_quantity" scope="request" type="java.lang.Integer"/>

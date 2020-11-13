@@ -1,8 +1,5 @@
 <jsp:useBean id="teachers" scope="request" type="com.mishamba.project.model.User"/>
-<%@ page import="com.mishamba.project.model.User" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/7/20
@@ -12,17 +9,18 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="ft" uri="former-tags"%>
 <%@taglib prefix="bt" uri="button-tags"%>
-<%Locale locale = (Locale) request.getSession().getAttribute("locale");
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
-%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setBundle basename="signs.sign"/>
 <html>
 <head>
-    <title><%=resourceBundle.getString("appoint_page_sign")%></title>
+    <title><fmt:message key="appoint_page_sign"/></title>
 </head>
 <body>
 <br>
 
-<h3><%=resourceBundle.getString("menu_sign")%></h3>
+<h3><fmt:message key="menu_sign"/></h3>
 <br>
 
 <%-- forming menu --%>
@@ -55,8 +53,8 @@
             break;
     }
 %>
-
-<h3><%=resourceBundle.getString("teachers_list_sign")%></h3>
+<br>
+<h3><fmt:message key="teachers_list_sign"/></h3>
 <br>
 <c:forEach var="teacher" items="${teachers}">
     <ft:teacher-for-list teacher="${teacher}"/>
@@ -66,7 +64,7 @@
             <input type="number" name="teacher_id">
         </label>
         <input type="hidden" name="command" value="appoint_teacher">
-        <input type="submit" value=<%=resourceBundle.getString("appoint_sign")%>>
+        <input type="submit" value=<fmt:message key="appoint_sign"/>>
     </form>
 </body>
 </html>

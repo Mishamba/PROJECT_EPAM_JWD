@@ -1,17 +1,16 @@
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
-<%Locale locale = (Locale) request.getSession().getAttribute("locale");
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("signs.sign", locale);
-%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:bundle basename="signs.sign"/>
 <html>
 <head>
-    <title><%=resourceBundle.getString("my_university_sign")%></title>
+    <title><fmt:message key="my_university_sign"/></title>
 </head>
 <body>
-<h2><%=resourceBundle.getString("user_info_sign")%></h2>
+<h2><fmt:message key="user_info_sign"/></h2>
 <br>
 <% if (request.getSession().getAttribute("id") != null) {%>
     <jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
@@ -57,7 +56,7 @@
     }
 %>
 <br>
-<h2><%=resourceBundle.getString("courses_add_sign")%></h2>
+<h2><fmt:message key="courses_add_sign"/></h2>
 <br>
 <c:forEach var="course" items="course_add">
     <ft:course-list course="${course}"/>

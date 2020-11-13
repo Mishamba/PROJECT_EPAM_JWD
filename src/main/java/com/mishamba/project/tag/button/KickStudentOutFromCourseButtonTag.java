@@ -6,6 +6,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class KickStudentOutFromCourseButtonTag extends TagSupport {
@@ -13,7 +14,6 @@ public class KickStudentOutFromCourseButtonTag extends TagSupport {
 
     private int courseId;
     private int studentId;
-    private ResourceBundle resourceBundle;
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
@@ -23,11 +23,9 @@ public class KickStudentOutFromCourseButtonTag extends TagSupport {
         this.studentId = studentId;
     }
 
-    public void setResourceBundle(ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
-    }
-
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
