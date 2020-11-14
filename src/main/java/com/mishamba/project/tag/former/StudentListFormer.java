@@ -6,6 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class StudentListFormer extends TagSupport {
     private User student;
@@ -21,6 +23,9 @@ public class StudentListFormer extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+
         try {
             JspWriter out = pageContext.getOut();
 
@@ -38,7 +43,9 @@ public class StudentListFormer extends TagSupport {
             out.write("<input type=\"hidden\" name=\"student_id\" value=\"");
             out.write(student.getId());
             out.write("\">");
-            out.write("<input type=\"submit\" value=\"View progress\">");
+            out.write("<input type=\"submit\" value=\"");
+            out.write(resourceBundle.getString("view_progress_sign"));
+            out.write("\">");
             out.write("</form><br>");
             out.write("<br>");
         } catch (IOException e) {

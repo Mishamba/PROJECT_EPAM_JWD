@@ -7,6 +7,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class HometaskForCheckFormer extends TagSupport {
     private static final Logger logger = Logger.
@@ -19,6 +21,8 @@ public class HometaskForCheckFormer extends TagSupport {
 
     @Override
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
         try {
             JspWriter out = pageContext.getOut();
 
@@ -28,7 +32,9 @@ public class HometaskForCheckFormer extends TagSupport {
             hometaskFormerTag.doStartTag();
 
             out.write("<br>");
-            out.write("<h3>Answer</h3>");
+            out.write("<h3>");
+            out.write(resourceBundle.getString("answer_sign"));
+            out.write("</h3>");
             out.write("<br>");
             out.write(hometask.getResponse().getAnswer());
             out.write("<br>");

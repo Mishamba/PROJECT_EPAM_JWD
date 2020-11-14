@@ -47,21 +47,6 @@
         </attribute>
     </tag>
     <tag>
-        <name>main-page-course</name>
-        <tag-class>com.mishamba.project.tag.former.MainPageCourseFormerTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>course</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <name>studentsOnCourseQuantity</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-    </tag>
-    <tag>
         <name>student-list</name>
         <tag-class>com.mishamba.project.tag.former.StudentListFormer</tag-class>
         <body-content>empty</body-content>

@@ -7,6 +7,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class UserProgressPageInfoFormer extends TagSupport {
     private User user;
@@ -18,22 +20,32 @@ public class UserProgressPageInfoFormer extends TagSupport {
     @Override
     public int doStartTag() throws JspException {
         DateParser dateParser = new DateParser();
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
 
         try {
             JspWriter out = pageContext.getOut();
 
-            out.write("<h3>First name</h3>");
+            out.write("<h3>");
+            out.write("</h3>");
+            out.write(resourceBundle.getString("first_name_sign"));
             out.write("<br>");
             out.write(user.getFirstName());
             out.write("<br>");
-            out.write("<h3>Last name</h3>");
+            out.write("<h3>");
+            out.write(resourceBundle.getString("last_name_sign"));
+            out.write("</h3>");
             out.write("<br>");
             out.write(user.getLastName());
-            out.write("<h3>Birthday</h3>");
+            out.write("<h3>");
+            out.write(resourceBundle.getString("birthday_sign"));
+            out.write("</h3>");
             out.write("<br>");
             out.write(dateParser.parseDateToString(user.getBirthday()));
             out.write("<br>");
-            out.write("<h3>Email</h3>");
+            out.write("<h3>");
+            out.write(resourceBundle.getString("email_sign"));
+            out.write("</h3>");
             out.write("<br>");
             out.write(user.getEmail());
             out.write("<br>");

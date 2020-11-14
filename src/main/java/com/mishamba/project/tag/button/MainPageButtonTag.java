@@ -19,7 +19,9 @@ public class MainPageButtonTag extends TagSupport {
             JspWriter out = pageContext.getOut();
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"main_page\">");
-            out.write("<input type=\"submit\" value=\"Main page\">");
+            out.write("<input type=\"submit\" value=\"");
+            out.write(resourceBundle.getString("main_page_button_sign"));
+            out.write("\">");
             out.write("</form>");
         } catch (IOException e) {
             logger.error("can't form button");

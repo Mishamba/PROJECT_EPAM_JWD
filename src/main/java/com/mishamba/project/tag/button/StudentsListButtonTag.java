@@ -6,6 +6,8 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class StudentsListButtonTag extends TagSupport {
     private static final Logger logger = Logger.getLogger(StudentsListButtonTag.class);
@@ -17,6 +19,8 @@ public class StudentsListButtonTag extends TagSupport {
     }
 
     public int doStartTag() throws JspException {
+        Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
@@ -25,7 +29,9 @@ public class StudentsListButtonTag extends TagSupport {
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
             out.write(courseId);
             out.write("\">");
-            out.write("<input type=\"submit\" value=\"Students list\">");
+            out.write("<input type=\"submit\" value=\"");
+            out.write(resourceBundle.getString("students_list_sign"));
+            out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {
             logger.error("can't form button");
