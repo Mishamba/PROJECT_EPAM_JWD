@@ -63,5 +63,8 @@
     <br>
     <input type="submit" value=<fmt:message key="sign_in_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

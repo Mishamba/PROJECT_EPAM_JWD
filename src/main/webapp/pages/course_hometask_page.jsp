@@ -58,5 +58,7 @@
     <ft:hometask hometask="${hometask}"/>
 </c:forEach>
 <br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

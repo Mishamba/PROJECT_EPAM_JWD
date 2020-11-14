@@ -10,6 +10,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="bt" uri="button-tags" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="signs.sign"/>
 <html>
@@ -27,5 +28,8 @@ ${course.courseName}
 <c:forEach var="student" items="${students}">
     <ft:user-info user="${student}"/>
 </c:forEach>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

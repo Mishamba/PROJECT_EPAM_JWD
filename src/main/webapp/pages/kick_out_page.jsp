@@ -90,5 +90,8 @@
     <br>
     <input type="submit" value="Set review">
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

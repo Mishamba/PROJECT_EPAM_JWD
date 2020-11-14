@@ -9,6 +9,7 @@
 <%@taglib prefix="ft" uri="former-tags"%>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="signs.sign"/>
 <html>
@@ -57,5 +58,8 @@
     <ft:course-list course="course"/>
 </c:forEach>
 <br>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

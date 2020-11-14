@@ -87,7 +87,10 @@
     <%}%>
 <br>
     <input type="hidden" name="command" value="sign_up_check">
-    <input type="submit" value=<fmt:message key="sign_up_sign"/>
+    <input type="submit" value=<fmt:message key="sign_up_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

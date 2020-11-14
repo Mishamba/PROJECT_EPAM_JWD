@@ -61,5 +61,8 @@
 <c:forEach var="course" items="course_add">
     <ft:course-list course="${course}"/>
 </c:forEach>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

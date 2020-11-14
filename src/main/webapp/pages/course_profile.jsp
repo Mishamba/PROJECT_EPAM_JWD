@@ -17,7 +17,7 @@
     <title><fmt:message key="course_sign"/></title>
 </head>
 <body>
-<h3><fmt:message key="menu_sign"></h3>
+<h3><fmt:message key="menu_sign"/></h3>
 <br>
 
 <%-- forming menu --%>
@@ -79,5 +79,7 @@
 <bt:student-sign-up-form-course courseId="${course.id}"/>
 <br>
 <%}%>
+<br>
+<bt:change-locale/>
 </body>
 </html>

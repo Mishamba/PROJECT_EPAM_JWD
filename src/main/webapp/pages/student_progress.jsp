@@ -69,5 +69,8 @@
     <input type="hidden" name="student_id" value=<%=request.getParameter("student_id")%>>
     <input type="submit" value=<fmt:message key="kick_out_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

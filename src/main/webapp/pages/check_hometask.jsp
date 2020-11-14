@@ -65,5 +65,8 @@
     <input type="hidden" name="hometask_id" value=<%=request.getParameter("hometask_id")%>>
     <input type="submit" value=<fmt:message key="set_mark_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

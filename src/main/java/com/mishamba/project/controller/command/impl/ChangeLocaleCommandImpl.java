@@ -1,0 +1,39 @@
+package com.mishamba.project.controller.command.impl;
+
+import com.mishamba.project.controller.command.Command;
+import org.apache.log4j.Logger;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Locale;
+
+public class ChangeLocaleCommandImpl implements Command {
+    private final static Logger logger = Logger.getLogger(ChangeLocaleCommandImpl.class);
+    private final String LOCALE = "locale";
+    private final String EN_LANGUAGE = "EN";
+    private final String RU = "RU";
+    private final String US_COUNTRY = "US";
+
+    @Override
+    public void execute(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession();
+        Locale locale = (Locale) session.getAttribute(LOCALE);
+        if (locale.getLanguage().equals(EN_LANGUAGE) &&
+                locale.getCountry().equals(US_COUNTRY)) {
+            locale = new Locale(RU, RU);
+        } else {
+            locale = new Locale(EN_LANGUAGE, US_COUNTRY);
+        }
+
+        session.setAttribute(LOCALE, locale);
+
+        try {
+            request.getRequestDispatcher("index.jsp").forward(request, response);
+        } catch (ServletException | IOException e) {
+            logger.error("can't send answer");
+        }
+    }
+}

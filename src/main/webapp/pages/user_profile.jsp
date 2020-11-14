@@ -98,5 +98,7 @@ ${user.email}
     }
 %>
 <br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

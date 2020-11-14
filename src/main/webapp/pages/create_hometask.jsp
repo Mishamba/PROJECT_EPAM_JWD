@@ -65,5 +65,8 @@
     <input type="hidden" name="course_id" value="${course.id}">
     <input type="submit" value=<fmt:message key="send_hometask_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

@@ -66,5 +66,9 @@
         <input type="hidden" name="command" value="appoint_teacher">
         <input type="submit" value=<fmt:message key="appoint_sign"/>>
     </form>
+
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

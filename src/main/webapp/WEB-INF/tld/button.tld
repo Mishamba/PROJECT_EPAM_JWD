@@ -161,4 +161,9 @@
         <tag-class>com.mishamba.project.tag.button.UserProfileButtonTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>change-locale</name>
+        <tag-class>com.mishamba.project.tag.button.ChangeLocaleButtonTag</tag-class>
+        <body-content>empty</body-content>
+    </tag>
 </taglib>

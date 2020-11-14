@@ -37,6 +37,7 @@ public class CommandProvider {
         repository.put("check_hometask", new GetCheckHometaskPageCommand());
         repository.put("set_hometask_mark", new SetHometaskMarkProcessCommand());
         repository.put("kick_student_page", new GetKickStudentOutPageCommand());
+        repository.put("change_locale", new ChangeLocaleCommandImpl());
     }
 
     public static CommandProvider getInstance() {

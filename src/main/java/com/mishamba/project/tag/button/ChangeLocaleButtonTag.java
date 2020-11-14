@@ -7,31 +7,21 @@ import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 import java.io.IOException;
 import java.util.Locale;
-import java.util.ResourceBundle;
 
-public class CourseHometaskButtonTag extends TagSupport {
-    private static final Logger logger = Logger.getLogger(CourseHometaskButtonTag.class);
-
-    private int courseId;
-
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
-    }
+public class ChangeLocaleButtonTag extends TagSupport {
+    private static final Logger logger = Logger.getLogger(ChangeLocaleButtonTag.class);
+    private final String LOCALE = "locale";
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
 
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
-            out.write("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
-            out.write("<input type=\"hidden\" name=\"command\" value=\"course_hometask\">");
-            out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
-            out.write(courseId);
-            out.write("\">");
+            out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
+            out.write("<input type=\"hidden\" name=\"command\" value=\"change_locale\">");
             out.write("<input type=\"submit\" value=\"");
-            out.write(resourceBundle.getString("view_hometask_sign"));
+            out.write(locale.getLanguage());
             out.write("\">");
             out.write("</form>");
             out.write("<br>");

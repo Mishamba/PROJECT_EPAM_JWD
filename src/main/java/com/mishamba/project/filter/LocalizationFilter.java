@@ -11,7 +11,6 @@ import java.util.Locale;
 public class LocalizationFilter implements Filter {
     private static final Logger logger = Logger.getLogger(LocalizationFilter.class);
     private final String LOCALE = "locale";
-    private final String FILE_NAME = "sign.text";
     private final String LANGUAGE = "EN";
     private final String COUNTRY = "US";
 

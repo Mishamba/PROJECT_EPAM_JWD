@@ -59,5 +59,8 @@
     <input type="hidden" name="command" value="enter_hometask_answer">
     <input type="submit" value=<fmt:message key="send_answer_sign"/>>
 </form>
+<br>
+<br>
+<bt:change-locale/>
 </body>
 </html>

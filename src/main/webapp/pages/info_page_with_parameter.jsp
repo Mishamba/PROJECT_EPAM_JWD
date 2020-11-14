@@ -13,6 +13,7 @@
 </head>
 <body>
 ${info}
+<br>
 <form action="${pageContext.request.contextPath}/info">
     <input type="hidden" name="command" value="main_page">
     <input type="submit" value="Go to main page">
