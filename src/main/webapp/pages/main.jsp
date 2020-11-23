@@ -22,7 +22,7 @@
 <bt:sign-up/>
 <br>
 <%}%>
-<h3>Menu</h3>
+<h3><fmt:message key="menu_sign"/></h3>
 <br>
 
 <%-- forming menu --%>
@@ -58,7 +58,8 @@
 <br>
 <h2><fmt:message key="courses_add_sign"/></h2>
 <br>
-<c:forEach var="course" items="course_add">
+<jsp:useBean id="course_add" scope="request" type="java.util.List"/>
+<c:forEach var="course" items="${course_add}">
     <ft:course-list course="${course}"/>
 </c:forEach>
 <br>

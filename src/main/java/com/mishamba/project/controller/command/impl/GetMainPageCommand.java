@@ -17,10 +17,10 @@ import java.util.Optional;
 public class GetMainPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetMainPageCommand.class);
     private final String USER_INFO_PARAMETER = "user";
-    private final String COURSES_ADD_PARAMETER = "courses_add";
-    private final String MAIN_PAGE = "pages/main.jsp";
+    private final String COURSE_ADD_PARAMETER = "course_add";
+    private final String MAIN_PAGE = "/pages/main.jsp";
     private final String ID = "id";
-    private final String ERROR_PAGE = "pages/error.html";
+    private final String ERROR_PAGE = "/pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse resp) {
@@ -52,12 +52,18 @@ public class GetMainPageCommand implements Command {
         }
 
         request.setAttribute(USER_INFO_PARAMETER, user);
-        request.setAttribute(COURSES_ADD_PARAMETER, coursesAdd);
+        request.setAttribute(COURSE_ADD_PARAMETER, coursesAdd);
 
         try {
             request.getRequestDispatcher(uploadPage).forward(request, resp);
         } catch (ServletException | IOException e) {
             logger.error("can't send response for user");
+            e.printStackTrace();
+            try {
+                resp.sendError(500);
+            } catch (IOException ioException) {
+                logger.error("can't set error code");
+            }
         }
     }
 }

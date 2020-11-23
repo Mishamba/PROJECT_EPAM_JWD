@@ -34,6 +34,7 @@ public class RightsHolder {
         requestsRights.put("check_hometask", Collections.singletonList(TEACHER));
         requestsRights.put("set_hometask_mark", Collections.singletonList(TEACHER));
         requestsRights.put("kick_student_page", Collections.singletonList(TEACHER));
+        requestsRights.put("change_locale", Arrays.asList(ADMIN, STUDENT, TEACHER, ANONYM));
     }
 
     private static class RightsHolderHolder {

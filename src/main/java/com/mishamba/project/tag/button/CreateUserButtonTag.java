@@ -14,7 +14,7 @@ public class CreateUserButtonTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sing",
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign",
                 locale);
 
         try {

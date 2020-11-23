@@ -25,7 +25,7 @@ public class TeacherManageCourseButtonTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");

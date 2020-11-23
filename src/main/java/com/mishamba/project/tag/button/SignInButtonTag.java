@@ -14,10 +14,12 @@ public class SignInButtonTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign", locale);
         try {
             JspWriter out = pageContext.getOut();
-            out.write("<h2>Sign In</h2>");
+            out.write("<h2>");
+            out.write(resourceBundle.getString("sign_in_sign"));
+            out.write("</h2>");
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/sign_in\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"sign_in\">");
             out.write("<input type=\"submit\" value=\"");

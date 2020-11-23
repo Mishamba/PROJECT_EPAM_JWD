@@ -20,7 +20,7 @@ public class StudentSignUpForCourseButtonTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
@@ -30,7 +30,7 @@ public class StudentSignUpForCourseButtonTag extends TagSupport {
             out.write(courseId);
             out.write(">");
             out.write("<input type=\"submit\" value=\"");
-            out.write(resourceBundle.getString("sign_up_on_course"));
+            out.write(resourceBundle.getString("sign_up_on_course_sign"));
             out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {

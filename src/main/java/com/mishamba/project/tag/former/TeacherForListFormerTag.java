@@ -24,7 +24,7 @@ public class TeacherForListFormerTag extends TagSupport {
     public int doStartTag() throws JspException {
         DateParser dateParser = new DateParser();
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign", locale);
 
         try {
             JspWriter out = pageContext.getOut();

@@ -20,7 +20,7 @@ public class RemoveTeacherFromCourseButtonTag extends TagSupport {
 
     public int doStartTag() throws JspException {
         Locale locale = (Locale) pageContext.getSession().getAttribute("locale");
-        ResourceBundle resourceBundle = ResourceBundle.getBundle("sings/sing", locale);
+        ResourceBundle resourceBundle = ResourceBundle.getBundle("signs/sign", locale);
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
@@ -30,7 +30,7 @@ public class RemoveTeacherFromCourseButtonTag extends TagSupport {
             out.write("\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"remove_teacher_from_course\">");
             out.write("<input type=\"submit\" value=\"");
-            out.write(resourceBundle.getString("remove_teacher_from_course"));
+            out.write(resourceBundle.getString("remove_teacher_from_course_sign"));
             out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {
