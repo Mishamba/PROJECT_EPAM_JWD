@@ -1,5 +1,4 @@
-<%@ page import="java.util.Locale" %>
-<%@ page import="java.util.ResourceBundle" %><%--
+<%--
   Created by IntelliJ IDEA.
   User: mishamba
   Date: 10/6/20
@@ -10,7 +9,7 @@
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="signs.sign"/>
 <html>
 <head>
@@ -58,10 +57,10 @@
 <% boolean participation = (boolean) request.getAttribute("participation"); %>
 <ft:course-info course="${course}" studentsOnCourseQuantity="${students_on_course_quantity}"/>
 <br>
-<% if (role.equals("teacher") && course.getTeacher() == null) {%>
+<% if (role.equals("teacher") && course.getTeacher() != null) { %>
 <bt:append-teacher-on-course courseId="${course.id}"/>
 <br>
-<%}%>
+<% } %>
 <% if (role.equals("teacher") && participation) {%>
 <bt:course-hometask courseId="${course.id}"/>
 <br>

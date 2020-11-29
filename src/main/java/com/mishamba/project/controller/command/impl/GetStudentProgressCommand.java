@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This class sends for teacher info about students hometasks
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetStudentProgressCommand implements Command {
     private final Logger logger = Logger.getLogger(GetStudentProgressCommand.class);
     private final String STUDENT_ID = "student_id";

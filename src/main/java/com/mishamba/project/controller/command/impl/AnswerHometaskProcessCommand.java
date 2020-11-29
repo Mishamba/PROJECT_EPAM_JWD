@@ -10,6 +10,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Class processes answer hometask
+ *
+ * This class writes hometask answer to database
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
 public class AnswerHometaskProcessCommand implements Command {
     private final static Logger logger = Logger.getLogger(AnswerHometaskProcessCommand.class);
     private final String HOMETASK_ID = "hometask_id";

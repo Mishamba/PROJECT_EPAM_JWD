@@ -14,6 +14,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This class sends main page with course add
+ * for user
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetMainPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetMainPageCommand.class);
     private final String USER_INFO_PARAMETER = "user";

@@ -13,6 +13,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class sends info about courses user participated in.
+ * Also this class filters this courses by finished parameter
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetUserCoursesCommand implements Command {
     private final Logger logger = Logger.getLogger(GetUserCoursesCommand.class);
     private final String ID = "id";

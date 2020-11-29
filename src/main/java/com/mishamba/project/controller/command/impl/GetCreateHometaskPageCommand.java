@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class sends page for user with teacher role
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetCreateHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCreateHometaskPageCommand.class);
     private final String CREATE_HOMETASK_PAGE = "pages/create_hometask.jsp";

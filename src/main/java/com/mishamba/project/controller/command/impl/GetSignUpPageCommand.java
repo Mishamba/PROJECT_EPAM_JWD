@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class sends Sign Up page for user
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetSignUpPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetSignUpPageCommand.class);
     private final String SIGN_UP_PAGE = "pages/sign_up.jsp";

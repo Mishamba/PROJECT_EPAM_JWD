@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class processes setting mark on students hometask responce
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class SetHometaskMarkProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SetHometaskMarkProcessCommand.class);
     private final String INDEX_PAGE = "pages/index.jsp";

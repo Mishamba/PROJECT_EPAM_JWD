@@ -13,6 +13,13 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * This class sends page with user profile
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetUserProfilePageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetUserProfilePageCommand.class);
     private final String USER_PROFILE_PAGE = "pages/user_profile.jsp";

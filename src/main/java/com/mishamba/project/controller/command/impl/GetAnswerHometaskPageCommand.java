@@ -13,6 +13,13 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+/**
+ * This class sends hometask answer page
+ *
+ *  @version 1.0
+ *  @author Mishamba
+ */
+
 public class GetAnswerHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetAnswerHometaskPageCommand.class);
     private final String HOMETASK_ID = "hometask_id";

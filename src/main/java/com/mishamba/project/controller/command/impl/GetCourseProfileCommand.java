@@ -14,6 +14,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This page sends page with info about course.
+ * If user is participated in course he gets some buttons on page
+ * for some manage
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetCourseProfileCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseProfileCommand.class);
     private final String COURSE_ID = "course_id";
@@ -22,6 +31,7 @@ public class GetCourseProfileCommand implements Command {
     private final String ID = "id";
     private final String COURSE_PARAMETER = "course";
     private final String USER_PARTICIPATION = "participation";
+    private final String STUDENTS_ON_COURSE_QUANTITY = "students_on_course_quantity";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -40,40 +50,45 @@ public class GetCourseProfileCommand implements Command {
             uploadPage = ERROR_PAGE;
         }
 
-        int userId = (int) request.getSession().getAttribute(ID);
+        Integer userId = (Integer) request.getSession().getAttribute(ID);
 
-        boolean userParticipaion = false;
-        try {
-            Optional<Course> optionalCourse = ServiceFactory.getInstance().
-                    getCourseService().getCourseById(courseId);
-            ArrayList<User> courseStudents = ServiceFactory.getInstance().
-                    getCourseService().getStudentsOnCourse(courseId);
-            for (User student : courseStudents) {
-                if (student.getId() == userId) {
-                    userParticipaion = true;
-                    break;
+        boolean userParticipation = false;
+
+        if (userId != null && course != null) {
+            try {
+                ArrayList<User> courseStudents = ServiceFactory.getInstance().
+                        getCourseService().getStudentsOnCourse(course.getId());
+                for (User student : courseStudents) {
+                    if (student.getId().equals(userId)) {
+                        userParticipation = true;
+                        break;
+                    }
                 }
+            } catch (CustomServiceException e) {
+                logger.error("can't check is teacher leads the course right now");
             }
-            if (optionalCourse.isPresent() && !userParticipaion) {
-                userParticipaion = optionalCourse.get().getTeacher().getId() == userId;
-            }
+        }
+
+        Integer studentsOnCourseQuantity = null;
+
+        try {
+            studentsOnCourseQuantity = ServiceFactory.getInstance().
+                    getCourseService().getStudentsOnCourse(courseId).size();
         } catch (CustomServiceException e) {
-            logger.error("can't check is teacher leads the course right now");
+            logger.error("can't get students on course quantity");
+            uploadPage = ERROR_PAGE;
         }
 
         request.setAttribute(COURSE_PARAMETER, course);
-        request.setAttribute(USER_PARTICIPATION, userParticipaion);
+        request.setAttribute(USER_PARTICIPATION, userParticipation);
+        request.setAttribute(STUDENTS_ON_COURSE_QUANTITY, studentsOnCourseQuantity);
 
         try {
             request.getRequestDispatcher(uploadPage).
                     forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload page");
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException exception) {
-                logger.error("can't upload error page");
-            }
+            e.printStackTrace();
         }
     }
 }

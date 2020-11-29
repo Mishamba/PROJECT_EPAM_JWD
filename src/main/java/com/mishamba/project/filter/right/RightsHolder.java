@@ -1,8 +1,11 @@
 package com.mishamba.project.filter.right;
 
+import org.apache.log4j.Logger;
+
 import java.util.*;
 
 public class RightsHolder {
+    private static final Logger logger = Logger.getLogger(RightsHolder.class);
     private static Map<String, List<String>> requestsRights = null;
     private static final String ADMIN = "admin";
     private static final String STUDENT = "student";
@@ -13,7 +16,7 @@ public class RightsHolder {
         requestsRights = new HashMap<>(21, 0.75F);
         requestsRights.put("main_page", Arrays.asList(ADMIN, STUDENT, TEACHER,
                 ANONYM));
-        requestsRights.put("course_catalog", Arrays.asList(ADMIN, STUDENT,
+        requestsRights.put("courses_catalog", Arrays.asList(ADMIN, STUDENT,
                 TEACHER, ANONYM));
         requestsRights.put("sign_up", Arrays.asList(ANONYM, ADMIN));
         requestsRights.put("sign_in", Collections.singletonList(ANONYM));
@@ -55,10 +58,14 @@ public class RightsHolder {
         }
 
         List<String> roles = requestsRights.get(commandName);
-        for (String role : roles) {
-            if (role.equals(givenRole)) {
-                return true;
+        if (roles != null) {
+            for (String role : roles) {
+                if (role.equals(givenRole)) {
+                    return true;
+                }
             }
+        } else {
+            logger.error("can't get role for command name");
         }
 
         return false;

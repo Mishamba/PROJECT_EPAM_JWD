@@ -11,6 +11,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
+/**
+ * This class process create hometask.
+ * Class checks user role and validates deadline
+ *
+ *  @version 1.0
+ *  @author Mishamba
+ */
+
 public class CreateHometaskProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(CreateHometaskProcessCommand.class);
     private final String INDEX_PAGE = "pages/index.jsp";

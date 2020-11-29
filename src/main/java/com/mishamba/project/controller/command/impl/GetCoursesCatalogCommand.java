@@ -14,22 +14,31 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This class sends page with all active courses and gets
+ * this courses from database
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetCoursesCatalogCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCoursesCatalogCommand.class);
     private final String COURSES_CATALOG_PAGE = "pages/courses_catalog.jsp";
     private final String ERROR_PAGE = "pages/error.html";
     private final String ID = "id";
+    private final String USER = "user";
+    private final String COURSES = "courses";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse resp) {
         String uploadPage = COURSES_CATALOG_PAGE;
+        Integer userId = (Integer) request.getAttribute(ID);
 
-        User user = null;
+        Optional<User> user = Optional.empty();
         try {
-            Optional<User> optionalUser;
-            optionalUser = ServiceFactory.getInstance().getUserService().getUserById((int) request.getSession().getAttribute(ID));
-            if (optionalUser.isPresent()) {
-                user = optionalUser.get();
+            if (userId != null) {
+                user = ServiceFactory.getInstance().getUserService().getUserById(userId);
             }
         } catch (CustomServiceException e) {
             uploadPage = ERROR_PAGE;
@@ -43,12 +52,13 @@ public class GetCoursesCatalogCommand implements Command {
             courses = new ArrayList<>();
         }
 
-        request.setAttribute("user_info", user);
-        request.setAttribute("courses", courses);
+        request.setAttribute(USER, user);
+        request.setAttribute(COURSES, courses);
 
         try {
             request.getRequestDispatcher(uploadPage).forward(request, resp);
         } catch (ServletException | IOException e) {
+            e.printStackTrace();
             logger.error("can't send courses catalog for user");
         }
     }

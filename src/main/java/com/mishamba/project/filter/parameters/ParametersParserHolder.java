@@ -25,6 +25,7 @@ public class ParametersParserHolder {
         parserMap.put(HOMETASK_ID, new IntegerParser());
         parserMap.put(STUDENT_ID, new IntegerParser());
         parserMap.put(MARK, new IntegerParser());
+        parserMap.put(COURSE_ID, new IntegerParser());
     }
 
     private static class ParametersParserHolderHolder {

@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * This class sends check hometask page for teacher.
+ * Also it validates user role
+ *
+ *  @version 1.0
+ *  @author Mishamba
+ */
+
 public class GetCheckHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCheckHometaskPageCommand.class);
     private final String CHECK_HOMETASK_PAGE = "pages/check_hometask.jsp";

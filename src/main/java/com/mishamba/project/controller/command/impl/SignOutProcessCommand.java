@@ -8,6 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class drop session info
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class SignOutProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SignOutProcessCommand.class);
     private final String INDEX_PAGE = "pages/index.jsp";

@@ -28,7 +28,7 @@ public class CourseListFormerTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/course_info\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"course_profile\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
-            out.write(course.getId());
+            out.write(String.valueOf(course.getId()));
             out.write("\">");
             out.write("<input type=\"submit\" value=\"");
             out.write(resourceBundle.getString("view_sign"));

@@ -14,6 +14,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Optional;
 
+/**
+ * This class sends for teacher list with students on course
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetStudentsOnCourseListCommand implements Command {
     private final Logger logger = Logger.getLogger(GetStudentsOnCourseListCommand.class);
     private final String COURSE_ID = "course_id";

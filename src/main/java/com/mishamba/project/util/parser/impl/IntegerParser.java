@@ -6,6 +6,10 @@ import com.mishamba.project.util.parser.Parser;
 public class IntegerParser implements Parser<Integer> {
     @Override
     public Integer parse(String input) throws UtilException {
+        if (input == null) {
+            return null;
+        }
+
         try {
             return Integer.parseInt(input);
         } catch (NumberFormatException | NullPointerException e) {

@@ -13,6 +13,14 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Optional;
 
+/**
+ * This class sing up new user
+ * Admin can create user with any role, but anonym can sign up only as a student.
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class SignUpProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SignUpProcessCommand.class);
     private final String FIRST_NAME_PARAMETER = "first_name";
@@ -33,6 +41,7 @@ public class SignUpProcessCommand implements Command {
         String firstName = (String) request.getAttribute(FIRST_NAME_PARAMETER);
         String lastName = (String) request.getAttribute(LAST_NAME_PARAMETER);
         String email = (String) request.getAttribute(EMAIL_PARAMETER);
+
         // admin can create user with any role,
         // but anonym can sign up only as student
         String sessionRole = (String) request.getSession().getAttribute(ROLE_PARAMETER);

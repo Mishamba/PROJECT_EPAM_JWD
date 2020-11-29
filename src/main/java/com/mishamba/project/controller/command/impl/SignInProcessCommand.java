@@ -11,6 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class process sign in data and set user to session
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class SignInProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(SignUpProcessCommand.class);
     private final String EMAIL_PARAMETER = "email";

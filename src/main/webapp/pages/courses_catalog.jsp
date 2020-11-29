@@ -10,7 +10,7 @@
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<fmt:setLocale value="${sessionScope.locale}"/>
+<fmt:setLocale value="${locale}"/>
 <fmt:setBundle basename="signs.sign"/>
 <html>
 <head>
@@ -19,8 +19,10 @@
 <body>
 <h2><fmt:message key="user_info_sign"/></h2>
 <br>
-<jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
-<ft:user-info user="${user}"/>
+<jsp:useBean id="user" scope="request" type="java.util.Optional"/>
+<c:if test="${user.isPresent()}">
+    <ft:user-info user="${user}"/>
+</c:if>
 <br>
 
 <h3><fmt:message key="menu_sign"/></h3>

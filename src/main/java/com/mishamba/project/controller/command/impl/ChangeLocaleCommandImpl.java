@@ -10,6 +10,14 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Locale;
 
+
+/**
+ * This class changes locale
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class ChangeLocaleCommandImpl implements Command {
     private final static Logger logger = Logger.getLogger(ChangeLocaleCommandImpl.class);
     private final String LOCALE = "locale";

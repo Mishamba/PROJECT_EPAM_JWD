@@ -10,6 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * This class prodess sign up student on course
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class StudentSignUpOnCourseCommand implements Command {
     private final Logger logger = Logger.getLogger(StudentSignUpOnCourseCommand.class);
     private final String INDEX_PAGE = "pages/index.jsp";

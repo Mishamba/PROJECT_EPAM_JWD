@@ -12,6 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Optional;
 
+/**
+ * This class sends page where teacher can set review info
+ * about students progress on course
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetKickStudentOutPageCommand implements Command {
     private static final Logger logger = Logger.getLogger(GetKickStudentOutPageCommand.class);
     private final String KICK_OUT_PAGE = "pages/kick_out_page.jsp";

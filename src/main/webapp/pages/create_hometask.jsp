@@ -1,3 +1,4 @@
+<jsp:useBean id="course_id" scope="request" type="java.lang.Integer"/>
 <jsp:useBean id="course" scope="request" type="com.mishamba.project.model.Course"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
@@ -62,7 +63,7 @@
         <input type="text" name="deadline">
     </label>
     <input type="hidden" name="command" value="check_create_hometask">
-    <input type="hidden" name="course_id" value="${course.id}">
+    <input type="hidden" name="course_id" value="${course_id}">
     <input type="submit" value=<fmt:message key="send_hometask_sign"/>>
 </form>
 <br>

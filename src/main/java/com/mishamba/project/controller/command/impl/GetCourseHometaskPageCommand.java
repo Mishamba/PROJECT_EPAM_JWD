@@ -12,6 +12,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * This class sends page with all hometasks on course
+ *
+ * @version 1.0
+ * @author Mishamba
+ */
+
 public class GetCourseHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetCourseHometaskPageCommand.class);
     private final String COURSE_HOMETASK_PAGE = "pages/course_hometask_page.jsp";

@@ -16,7 +16,7 @@ public class CommandParametersHolder {
     private CommandParametersHolder() {
         commandParameters = new HashMap<>(11, 0.75F);
         commandParameters.put("sign_up_check", Collections.singletonList(BIRTHDAY));
-        commandParameters.put("course_profile", Arrays.asList(USER_ID, COURSE_ID));
+        commandParameters.put("course_profile", Collections.singletonList(COURSE_ID));
         commandParameters.put("student_sign_up_for_course", Collections.singletonList(COURSE_ID));
         commandParameters.put("students_on_course_list", Collections.singletonList(COURSE_ID));
         commandParameters.put("course_hometask", Collections.singletonList(COURSE_ID));
