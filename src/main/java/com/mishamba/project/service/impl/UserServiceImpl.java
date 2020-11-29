@@ -6,6 +6,7 @@ import com.mishamba.project.model.User;
 import com.mishamba.project.service.UserService;
 import com.mishamba.project.exception.CustomServiceException;
 import com.mishamba.project.util.validator.DateValidator;
+import com.mishamba.project.util.validator.EmailValidator;
 import org.apache.log4j.Logger;
 
 import java.util.Date;
@@ -43,14 +44,15 @@ public class UserServiceImpl implements UserService {
     public boolean createUser(String firstName, String lastName, String email,
                               String role, Date birthday, String password)
             throws CustomServiceException {
-        // TODO: 10/24/20 add email validation
         int passwordHash = password.hashCode();
         passwordHash = Integer.valueOf(passwordHash).hashCode();
 
         DateValidator dateValidator = new DateValidator();
-        if (dateValidator.checkForFuture(birthday)) {
-            User newUser = new User(null, firstName, lastName, email, birthday, null,
-                    role);
+        EmailValidator emailValidator = new EmailValidator();
+        if (dateValidator.checkForFuture(birthday) &&
+                emailValidator.validate(email)) {
+            User newUser = new User(null, firstName, lastName,
+                    email, birthday, null, role);
             try {
                 return DAOFactory.getInstance().getUserDAO().createUser(newUser, passwordHash);
             } catch (DAOException e) {

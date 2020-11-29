@@ -8,6 +8,6 @@ public class DateValidator {
             return true;
         }
 
-        return (date.compareTo(new Date()) < 0);
+        return (date.after(new Date()));
     }
 }
