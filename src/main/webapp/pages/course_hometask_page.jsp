@@ -56,6 +56,14 @@
 <br>
 <c:forEach var="hometask" items="${hometasks}">
     <ft:hometask hometask="${hometask}"/>
+    <c:choose>
+        <c:when test="${hometask.getResponse() == null}">
+            <bt:answer-hometask hometask="${hometask}"/>
+        </c:when>
+        <c:when test="${hometask.getResponse() != null}">
+            <ft:hometask-responce hometask="${hometask}"/>
+        </c:when>
+    </c:choose>
 </c:forEach>
 <br>
 <br>

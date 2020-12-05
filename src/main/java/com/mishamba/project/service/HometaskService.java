@@ -8,7 +8,7 @@ import java.util.Date;
 import java.util.Optional;
 
 public interface HometaskService {
-    ArrayList<Hometask> getCourseHometaskForUser(int courseId, int studentId,
+    ArrayList<Hometask> getCourseHometaskForUser(Integer courseId, Integer studentId,
                                                  String role)
             throws CustomServiceException;
     boolean createHometask(int courseId, String title, String description,

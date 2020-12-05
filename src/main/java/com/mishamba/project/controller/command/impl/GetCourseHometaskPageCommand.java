@@ -24,16 +24,16 @@ public class GetCourseHometaskPageCommand implements Command {
     private final String COURSE_HOMETASK_PAGE = "pages/course_hometask_page.jsp";
     private final String ERROR_PAGE = "pages/error.html";
     private final String ROLE = "role";
-    private final String COURSE_ID = "courseId";
+    private final String COURSE_ID = "course_id";
     private final String ID = "id";
-    private final String HOMETASK_PARAMETER = "hometask";
+    private final String HOMETASK_PARAMETER = "hometasks";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
         String pageToUpload = COURSE_HOMETASK_PAGE;
 
-        int courseId = (int) request.getAttribute(COURSE_ID);
-        int userId = (int) request.getSession().getAttribute(ID);
+        Integer courseId = (Integer) request.getAttribute(COURSE_ID);
+        Integer userId = (Integer) request.getSession().getAttribute(ID);
         String role = (String) request.getSession().getAttribute(ROLE);
 
         ArrayList<Hometask> hometasks = new ArrayList<>();

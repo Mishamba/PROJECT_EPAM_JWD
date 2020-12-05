@@ -55,7 +55,7 @@
 <br>
 <jsp:useBean id="courses" scope="request" type="java.util.List"/>
 <c:forEach var="course" items="${courses}">
-    <ft:course-list course="course"/>
+    <ft:course-list course="${course}"/>
 </c:forEach>
 <br>
 <br>

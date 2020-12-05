@@ -128,7 +128,7 @@ public class CourseInfoFormerTag extends TagSupport {
                 out.write("</h3>");
             } else {
                 out.write("<h3>");
-                out.write(resourceBundle.getString("course_is_active"));
+                out.write(resourceBundle.getString("course_is_active_sign"));
                 out.write("</h3>");
             }
         } catch (IOException e) {

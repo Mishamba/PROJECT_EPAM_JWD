@@ -166,4 +166,14 @@
         <tag-class>com.mishamba.project.tag.button.ChangeLocaleButtonTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>answer-hometask</name>
+        <tag-class>com.mishamba.project.tag.button.AnswerHometaskButtonTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>hometask</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

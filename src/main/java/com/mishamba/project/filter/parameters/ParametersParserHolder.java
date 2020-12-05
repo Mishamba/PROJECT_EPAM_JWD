@@ -1,6 +1,7 @@
 package com.mishamba.project.filter.parameters;
 
 import com.mishamba.project.util.parser.Parser;
+import com.mishamba.project.util.parser.impl.BooleanParser;
 import com.mishamba.project.util.parser.impl.DateParser;
 import com.mishamba.project.util.parser.impl.IntegerParser;
 
@@ -16,6 +17,7 @@ public class ParametersParserHolder {
     private final String HOMETASK_ID = "hometask_id";
     private final String STUDENT_ID = "student_id";
     private final String MARK = "mark";
+    private final String FINISHED = "finished";
 
     private ParametersParserHolder() {
         parserMap = new HashMap<>();
@@ -26,6 +28,7 @@ public class ParametersParserHolder {
         parserMap.put(STUDENT_ID, new IntegerParser());
         parserMap.put(MARK, new IntegerParser());
         parserMap.put(COURSE_ID, new IntegerParser());
+        parserMap.put(FINISHED, new BooleanParser());
     }
 
     private static class ParametersParserHolderHolder {

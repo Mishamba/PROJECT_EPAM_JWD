@@ -32,10 +32,10 @@ public class KickStudentOutFromCourseButtonTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"kick_student_page\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
-            out.write(courseId);
+            out.write(String.valueOf(courseId));
             out.write("\">");
             out.write("<input type=\"hidden\" name=\"student_id\" value=\"");
-            out.write(studentId);
+            out.write(String.valueOf(studentId));
             out.write("\">");
             out.write("<input type=\"submit\" value=\"");
             out.write(resourceBundle.getString("kick_student_out_sign"));

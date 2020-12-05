@@ -18,13 +18,17 @@ public class HometaskServiceImpl implements HometaskService {
     private static final Logger logger = Logger.getLogger(HometaskServiceImpl.class);
 
     @Override
-    public ArrayList<Hometask> getCourseHometaskForUser(int courseId, int userId, String role) throws CustomServiceException {
+    public ArrayList<Hometask> getCourseHometaskForUser(Integer courseId, Integer userId, String role) throws CustomServiceException {
+        if (courseId == null && userId == null) {
+            throw new CustomServiceException("got null parameters");
+        }
+
         ArrayList<Hometask> hometasks;
         try {
             logger.info("getting hometask on course");
             hometasks = DAOFactory.getInstance().getHometaskDAO().
                     getHometasksOnCourseForUser(courseId, userId);
-        } catch (DAOException e) {
+        } catch (DAOException | NullPointerException e) {
             throw new CustomServiceException("can't get course hometask", e);
         }
 

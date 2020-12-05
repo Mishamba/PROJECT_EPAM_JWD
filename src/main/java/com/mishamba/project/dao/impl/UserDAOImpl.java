@@ -30,9 +30,6 @@ public class UserDAOImpl implements UserDAO {
             "LEFT JOIN student_course_references " +
             "ON student_course_references.student_id=users.id " +
             "WHERE student_course_references.course_id=?";
-    private final String STUDENT_ID_BY_EMAIL = "SELECT id " +
-            "FROM users " +
-            "WHERE email = ?";
     private final String STUDENT_QUEUE =
             "SELECT id, first_name, last_name, email, birthday " +
                     "FROM users WHERE role = 'student' " +
@@ -46,7 +43,7 @@ public class UserDAOImpl implements UserDAO {
             "FROM users " +
             "WHERE email = ? AND password_hash = ?) as exists_value";
     private final String GET_USER_BY_EMAIL = "SELECT id, first_name, last_name, " +
-            "birthday, role " +
+            "birthday, role, email " +
             "FROM users " +
             "WHERE email = ?";
     private final String CHECK_EMAIL_UNIQUE = "SELECT EXISTS " +

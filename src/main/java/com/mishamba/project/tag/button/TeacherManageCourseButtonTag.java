@@ -32,7 +32,7 @@ public class TeacherManageCourseButtonTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"teacher_manage_course\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=");
-            out.write(courseId);
+            out.write(String.valueOf(courseId));
             out.write(">");
             out.write("<input type=\"submit\" name=\"");
             if (finished) {

@@ -23,7 +23,7 @@ public class SignInProcessCommand implements Command {
     private final String EMAIL_PARAMETER = "email";
     private final String PASSWORD_PARAMETER = "password";
     private final String ERROR_PAGE = "pages/error.html";
-    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String INDEX_PAGE = "index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -36,7 +36,8 @@ public class SignInProcessCommand implements Command {
                     checkSignInData(email, password)) {
                 User user = ServiceFactory.getInstance().
                         getUserService().getUserByEmail(email).get();
-                request.setAttribute("user", user);
+                request.getSession().setAttribute("role", user.getRole());
+                request.getSession().setAttribute("id", user.getId());
                 pageToLoad = INDEX_PAGE;
             }
         } catch (CustomServiceException e) {

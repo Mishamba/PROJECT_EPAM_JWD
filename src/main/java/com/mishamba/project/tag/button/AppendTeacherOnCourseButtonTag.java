@@ -27,7 +27,7 @@ public class AppendTeacherOnCourseButtonTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"append_teacher_on_course>");
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
-            out.write(courseId);
+            out.write(String.valueOf(courseId));
             out.write("\">");
             out.write("<input type=\"submit\" value=\"");
             out.write(resourceBundle.getString("append_teacher_on_course_sign"));
