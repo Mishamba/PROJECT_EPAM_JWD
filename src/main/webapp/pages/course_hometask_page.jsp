@@ -56,14 +56,17 @@
 <br>
 <c:forEach var="hometask" items="${hometasks}">
     <ft:hometask hometask="${hometask}"/>
-    <c:choose>
-        <c:when test="${hometask.getResponse() == null}">
-            <bt:answer-hometask hometask="${hometask}"/>
-        </c:when>
-        <c:when test="${hometask.getResponse() != null}">
-            <ft:hometask-responce hometask="${hometask}"/>
-        </c:when>
-    </c:choose>
+
+    <c:if test="${sessionScope.role.toString() eq 'student'}" >
+        <c:choose>
+            <c:when test="${hometask.getResponse() == null}">
+                <bt:answer-hometask hometask="${hometask}"/>
+            </c:when>
+            <c:when test="${hometask.getResponse() != null}">
+                <ft:hometask-response hometaskResponse="${hometask.response}"/>
+            </c:when>
+        </c:choose>
+    </c:if>
 </c:forEach>
 <br>
 <br>

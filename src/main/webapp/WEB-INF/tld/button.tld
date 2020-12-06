@@ -176,4 +176,34 @@
             <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
+    <tag>
+        <name>student-progress</name>
+        <tag-class>com.mishamba.project.tag.button.StudentProgressButtonTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>studentId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>courseId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
+        <name>check-hometask</name>
+        <tag-class>com.mishamba.project.tag.button.CheckHometaskResponseButtonTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>hometaskId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>studentId</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 </taglib>

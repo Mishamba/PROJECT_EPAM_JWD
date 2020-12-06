@@ -21,7 +21,7 @@ import java.util.Date;
 
 public class CreateHometaskProcessCommand implements Command {
     private final Logger logger = Logger.getLogger(CreateHometaskProcessCommand.class);
-    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String INDEX_PAGE = "index.jsp";
     private final String ERROR_PAGE = "pages/error.html";
     private final String COURSE_ID = "course_id";
     private final String TITLE = "title";
@@ -38,7 +38,7 @@ public class CreateHometaskProcessCommand implements Command {
         Date deadline = (Date) request.getAttribute(DEADLINE);
 
         try {
-            if (ServiceFactory.getInstance().getHometaskService().
+            if (!ServiceFactory.getInstance().getHometaskService().
                     createHometask(courseId, title, description, deadline)) {
                 logger.error("can't create hometask");
                 uploadPage = ERROR_PAGE;

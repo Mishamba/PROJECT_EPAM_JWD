@@ -1,6 +1,7 @@
 package com.mishamba.project.tag.former;
 
 import com.mishamba.project.model.Hometask;
+import com.mishamba.project.model.HometaskResponse;
 import org.apache.log4j.Logger;
 
 import javax.servlet.jsp.JspException;
@@ -10,13 +11,12 @@ import java.io.IOException;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class HometaskForCheckFormer extends TagSupport {
-    private static final Logger logger = Logger.
-            getLogger(HometaskForCheckFormer.class);
-    private Hometask hometask;
+public class HometaskAnswerFormer extends TagSupport {
+    private static final Logger logger = Logger.getLogger(HometaskAnswerFormer.class);
+    private HometaskResponse hometaskResponse;
 
-    public void setHometask(Hometask hometask) {
-        this.hometask = hometask;
+    public void setHometaskResponse(HometaskResponse hometaskResponse) {
+        this.hometaskResponse = hometaskResponse;
     }
 
     @Override
@@ -26,17 +26,12 @@ public class HometaskForCheckFormer extends TagSupport {
         try {
             JspWriter out = pageContext.getOut();
 
-            HometaskFormerTag hometaskFormerTag = new HometaskFormerTag();
-            hometaskFormerTag.setHometask(hometask);
-
-            hometaskFormerTag.doStartTag();
-
             out.write("<br>");
             out.write("<h3>");
             out.write(resourceBundle.getString("answer_sign"));
             out.write("</h3>");
             out.write("<br>");
-            out.write(hometask.getResponse().getAnswer());
+            out.write(hometaskResponse.getAnswer());
             out.write("<br>");
         } catch (IOException e) {
             logger.error("can't form hometask for check");

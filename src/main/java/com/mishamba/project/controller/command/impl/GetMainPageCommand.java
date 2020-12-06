@@ -66,7 +66,6 @@ public class GetMainPageCommand implements Command {
             request.getRequestDispatcher(uploadPage).forward(request, resp);
         } catch (ServletException | IOException e) {
             logger.error("can't send response for user");
-            e.printStackTrace();
             try {
                 resp.sendError(500);
             } catch (IOException ioException) {

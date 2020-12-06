@@ -54,7 +54,7 @@ public class HometaskServiceImpl implements HometaskService {
             return false;
         }
 
-        if (dateValidator.checkForFuture(deadline)) {
+        if (!dateValidator.checkForFuture(deadline)) {
             throw new CustomServiceException("deadline is not in future");
         }
 

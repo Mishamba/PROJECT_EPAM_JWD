@@ -42,7 +42,7 @@ public class UserInfoTag extends TagSupport {
             out.write("</p><br>");
             out.write("<p>");
             out.write(user.getLastName());
-            out.write("</p><br>");
+            out.write("</p><br><br>");
         } catch (IOException e) {
             logger.error("can't form user info");
             throw new JspException("can't form button", e);

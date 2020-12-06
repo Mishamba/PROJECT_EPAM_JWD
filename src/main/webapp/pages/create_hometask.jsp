@@ -1,5 +1,4 @@
 <jsp:useBean id="course_id" scope="request" type="java.lang.Integer"/>
-<jsp:useBean id="course" scope="request" type="com.mishamba.project.model.Course"/>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>

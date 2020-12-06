@@ -27,7 +27,7 @@ public class GetStudentProgressCommand implements Command {
     private final String COURSE_ID = "course_id";
     private final String TEACHER_ROLE = "teacher";
     private final String STUDENT_PARAMETER = "student";
-    private final String HOMETASK_PARAMETER = "hometask";
+    private final String HOMETASK_PARAMETER = "hometasks";
     private final String STUDENT_PROGRESS_PAGE = "pages/student_progress.jsp";
     private final String ERROR_PAGE = "pages/error.html";
 
@@ -68,6 +68,11 @@ public class GetStudentProgressCommand implements Command {
             request.getRequestDispatcher(uploadPage).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload student progress page");
+            try {
+                response.sendError(500);
+            } catch (IOException ioException) {
+                logger.error("can't set error code");
+            }
         }
     }
 }

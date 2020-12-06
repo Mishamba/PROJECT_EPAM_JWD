@@ -27,6 +27,8 @@ ${course.courseName}
 <jsp:useBean id="students" scope="request" type="java.util.List"/>
 <c:forEach var="student" items="${students}">
     <ft:user-info user="${student}"/>
+    <br>
+    <bt:student-progress studentId="${student.id}" courseId="${course.id}"/>
 </c:forEach>
 <br>
 <br>

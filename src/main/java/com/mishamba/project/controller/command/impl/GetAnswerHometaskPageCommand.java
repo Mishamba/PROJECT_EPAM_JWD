@@ -23,9 +23,13 @@ import java.util.Optional;
 public class GetAnswerHometaskPageCommand implements Command {
     private final Logger logger = Logger.getLogger(GetAnswerHometaskPageCommand.class);
     private final String HOMETASK_ID = "hometask_id";
+    private final String HOMETASK = "hometask";
+    private final String ANSWER_HOMETASK_PAGE = "pages/answer_hometask.jsp";
+    private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
+        String pageToUpload = ANSWER_HOMETASK_PAGE;
         int hometaskId = (int) request.getAttribute(HOMETASK_ID);
 
         Hometask hometask = null;
@@ -38,19 +42,13 @@ public class GetAnswerHometaskPageCommand implements Command {
             }
         } catch (CustomServiceException | NoSuchElementException e) {
             logger.error("can't get hometask info");
-            try {
-                request.getRequestDispatcher("error.html").forward(request, response);
-            } catch (ServletException | IOException servletException) {
-                logger.error("can't upload error.html");
-            }
-
-            return;
+            pageToUpload = ERROR_PAGE;
         }
 
-        request.setAttribute("hometask", hometask);
+        request.setAttribute(HOMETASK, hometask);
 
         try {
-            request.getRequestDispatcher("answer_hometask.jsp").forward(request, response);
+            request.getRequestDispatcher(pageToUpload).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't upload answer hometask page");
         }

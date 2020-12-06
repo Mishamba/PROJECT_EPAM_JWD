@@ -26,7 +26,7 @@ public class GetCheckHometaskPageCommand implements Command {
     private final String ERROR_PAGE = "pages/error.html";
     private final String HOMETASK_ID = "hometask_id";
     private final String STUDENT_ID = "student_id";
-    private final String HOMETASK_DATA = "hometask_data";
+    private final String HOMETASK = "hometask";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -47,7 +47,7 @@ public class GetCheckHometaskPageCommand implements Command {
             answerPage = ERROR_PAGE;
         }
 
-        request.setAttribute(HOMETASK_DATA, hometaskData);
+        request.setAttribute(HOMETASK, hometaskData);
 
         try {
             request.getRequestDispatcher(answerPage).forward(request, response);

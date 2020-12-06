@@ -28,6 +28,7 @@ public class CommandParametersHolder {
         commandParameters.put("set_hometask_mark", Arrays.asList(STUDENT_ID, HOMETASK_ID, MARK));
         commandParameters.put("kick_student_page", Collections.singletonList(STUDENT_ID));
         commandParameters.put("user_courses", Collections.singletonList(FINISHED));
+        commandParameters.put("create_hometask", Collections.singletonList(COURSE_ID));
     }
 
     private static class CommandParametersHolderHolder {

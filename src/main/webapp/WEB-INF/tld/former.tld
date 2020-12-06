@@ -7,11 +7,11 @@
     <short-name>ft</short-name>
     <uri>former-tags</uri>
     <tag>
-        <name>hometask-for-check</name>
-        <tag-class>com.mishamba.project.tag.former.HometaskForCheckFormer</tag-class>
+        <name>hometask-answer</name>
+        <tag-class>com.mishamba.project.tag.former.HometaskAnswerFormer</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>hometask</name>
+            <name>hometaskResponse</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -37,11 +37,11 @@
         </attribute>
     </tag>
     <tag>
-        <name>hometask-responce</name>
+        <name>hometask-response</name>
         <tag-class>com.mishamba.project.tag.former.HometaskResponseFormer</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>hometask</name>
+            <name>hometaskResponse</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

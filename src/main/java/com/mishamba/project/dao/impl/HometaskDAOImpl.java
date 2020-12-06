@@ -25,7 +25,8 @@ public class HometaskDAOImpl implements HometaskDAO {
             "(hometask_id, student_id, answer)" +
             "VALUES (?, ?, ?)";
     private final String GET_HOMETASK_BY_ID = "SELECT id, course_id, " +
-            "hometask_title as title, hometask_description as description, image, begin_date, deadline " +
+            "hometask_title as title, hometask_description as description, " +
+            "image, begin_date, deadline " +
             "FROM hometasks " +
             "WHERE id=?";
     private final String CREATE_HOMETASK = "INSERT INTO hometasks " +
@@ -33,13 +34,18 @@ public class HometaskDAOImpl implements HometaskDAO {
             "begin_date, deadline) " +
             "VALUES (?, ?, ?, ?, ?)";
     private final String GET_HOMETASK_ON_COURSE = "SELECT id, course_id, " +
-            "hometask_title as title, hometask_description as description, image, begin_date, " +
+            "hometask_title as title, hometask_description as description, " +
+            "image, begin_date, " +
             "deadline " +
             "FROM hometasks " +
             "WHERE course_id = ?";
-    private final String GET_HOMETASK_RESPONSE = "SELECT hometask_id, student_id, answer, mark " +
+    private final String GET_HOMETASK_RESPONSE = "SELECT hometask_id, " +
+            "student_id, answer, mark " +
             "FROM hometask_responce " +
             "WHERE hometask_id = ? AND student_id = ?";
+    private final String CHECK_FOR_RESPONCE = "SELECT EXISTS " +
+            "(SELECT * FROM hometask_responce  WHERE hometask_id = ? AND " +
+            "student_id = ?) as exist";
 
     @Override
     public boolean createHometask(Hometask hometask) throws DAOException {
@@ -197,18 +203,35 @@ public class HometaskDAOImpl implements HometaskDAO {
     public boolean writeHometaskResponse(HometaskResponse response) throws DAOException {
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement = null;
+        boolean exists = false;
 
         try {
-            statement = connection.prepareStatement(ENTER_HOMETASK_RESPONSE);
+            statement = connection.prepareStatement(CHECK_FOR_RESPONCE);
             statement.setInt(1, response.getHometaskId());
             statement.setInt(2, response.getStudentId());
-            statement.setString(3, response.getAnswer());
 
-            return (statement.executeUpdate() == 1);
+            ResultSet resultSet = statement.executeQuery();
+            resultSet.next();
+            exists = resultSet.getBoolean("exist");
         } catch (SQLException e) {
-            logger.error("can't write hometask responce");
-            throw new DAOException("can't write hometask response");
+            logger.error("can't check responce exist fact");
         }
+
+        if (!exists) {
+            try {
+                statement = connection.prepareStatement(ENTER_HOMETASK_RESPONSE);
+                statement.setInt(1, response.getHometaskId());
+                statement.setInt(2, response.getStudentId());
+                statement.setString(3, response.getAnswer());
+
+                return (statement.executeUpdate() == 1);
+            } catch (SQLException e) {
+                logger.error("can't write hometask responce");
+                throw new DAOException("can't write hometask response");
+            }
+        }
+
+        return false;
     }
 
     @Override

@@ -30,7 +30,7 @@ public class GetCourseProfileCommand implements Command {
     private final String ERROR_PAGE = "pages/error.html";
     private final String ID = "id";
     private final String COURSE_PARAMETER = "course";
-    private final String USER_PARTICIPATION = "participation";
+    private final String USER_PARTICIPATION = "participated";
     private final String STUDENTS_ON_COURSE_QUANTITY = "students_on_course_quantity";
 
     @Override
@@ -63,6 +63,10 @@ public class GetCourseProfileCommand implements Command {
                         userParticipation = true;
                         break;
                     }
+                }
+
+                if (course.getTeacher().getId().equals(userId)) {
+                    userParticipation = true;
                 }
             } catch (CustomServiceException e) {
                 logger.error("can't check is teacher leads the course right now");

@@ -24,7 +24,7 @@ public class AnswerHometaskProcessCommand implements Command {
     private final String ANSWER = "answer";
     private final String ID = "id";
     private final String ERROR_PAGE = "pages/error.html";
-    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String INDEX_PAGE = "index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -35,7 +35,7 @@ public class AnswerHometaskProcessCommand implements Command {
         int studentId = (int) request.getSession().getAttribute(ID);
 
         try {
-            if (ServiceFactory.getInstance().getHometaskService().writeHometaskAnswer(answer, hometaskId, studentId)) {
+            if (!ServiceFactory.getInstance().getHometaskService().writeHometaskAnswer(answer, hometaskId, studentId)) {
                 logger.error("can't write answer");
                 uploadPage = ERROR_PAGE;
             }

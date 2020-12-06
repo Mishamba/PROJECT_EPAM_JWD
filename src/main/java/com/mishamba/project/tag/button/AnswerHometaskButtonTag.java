@@ -26,10 +26,10 @@ public class AnswerHometaskButtonTag extends TagSupport {
         try {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
-            out.write("<form action=\"PROJECT_EPAM_JWD_war/hometask\">");
+            out.write("<form action=\"/PROJECT_EPAM_JWD_war/hometask\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"answer_hometask\">");
             out.write("<input type=\"hidden\" name=\"hometask_id\" value=\"");
-            out.write(hometask.getId());
+            out.write(String.valueOf(hometask.getId()));
             out.write("\">");
             out.write("<input type=\"submit\" value=\"");
             out.write(resourceBundle.getString("answer_hometask_sign"));

@@ -1,8 +1,5 @@
 <%@taglib prefix="bt" uri="button-tags"%>
 <%@taglib prefix="ft" uri="former-tags"%>
-<jsp:useBean id="hometask" scope="request" type="java.lang.String"/>
-<jsp:useBean id="menu" scope="request" type="java.lang.String"/>
-<jsp:useBean id="student_info" scope="request" type="java.lang.String"/>
 <%--
   Created by IntelliJ IDEA.
   User: mishamba
@@ -12,6 +9,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <fmt:setLocale value="${sessionScope.locale}"/>
 <fmt:setBundle basename="signs.sign"/>
 <html>
@@ -55,12 +53,24 @@
 <br>
 <h3><fmt:message key="student_info_sign"/></h3>
 <br>
-<jsp:useBean id="user" scope="request" type="com.mishamba.project.model.User"/>
-<ft:user-info user="${user}"/>
+<jsp:useBean id="student" scope="request" type="com.mishamba.project.model.User"/>
+<ft:user-info user="${student}"/>
 <br>
 <h3><fmt:message key="hometasks_sign"/></h3>
 <br>
-<ft:hometask hometask="${hometask}"/>
+<jsp:useBean id="hometasks" scope="request" type="java.util.List"/>
+<c:forEach var="hometask" items="${hometasks}">
+    <ft:hometask hometask="${hometask}"/>
+    <br>
+    <c:choose>
+        <c:when test="${not empty hometask.response && hometask.response.mark == 0}">
+            <bt:check-hometask hometaskId="${hometask.id}" studentId="${student.id}"/>
+        </c:when>
+        <c:when test="${not empty hometask.response && hometask.response.mark > 0}">
+            <ft:hometask-response hometaskResponse="${hometask}"/>
+        </c:when>
+    </c:choose>
+</c:forEach>
 <br>
 <br>
 <form action="${pageContext.request.contextPath}/university">

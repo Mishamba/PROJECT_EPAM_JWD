@@ -31,7 +31,7 @@ public class CreateHometaskButtonTag extends TagSupport {
             out.write(String.valueOf(courseId));
             out.write("\">");
             out.write("<input type=\"submit\" value=\"");
-            out.write(resourceBundle.getString("view_hometask_sign"));
+            out.write(resourceBundle.getString("create_hometask_sign"));
             out.write("\">");
             out.write("</form><br>");
         } catch (IOException e) {
