@@ -49,8 +49,8 @@ public class UserServiceImpl implements UserService {
 
         DateValidator dateValidator = new DateValidator();
         EmailValidator emailValidator = new EmailValidator();
-        if (dateValidator.checkForFuture(birthday) &&
-                emailValidator.validate(email)) {
+        if (!dateValidator.checkForFuture(birthday) &&
+                emailValidator.valid(email)) {
             User newUser = new User(null, firstName, lastName,
                     email, birthday, null, role);
             try {

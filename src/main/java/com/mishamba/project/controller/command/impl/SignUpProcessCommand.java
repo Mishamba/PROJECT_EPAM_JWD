@@ -38,9 +38,9 @@ public class SignUpProcessCommand implements Command {
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        String firstName = (String) request.getAttribute(FIRST_NAME_PARAMETER);
-        String lastName = (String) request.getAttribute(LAST_NAME_PARAMETER);
-        String email = (String) request.getAttribute(EMAIL_PARAMETER);
+        String firstName = request.getParameter(FIRST_NAME_PARAMETER);
+        String lastName = request.getParameter(LAST_NAME_PARAMETER);
+        String email = request.getParameter(EMAIL_PARAMETER);
 
         // admin can create user with any role,
         // but anonym can sign up only as student
@@ -50,14 +50,14 @@ public class SignUpProcessCommand implements Command {
         }
 
         String role = (sessionRole.equals(ADMIN)) ?
-                (String) request.getAttribute(ROLE_PARAMETER) : STUDENT;
+                request.getParameter(ROLE_PARAMETER) : STUDENT;
         Date birthday = (Date) request.getAttribute(BIRTHDAY_PARAMETER);
-        String password = (String) request.getAttribute(PASSWORD_PARAMETER);
+        String password = request.getParameter(PASSWORD_PARAMETER);
 
         String uploadPage = INDEX_PAGE;
 
         try {
-            if (ServiceFactory.getInstance().getUserService().
+            if (!ServiceFactory.getInstance().getUserService().
                     createUser(firstName, lastName, email, role,
                             birthday, password)) {
                 uploadPage = ERROR_PAGE;

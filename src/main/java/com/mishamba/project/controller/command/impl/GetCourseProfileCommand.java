@@ -65,7 +65,7 @@ public class GetCourseProfileCommand implements Command {
                     }
                 }
 
-                if (course.getTeacher().getId().equals(userId)) {
+                if (course.getTeacher() != null && course.getTeacher().getId().equals(userId)) {
                     userParticipation = true;
                 }
             } catch (CustomServiceException e) {

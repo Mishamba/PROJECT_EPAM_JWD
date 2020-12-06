@@ -11,13 +11,13 @@ public class EmailValidatorTest {
     public void testValidateValid() {
         EmailValidator emailValidator = new EmailValidator();
         String email = "misha.nenahov@gmail.com";
-        assertTrue(emailValidator.validate(email));
+        assertTrue(emailValidator.valid(email));
     }
 
     @Test
     public void testValidateInvalid() {
         EmailValidator emailValidator = new EmailValidator();
         String invalidEmail = "invalid.email.gmail.com";
-        assertFalse(emailValidator.validate(invalidEmail));
+        assertFalse(emailValidator.valid(invalidEmail));
     }
 }
