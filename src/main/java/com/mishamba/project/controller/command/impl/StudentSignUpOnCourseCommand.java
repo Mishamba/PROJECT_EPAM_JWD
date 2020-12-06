@@ -19,13 +19,15 @@ import java.io.IOException;
 
 public class StudentSignUpOnCourseCommand implements Command {
     private final Logger logger = Logger.getLogger(StudentSignUpOnCourseCommand.class);
-    private final String INDEX_PAGE = "pages/index.jsp";
+    private final String ID = "id";
+    private final String COURSE_ID = "course_id";
+    private final String INDEX_PAGE = "index.jsp";
     private final String ERROR_PAGE = "pages/error.html";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
-        int studentId = (int) request.getAttribute("id");
-        int courseId = (int) request.getAttribute("course_id");
+        int studentId = (int) request.getSession().getAttribute(ID);
+        int courseId = (int) request.getAttribute(COURSE_ID);
 
         String uploadPage = INDEX_PAGE;
 

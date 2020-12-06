@@ -76,7 +76,7 @@
 <bt:course-hometask courseId="${course.id}"/>
 <br>
 </c:if>
-<c:if test="${sessionScope eq 'student'}">
+<c:if test="${sessionScope.role eq 'student' and not requestScope.participated}">
 <bt:student-sign-up-form-course courseId="${course.id}"/>
 <br>
 </c:if>

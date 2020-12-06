@@ -63,7 +63,7 @@
                 <bt:answer-hometask hometask="${hometask}"/>
             </c:when>
             <c:when test="${hometask.getResponse() != null}">
-                <ft:hometask-response hometaskResponse="${hometask.response}"/>
+                <ft:hometask-response hometask="${hometask}"/>
             </c:when>
         </c:choose>
     </c:if>

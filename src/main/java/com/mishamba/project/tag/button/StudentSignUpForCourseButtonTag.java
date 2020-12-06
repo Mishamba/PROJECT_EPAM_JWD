@@ -27,7 +27,7 @@ public class StudentSignUpForCourseButtonTag extends TagSupport {
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
             out.write("<input type=\"hidden\" name=\"command\" value=\"student_sign_up_for_course\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=");
-            out.write(courseId);
+            out.write(String.valueOf(courseId));
             out.write(">");
             out.write("<input type=\"submit\" value=\"");
             out.write(resourceBundle.getString("sign_up_on_course_sign"));

@@ -67,7 +67,7 @@
             <bt:check-hometask hometaskId="${hometask.id}" studentId="${student.id}"/>
         </c:when>
         <c:when test="${not empty hometask.response && hometask.response.mark > 0}">
-            <ft:hometask-response hometaskResponse="${hometask}"/>
+            <ft:hometask-response hometask="${hometask}"/>
         </c:when>
     </c:choose>
 </c:forEach>

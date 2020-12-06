@@ -41,7 +41,7 @@
         <tag-class>com.mishamba.project.tag.former.HometaskResponseFormer</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>hometaskResponse</name>
+            <name>hometask</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>

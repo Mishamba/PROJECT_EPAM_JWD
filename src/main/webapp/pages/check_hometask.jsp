@@ -53,6 +53,7 @@
 <h3><fmt:message key="hometask_data_sign"/></h3>
 <br>
 <jsp:useBean id="hometask" scope="request" type="com.mishamba.project.model.Hometask"/>
+<ft:hometask hometask="${hometask}"/>
 <ft:hometask-answer hometaskResponse="${hometask.response}"/>
 <br>
 <form action="${pageContext.request.contextPath}/hometask">
