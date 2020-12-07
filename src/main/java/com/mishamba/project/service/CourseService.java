@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CourseService {
+    boolean appendTeacherOnCoruse(int courseId, int teacherId) throws CustomServiceException;
     ArrayList<Course> getCoursesWithoutTeacher() throws CustomServiceException;
     ArrayList<Course> getActiveCourses() throws CustomServiceException;
     List<Course> getUserCourses(int userId, String role, boolean finished) throws CustomServiceException;

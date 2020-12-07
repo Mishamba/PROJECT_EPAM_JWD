@@ -18,6 +18,7 @@ public class ParametersParserHolder {
     private final String STUDENT_ID = "student_id";
     private final String MARK = "mark";
     private final String FINISHED = "finished";
+    private final String GOT_CERTIFICATE = "got_certificate";
 
     private ParametersParserHolder() {
         parserMap = new HashMap<>();
@@ -29,6 +30,7 @@ public class ParametersParserHolder {
         parserMap.put(MARK, new IntegerParser());
         parserMap.put(COURSE_ID, new IntegerParser());
         parserMap.put(FINISHED, new BooleanParser());
+        parserMap.put(GOT_CERTIFICATE, new BooleanParser());
     }
 
     private static class ParametersParserHolderHolder {

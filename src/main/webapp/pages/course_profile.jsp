@@ -58,11 +58,11 @@
 <ft:course-info course="${course}" studentsOnCourseQuantity="${students_on_course_quantity}"/>
 
 <br>
-<c:if test="${sessionScope.role eq 'teacher' and !requestScope.participated}">
+<c:if test="${sessionScope.role eq 'teacher' and not requestScope.participated}">
 <bt:append-teacher-on-course courseId="${course.id}"/>
 <br>
 </c:if>
-<c:if test="${sessionScope.role eq 'teacher'}">
+<c:if test="${sessionScope.role eq 'teacher' and requestScope.participated}">
 <bt:course-hometask courseId="${course.id}"/>
 <br>
 <bt:create-hometask courseId="${course.id}"/>

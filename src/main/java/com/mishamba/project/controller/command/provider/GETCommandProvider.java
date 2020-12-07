@@ -7,15 +7,15 @@ import org.apache.log4j.Logger;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CommandProvider {
-    private final Logger logger = Logger.getLogger(CommandProvider.class);
+public class GETCommandProvider {
+    private final Logger logger = Logger.getLogger(GETCommandProvider.class);
     private final Map<String, Command> repository = new HashMap<>();
 
-    private static class CommandProviderHolder {
-        private static final CommandProvider HOLDER = new CommandProvider();
+    private static class GETCommandProviderHolder {
+        private static final GETCommandProvider HOLDER = new GETCommandProvider();
     }
 
-    private CommandProvider() {
+    private GETCommandProvider() {
         repository.put("main_page", new GetMainPageCommand());
         repository.put("courses_catalog", new GetCoursesCatalogCommand());
         repository.put("sign_up", new GetSignUpPageCommand());
@@ -38,10 +38,12 @@ public class CommandProvider {
         repository.put("set_hometask_mark", new SetHometaskMarkProcessCommand());
         repository.put("kick_student_page", new GetKickStudentOutPageCommand());
         repository.put("change_locale", new ChangeLocaleCommandImpl());
+        repository.put("kick_student_process", new KickStudentProcessCommand());
+        repository.put("append_teacher_on_course", new AppendTeacherOnCourseProcessCommand());
     }
 
-    public static CommandProvider getInstance() {
-        return CommandProviderHolder.HOLDER;
+    public static GETCommandProvider getInstance() {
+        return GETCommandProviderHolder.HOLDER;
     }
 
     public Command getCommand(String commandType) {

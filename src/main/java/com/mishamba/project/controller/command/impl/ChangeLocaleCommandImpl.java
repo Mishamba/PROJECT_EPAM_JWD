@@ -25,6 +25,7 @@ public class ChangeLocaleCommandImpl implements Command {
     private final String RU_LANGUAGE = "ru";
     private final String RU_COUNTRY = "RU";
     private final String US_COUNTRY = "US";
+    private final String INDEX = "index.jsp";
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -39,9 +40,8 @@ public class ChangeLocaleCommandImpl implements Command {
 
         session.setAttribute(LOCALE, locale);
 
-        // TODO: 11/14/20 save page
         try {
-            request.getRequestDispatcher("index.jsp").forward(request, response);
+            request.getRequestDispatcher(INDEX).forward(request, response);
         } catch (ServletException | IOException e) {
             logger.error("can't send answer");
         }

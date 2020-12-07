@@ -22,11 +22,11 @@ public class MarkReviewDAOImpl implements MarkReviewDAO {
             "review, got_certificate) " +
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
     private final String MARK_REVIEW_QUEUE = "SELECT " +
-            "users.id as teacher_id" +
+            "users.id as teacher_id, " +
             "users.first_name AS teacher_first_name," +
             "users.last_name as teacher_last_name, finished, " +
-            "users.id as teacher_id, user.email as teacher_email, " +
-            "user.birthday as teacher_birthday, " +
+            "users.id as teacher_id, users.email as teacher_email, " +
+            "users.birthday as teacher_birthday, " +
             "mark, finished_date, review, got_certificate " +
             "FROM student_mark_review " +
             "LEFT JOIN " +
@@ -49,30 +49,34 @@ public class MarkReviewDAOImpl implements MarkReviewDAO {
                     getConnection();
             statement = connection.prepareStatement(MARK_REVIEW_QUEUE);
             statement.setInt(1, student.getId());
-            statement.setInt(2, student.getId());
+            statement.setInt(2, course.getId());
             resultSet = statement.executeQuery();
             DateParser dateParser = new DateParser();
 
-            int teacherId = resultSet.getInt("teacher_id");
-            String teacherFirstName = resultSet.getString("teacher_first_name");
-            String teacherLastName = resultSet.getString("teacher_last_name");
-            Date teacherBirthday = dateParser.parse(resultSet.getString("teacher_birthday"));
-            String teacherEmail = resultSet.getString("teacher_email");
-            ArrayList<String> teacherSubjects = DAOFactory.getInstance().
-                    getUserDAO().getTeacherSubjects(teacherId);
-            User teacher = new User(teacherId, teacherFirstName,
-                    teacherLastName, teacherEmail, teacherBirthday,
-                    teacherSubjects, "teacher");
-            Boolean finished = resultSet.getBoolean("finished");
-            Integer mark = resultSet.getInt("mark");
-            Date finishDate = dateParser.parse(resultSet.getString("finish_date"));
-            String review = resultSet.getString("review");
-            Boolean gotCertificate = resultSet.getBoolean("got_certificate");
-            return new MarkReview(student, teacher, course,
-                    finished, mark, finishDate, review, gotCertificate);
+            if (resultSet.next()) {
+                int teacherId = resultSet.getInt("teacher_id");
+                String teacherFirstName = resultSet.getString("teacher_first_name");
+                String teacherLastName = resultSet.getString("teacher_last_name");
+                Date teacherBirthday = dateParser.parse(resultSet.getString("teacher_birthday"));
+                String teacherEmail = resultSet.getString("teacher_email");
+                ArrayList<String> teacherSubjects = DAOFactory.getInstance().
+                        getUserDAO().getTeacherSubjects(teacherId);
+                User teacher = new User(teacherId, teacherFirstName,
+                        teacherLastName, teacherEmail, teacherBirthday,
+                        teacherSubjects, "teacher");
+                Boolean finished = resultSet.getBoolean("finished");
+                Integer mark = resultSet.getInt("mark");
+                Date finishDate = dateParser.parse(resultSet.getString("finish_date"));
+                String review = resultSet.getString("review");
+                Boolean gotCertificate = resultSet.getBoolean("got_certificate");
+                return new MarkReview(student, teacher, course,
+                        finished, mark, finishDate, review, gotCertificate);
+            }
         } catch (SQLException | UtilException throwable) {
             throw new DAOException("can't get mark review", throwable);
         }
+
+        return null;
     }
 
     @Override

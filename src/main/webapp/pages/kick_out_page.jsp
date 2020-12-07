@@ -63,7 +63,6 @@
     <input type="hidden" name="command" value="kick_student_process">
     <input type="hidden" name="student_id" value=<%= request.getParameter("student_id")%>>
     <input type="hidden" name="course_id" value=<%=request.getParameter("course_id")%>>
-    <input type="hidden" name="teacher_id" value=<%= request.getSession().getAttribute("teacher_id")%>>
     <p><fmt:message key="student_finished_course_successfully_sign"/></p>
     <br>
     <label>
@@ -84,7 +83,7 @@
     <p><fmt:message key="got_certificate_sign"/></p>
     <br>
     <label>
-        <input type="checkbox" checked name="get_certificate">
+        <input type="checkbox" checked name="got_certificate">
     </label>
     <br>
     <br>

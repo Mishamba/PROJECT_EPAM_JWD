@@ -14,6 +14,27 @@ public class CourseServiceImpl implements CourseService {
     private static final Logger logger = Logger.getLogger(CourseServiceImpl.class);
 
     @Override
+    public boolean appendTeacherOnCoruse(int courseId, int teacherId) throws CustomServiceException {
+        Course course = null;
+        try {
+            course = DAOFactory.getInstance().getCourseDAO().getCourseById(courseId);
+        } catch (DAOException e) {
+            logger.error("can't get course");
+            throw new CustomServiceException("can't get course", e);
+        }
+
+        if (course.getTeacher() == null) {
+            try {
+                return DAOFactory.getInstance().getCourseDAO().appendTeacherOnCourse(courseId, teacherId);
+            } catch (DAOException e) {
+                logger.error("can't append teacher on course", e);
+            }
+        }
+
+        return false;
+    }
+
+    @Override
     public ArrayList<Course> getCoursesWithoutTeacher() throws CustomServiceException {
         ArrayList<Course> courses;
         try {

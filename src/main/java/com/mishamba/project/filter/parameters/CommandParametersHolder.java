@@ -12,6 +12,7 @@ public class CommandParametersHolder {
     private final String STUDENT_ID = "student_id";
     private final String MARK = "mark";
     private final String FINISHED = "finished";
+    private final String GOT_CERTIFICATE = "got_certificate";
 
     private CommandParametersHolder() {
         commandParameters = new HashMap<>(11, 0.75F);
@@ -29,6 +30,8 @@ public class CommandParametersHolder {
         commandParameters.put("kick_student_page", Collections.singletonList(STUDENT_ID));
         commandParameters.put("user_courses", Collections.singletonList(FINISHED));
         commandParameters.put("create_hometask", Collections.singletonList(COURSE_ID));
+        commandParameters.put("kick_student_process", Arrays.asList(FINISHED, MARK, GOT_CERTIFICATE, STUDENT_ID, COURSE_ID));
+        commandParameters.put("append_teacher_on_course", Collections.singletonList(COURSE_ID));
     }
 
     private static class CommandParametersHolderHolder {

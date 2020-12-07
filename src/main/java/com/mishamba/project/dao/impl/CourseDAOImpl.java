@@ -20,6 +20,7 @@ import java.util.Date;
 
 public class CourseDAOImpl implements CourseDAO {
     private final Logger logger = Logger.getLogger(CourseDAOImpl.class);
+    private final String KICK_STUDENT_FROM_COURSE = "DELETE FROM student_course_references WHERE student_id = ? AND course_id = ?";
     private final String GET_COURSE_BY_TEACHERS_ID = "SELECT courses.id, courses.course_name, " +
             "courses.begin_of_course, courses.end_of_course, courses.course_teacher, " +
             "courses.max_students_quantity, courses.finished, users.id as teacher_id, " +
@@ -76,6 +77,25 @@ public class CourseDAOImpl implements CourseDAO {
             "users " +
             "on courses.course_teacher = users.id " +
             "WHERE courses.id = ?";
+    private final String APPEND_TEACHER_ON_COURSE = "UPDATE " +
+            "courses SET course_teacher = ? WHERE id = ?";
+
+    @Override
+    public boolean appendTeacherOnCourse(int courseId, int teacherId) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+
+        try {
+            statement = connection.prepareStatement(APPEND_TEACHER_ON_COURSE);
+            statement.setInt(1, teacherId);
+            statement.setInt(2, courseId);
+
+            return (statement.executeUpdate() == 1);
+        } catch (SQLException e) {
+            logger.error("can't append teacher on course");
+            throw new DAOException("can't append teacher on course", e);
+        }
+    }
 
     @Override
     public ArrayList<Course> getCoursesWithoutTeacher() throws DAOException {
@@ -160,23 +180,6 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return courses;
-    }
-
-    @Override
-    public Integer getStudentsOnCourseQuantity(Course course) throws DAOException {
-        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
-        PreparedStatement statement = null;
-        ResultSet resultSet = null;
-        try {
-            statement = connection.prepareStatement(STUDENTS_ON_COURSE_QUANTITY_QUEUE);
-            statement.setInt(1, course.getId());
-            resultSet = statement.executeQuery();
-            resultSet.next();
-            return resultSet.getInt("quantity");
-        } catch (SQLException throwables) {
-            throw new DAOException("can't get students quantity " +
-                    "on course with name" + course.getCourseName(), throwables);
-        }
     }
 
     private Course formCourseFromResultSet(ResultSet resultSet) throws
@@ -361,7 +364,6 @@ public class CourseDAOImpl implements CourseDAO {
         ArrayList<Course> courses = new ArrayList<>();
         ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
         PreparedStatement statement;
-        ResultSet resultSet;
 
         try {
             statement = connection.prepareStatement(GET_COURSE_BY_TEACHERS_ID);
@@ -373,5 +375,22 @@ public class CourseDAOImpl implements CourseDAO {
         }
 
         return getCourses(courses, statement);
+    }
+
+    @Override
+    public boolean kickStudentFromCourse(int studentId, int courseId) throws DAOException {
+        ProxyConnection connection = ConnectionPoolImpl.getInstance().getConnection();
+        PreparedStatement statement;
+
+        try {
+            statement = connection.prepareStatement(KICK_STUDENT_FROM_COURSE);
+            statement.setInt(1, studentId);
+            statement.setInt(2, courseId);
+
+            return statement.execute();
+        } catch (SQLException e) {
+            logger.error("can't execute queue");
+            throw new DAOException("can't execute queue", e);
+        }
     }
 }

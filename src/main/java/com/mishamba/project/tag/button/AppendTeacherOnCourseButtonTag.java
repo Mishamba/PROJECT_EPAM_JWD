@@ -25,7 +25,7 @@ public class AppendTeacherOnCourseButtonTag extends TagSupport {
             JspWriter out = pageContext.getOut();
             out.write("<br>");
             out.write("<form action=\"/PROJECT_EPAM_JWD_war/university\">");
-            out.write("<input type=\"hidden\" name=\"command\" value=\"append_teacher_on_course>");
+            out.write("<input type=\"hidden\" name=\"command\" value=\"append_teacher_on_course\">");
             out.write("<input type=\"hidden\" name=\"course_id\" value=\"");
             out.write(String.valueOf(courseId));
             out.write("\">");

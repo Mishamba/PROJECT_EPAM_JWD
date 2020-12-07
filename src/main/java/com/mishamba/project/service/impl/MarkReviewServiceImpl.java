@@ -17,12 +17,13 @@ public class MarkReviewServiceImpl implements MarkReviewService {
 
     @Override
     public boolean setMarkReview(Course course, User student, User teacher, int mark, String review, boolean finishedParameter, boolean gotCretificateParameter) throws CustomServiceException {
-        if (teacher.getRole().equals("teacher") ||
-                student.getRole().equals("student")) {
-            throw new CustomServiceException("given users hash wrong roles");
+        if (course == null || student == null || teacher == null) {
+            throw new CustomServiceException("parameters are null");
         }
-        if (course == null) {
-            throw new CustomServiceException("not course given");
+
+        if (!teacher.getRole().equals("teacher") ||
+                !student.getRole().equals("student")) {
+            throw new CustomServiceException("given users hash wrong roles");
         }
 
         MarkReview markReview = new MarkReview(student, teacher, course,
@@ -32,12 +33,17 @@ public class MarkReviewServiceImpl implements MarkReviewService {
         try {
             MarkReview checkMarkReview = DAOFactory.getInstance().
                     getMarkReviewDAO().getMarkReview(course, student);
-            return !markReview.equals(checkMarkReview) && DAOFactory.getInstance().getMarkReviewDAO().createMarkReview(markReview);
+            if(!markReview.equals(checkMarkReview) && DAOFactory.getInstance().getMarkReviewDAO().createMarkReview(markReview)) {
+                DAOFactory.getInstance().getCourseDAO().kickStudentFromCourse(student.getId(), course.getId());
+                return true;
+            }
         } catch (DAOException e) {
             logger.error("can't create mark review");
             throw new CustomServiceException("can't create mark review");
 
         }
+
+        return false;
     }
 
     @Override

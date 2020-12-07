@@ -1,7 +1,8 @@
 package com.mishamba.project.controller;
 
 import com.mishamba.project.controller.command.Command;
-import com.mishamba.project.controller.command.provider.CommandProvider;
+import com.mishamba.project.controller.command.provider.GETCommandProvider;
+import com.mishamba.project.controller.command.provider.POSTCommandProvider;
 import com.mishamba.project.filter.right.RightsHolder;
 import org.apache.log4j.Logger;
 
@@ -13,13 +14,15 @@ import java.io.IOException;
 
 public class CustomController extends HttpServlet {
     private final Logger logger = Logger.getLogger(CustomController.class);
+    private final String POST = "POST";
+    private final String GET = "GET";
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         logger.info("got GET request");
 
-        process(req, resp);
+        process(req, resp, GET);
     }
 
     @Override
@@ -27,15 +30,20 @@ public class CustomController extends HttpServlet {
             throws ServletException, IOException {
         logger.info("got POST request");
 
-        process(req, resp);
+        process(req, resp, POST);
     }
 
-    private void process(HttpServletRequest req, HttpServletResponse resp)
+    private void process(HttpServletRequest req, HttpServletResponse resp, String requestType)
             throws ServletException, IOException {
         String commandType = req.getParameter("command");
         logger.info("got commandType");
         String role = (String) req.getSession().getAttribute("role");
-        Command command = CommandProvider.getInstance().getCommand(commandType);
+        Command command = null;
+        if (requestType.equals(GET)) {
+            command = GETCommandProvider.getInstance().getCommand(commandType);
+        } else if (requestType.equals(POST)) {
+            command = POSTCommandProvider.getInstance().getCommand(commandType);
+        }
         if (command != null && RightsHolder.getInstance().rightsCorrect(
                 commandType, role)) {
             command.execute(req, resp);
