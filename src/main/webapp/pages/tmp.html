@@ -1,0 +1,86 @@
+<html>
+
+<head>
+    <title>???my_university_sign???</title>
+    <style>
+        h2 {
+            font-size: 28px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+        }
+
+        h3 {
+            font-size: 28px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+        }
+
+        h2 form input {
+            background-color: #8aa54d;
+            height: 60px;
+            width: 140px;
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+            border: 2px solid rgb(76, 102, 45);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        form input {
+            background-color: #8aa54d;
+            height: 60px;
+            width: 140px;
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+            border: 2px solid rgb(76, 102, 45);
+            border-radius: 5px;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>???user_info_sign???</h2>
+    <br>
+
+    <h2>Sign in</h2>
+    <form action="/PROJECT_EPAM_JWD_war/sign_in">
+        <input type="hidden" name="command" value="sign_in">
+        <input type="submit" value="Sign in"></form><br>
+    <br>
+    <h2>Sign up</h2>
+    <h2>
+        <form action="/PROJECT_EPAM_JWD_war/sign_up">
+            <input type="hidden" name="command" value="sign_up">
+            <input type="submit" value="Sign up">
+        </form>
+    </h2>
+    <br>
+    <h3>???menu_sign???</h3>
+    <br>
+
+    <form action="/PROJECT_EPAM_JWD_war/courses_catalog"><input type="hidden" name="command" value="courses_catalog"><input type="submit" value="Courses catalog"></form><br>
+    <form action="/PROJECT_EPAM_JWD_war/university"><input type="hidden" name="command" value="main_page"><input type="submit" value="Main page"></form>
+
+    <br>
+    <h2>???courses_add_sign???</h2>
+    <br>
+
+    <br>
+    <h3>Programming</h3><br>
+    <form action="/PROJECT_EPAM_JWD_war/course_info"><input type="hidden" name="command" value="course_profile"><input type="hidden" name="course_id" value="3"><input type="submit" value="View"></form><br>
+
+    <br>
+    <br>
+    <br>
+    <form action="/PROJECT_EPAM_JWD_war/university"><input type="hidden" name="command" value="change_locale"><input type="submit" value="en"></form><br>
+
+</body>
+
+</html>

@@ -8,6 +8,51 @@
 <html>
 <head>
     <title><fmt:message key="my_university_sign"/></title>
+    <style>
+        h2 {
+            font-size: 28px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+        }
+
+        h3 {
+            font-size: 28px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+        }
+
+        h2 form input {
+            background-color: #8aa54d;
+            height: 60px;
+            width: 140px;
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+            border: 2px solid rgb(76, 102, 45);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        form input {
+            background-color: #8aa54d;
+            height: 60px;
+            width: 140px;
+            font-size: 20px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            color: #051C0E;
+            border: 2px solid rgb(76, 102, 45);
+            border-radius: 5px;
+            position: relative;
+        }
+
+        p {
+
+        }
+    </style>
 </head>
 <body>
 <h2><fmt:message key="user_info_sign"/></h2>
